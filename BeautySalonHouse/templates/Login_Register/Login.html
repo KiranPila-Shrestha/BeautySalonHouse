@@ -1,0 +1,99 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="overflow-y-hidden">
+    <div class="login-wrapper-container">
+      <div class="login-child flex">
+        <div class="login-col1 w-[50%] h-full">
+          <img src="static/Image/bg-image.jpg" class="w-[80%] h-" alt="" />
+        </div>
+        <!--  -->
+        <div class="login-col2 w-[50%]">
+          <div class="form-parent w-full mt-[100px] flex flex-col gap-y-3">
+            <h1
+              class="text-4xl text-center font-semibold uppercase tracking-widest py-3"
+            >
+              Welcome Back!
+            </h1>
+            <p class="text-center uppercase text-xl text-gray-400">
+              Login to continue
+            </p>
+            <form
+              method="post"
+              action=""
+              class="m-auto w-[50%] flex flex-col items-center p-4"
+            >
+              {% csrf_token %}
+              <div class="username w-full">
+                <input
+                  required
+                  name="username"
+                  type="text"
+                  placeholder="Username"
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                />
+              </div>
+              <br />
+              <!--  -->
+              <div class="password w-full">
+                <input
+                  required
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                />
+              </div>
+              {% for messages in messages %}
+              <p class="pt-4 text-red-500" id="messages">{{messages}}</p>
+
+              {% endfor %}
+              <br />
+              <!--  -->
+              <div class="login-button w-full">
+                <button
+                  class="w-full bg-[#009688] py-2 text-white uppercase tracking-widest"
+                >
+                  Login
+                </button>
+              </div>
+
+              <!--  -->
+              <div class="mt-2">
+                <a href="" class="text-gray-400">Forgot password?</a>
+              </div>
+
+              <!--  -->
+              <div class="mt-2 text-gray-400">
+                Already have an account?
+                <a
+                  href="{% url 'register' %}"
+                  class="text-blue-500 hover:underline"
+                  >Register!</a
+                >
+              </div>
+            </form>
+
+            <!--  -->
+            <div class="flex flex-col items-center mt-4">
+              <img src="static/Image/logo.svg" alt="" />
+              <p class="uppercase tracking-widest text-gray-400 mt-2">
+                Discover the more attractive you
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

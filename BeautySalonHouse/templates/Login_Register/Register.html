@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <style>
+    .register-form > div {
+      margin-top: 10px;
+    }
+  </style>
+  <body class="">
+    <div class="register-wrapper-container">
+      <div class="register-child flex">
+        <div class="register-col1 w-[50%] h-full">
+          <img src="static/Image/bg-image.jpg" class="w-[80%] h-" alt="" />
+        </div>
+        <!--  -->
+        <div class="register-col2 w-[50%]">
+          <div class="form-parent w-full flex flex-col gap-y-3">
+            <h1
+              class="text-4xl text-center font-semibold uppercase tracking-widest py-3"
+            >
+              Let's Register
+            </h1>
+            <p class="text-center uppercase text-xl text-gray-400">
+              register to continue
+            </p>
+            <form
+              method="post"
+              action=""
+              class="register-form m-auto w-[50%] flex flex-col items-center p-4"
+            >
+              {% csrf_token %}
+              <div class="firstname w-full">
+                <input
+                  type="text"
+                  placeholder="First name..."
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                  name="first_name"
+                />
+              </div>
+              <!--  -->
+              <div class="lastname w-full">
+                <input
+                  type="text"
+                  placeholder="Last name..."
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                  name="last_name"
+                />
+              </div>
+              <!--  -->
+              <div class="username w-full">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Username..."
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                />
+              </div>
+              <!--  -->
+              <div class="address w-full">
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="Address..."
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                />
+              </div>
+              <!--  -->
+              <div class="contact w-full">
+                <input
+                  type="text"
+                  name="contact"
+                  placeholder="Contact..."
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                />
+              </div>
+              <!--  -->
+              <div class="email w-full">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email..."
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                />
+              </div>
+              <!--  -->
+              <div class="password-one w-full">
+                <input
+                  type="password"
+                  name="password1"
+                  placeholder="Password..."
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                />
+              </div>
+              <!--  -->
+              <div class="password-two w-full">
+                <input
+                  type="password"
+                  name="password2"
+                  placeholder="Reenter your password..."
+                  class="bg-[#EDEDED] w-full py-2 pl-2"
+                />
+              </div>
+              <!--  -->
+
+              <!--  -->
+              <div class="login-button w-full">
+                <button
+                  class="w-full bg-[#009688] py-2 text-white uppercase tracking-widest"
+                >
+                  Register
+                </button>
+              </div>
+            </form>
+
+            <!--  -->
+            <div class="flex flex-col items-center mt-4">
+              <img src="static/Image/logo.svg" alt="" />
+              <p class="uppercase tracking-widest text-gray-400 mt-2">
+                Discover the more attractive you
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <p class="text-center text-gray-600 mt-4">
+    Already have an account?
+    <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Login</a>
+  </p>
+</html>
