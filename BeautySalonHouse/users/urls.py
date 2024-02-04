@@ -8,6 +8,12 @@ urlpatterns = [
     path('logout', views.logoutUser, name='logout'),
     # path('logout', views.logoutUser, name='logout'),
     path('register', views.registerUser, name='register'),
+    
+     path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
+    
+   
+   path('EditProfile/', views.EditProfile, name='EditProfile'),
+ 
     # FOR Admin
     # path('adminHome', views.adminHome, name='adminHome'),   
      

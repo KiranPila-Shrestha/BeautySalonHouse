@@ -16,7 +16,7 @@
 
     {% endif %} {% if request.user.is_authenticated and user.is_superuser %}
 
-    <a href="">ADMIN DASHBOARD</a> <br />
+    <a href="{% url 'AdminDashBoard'%}">ADMIN DASHBOARD</a> <br />
 
     {% elif request.user.is_authenticated %}
 

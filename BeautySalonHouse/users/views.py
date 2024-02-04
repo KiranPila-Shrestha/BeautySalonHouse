@@ -90,3 +90,17 @@ def logoutUser(request):
     
     logout(request)
     return redirect('login')
+
+##EditProfile user
+def EditProfile(request):
+    # user_form = UserUpdateForm(instance=request.user)
+    # #Profile_form = ProfileUpadateForm(instance=request.user.UserProfile)
+    
+    # context = {
+    #     'user_form': user_form,
+    #     #'Profile_form': Profile_form
+    # }
+    return render(request, 'User_Profile_Management/EditProfile.html')
+
+def AdminDashBoard(request):
+     return render(request, 'Admin_Page/AdminDashboard.html')

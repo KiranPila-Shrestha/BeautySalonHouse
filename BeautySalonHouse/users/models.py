@@ -19,3 +19,12 @@ class UserDetail(models.Model):
    
    def __str__(self):
         return f"{self.user.username}'s Details"
+     
+class UserProfile(models.Model):
+   
+   """there is one to one relation between user and profile"""
+   user = models.OneToOneField(User, on_delete = models.CASCADE)
+   image = models.ImageField(default='default_image/profiledefault.jpg', blank=False, upload_to='profile_pics')
+   
+   def __str__(self):
+      return f'{self.user.username} UsersProfile'
