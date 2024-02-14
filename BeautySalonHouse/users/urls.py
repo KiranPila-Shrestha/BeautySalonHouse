@@ -8,11 +8,26 @@ urlpatterns = [
     path('logout', views.logoutUser, name='logout'),
     # path('logout', views.logoutUser, name='logout'),
     path('register', views.registerUser, name='register'),
+    path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
+    path('EditProfile/<int:user_id>/', views.EditProfile, name='EditProfile'),
+    path('ChangePassword/<int:user_id>/', views.ChangePassword, name= 'ChangePassword'),
     
-     path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
+    # PASSWORD RESET
+    path('reset_password', auth_views.PasswordResetView.as_view(
+    template_name="Login_Register/Reset_Password/ResetPassword.html"), 
+    name="reset_password"),   
     
-   
-   path('EditProfile/', views.EditProfile, name='EditProfile'),
+    path('reset_password_sent', auth_views.PasswordResetDoneView.as_view(
+    template_name="Login_Register/Reset_Password/SentPasswordReset.html"), 
+    name="password_reset_done"), 
+      
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+    template_name="Login_Register/Reset_Password/ConfirmResetPassword.html"), 
+    name="password_reset_confirm"), 
+      
+    path('reset_password_complete', auth_views.PasswordResetCompleteView.as_view(
+    template_name="Login_Register/Reset_Password/ResetPasswordNext.html"), 
+    name="password_reset_complete"),  
  
     # FOR Admin
     # path('adminHome', views.adminHome, name='adminHome'),   
