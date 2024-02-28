@@ -1,0 +1,153 @@
+
+{% load customtags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landing Page</title>
+  <!--tailwind-->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Include Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var userDropdownToggle = document.getElementById('userDropdownToggle');
+      var userDropdown = document.getElementById('userDropdown');
+      
+      userDropdownToggle.addEventListener('click', function() {
+          userDropdown.classList.toggle('hidden');
+      });
+  });
+  
+  </script>
+
+  <style>
+    /* CSS for hover effect and font family used */
+    .nav-link{
+      font-family: 'Syne' ;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover{
+      color: #00BCD4;
+    }
+
+      .service-image {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+
+    #userDropdown {
+      z-index : 5555;
+    }
+     
+  </style>
+</head>
+{% if request.user.is_authenticated %}
+User is authenticated
+{% else %}
+User is not authenticated
+{% endif %}
+<body> 
+    <!-- Navigation Bar -->
+    <nav class="bg-[#626262] text-white p-1 flex justify-between items-center">
+      <!-- Contact Info -->
+      <div class="flex">
+        <div class="mr-4">Email: example@example.com</div>
+        <div>Phone: +1234567890</div>
+      </div>
+      
+      <!-- Social Icons -->
+      <div class="flex mr-10">
+        <a href="#" class="mr-4"><i class="fab fa-instagram hover:text-red-400"></i></a>
+        <a href="#"><i class="fab fa-facebook hover:text-blue-400"></i></a>
+      </div>
+    </nav>
+  
+    <!-- Main Navigation Bar -->
+    <nav class="bg-white-900 text-black p-4 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <div class="text-2xl font-bold mr-10"><img src="static/Image/logo.svg" class="w-[80%] h-" alt="" /></div>
+        
+        <!-- Navigation Links -->
+        <div class="flex space-x-8 ">
+          <a href="{% url 'home' %}" class="nav-link"  >Home</a>
+          <a href="{% url 'product' %}" class="nav-link">Products</a>
+          <a href="" class="nav-link">Services</a>
+          <a href="{% url 'contact' %}" class="nav-link">Contact Us</a>
+        </div>
+      </div>      
+      <!-- Book Now Button -->
+      {% if request.user.is_authenticated %}
+      <a href="{% url 'booking' %}">
+          <button class="primary bg-[#009688] text-white px-8 py-2 ml-[480px]">Book Now</button>
+      </a>
+  {% else %}
+      <p style="font-family: 'Great Vibes', cursive" class="text-cyan-500">"Sign in to schedule your beauty appointment now"</p>
+      <a href="{% url 'login' %}" class="text-cyan-600 hover:text-blue-500">Login</a>
+  {% endif %}
+  
+
+  {% if request.user.is_authenticated %}
+  <div class="relative">
+      <div class="flex items-center cursor-pointer" id="userDropdownToggle">
+          <span class="text-gray-600 mr-10">
+              <i class="fas fa-user-circle text-2xl mr-2"></i>
+              {{ request.user.username }}
+          </span>
+        </div>
+          <div class="absolute hidden bg-white rounded shadow-md mt-2 py-2 w-48 " style = "font-family: poppins" id="userDropdown">
+            <a href="{% if request.user.userdetail.user_type == 'customer' %}{% url 'EditProfile' user.id %}{% elif request.user.is_superuser %}{% url 'AdminDashBoard' %}{% else %}{% url 'StaffDashboard' %}{% endif %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white"> <i class="fas fa-user-circle text-1.5xl mr-2 "></i>Account</a>
+            <a href="{% url 'logout' %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white"> <i class="fas fa-sign-out-alt text-1xl text-regular mr-2"></i>Logout</a>
+        </div>
+          
+      </div>
+      
+  </div>
+{% endif %}
+
+
+    </nav>
+{% block content%}
+{% endblock%}
+
+     <!-- Footer Section started -->
+ <hr class="border border-black my-4">
+ <footer class="bg-white-800 text-black py-8">
+  <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+    <div class="flex items-center mb-8 md:mb-0"> <!-- Add md:mb-0 to prevent margin on larger screens -->
+      <img src="static/Image/logo.svg" alt="Logo" class="w-17 h-17 mr-6">
+      <div>
+        <p class="font-bold text-xl" style="font-family: poppins">Aura Salon</p>
+        <p style="font-family: poppins" >Baneshwor</p> <!-- Move street name below the salon name -->
+        <p style="font-family: poppins">Kathmandu, Nepal</p> <!-- Separate the city and country -->
+      </div>
+    </div>
+    <div class="text-center md:text-left">
+      <h3 class="text-xl font-semibold mb-4"style="font-family: poppins">Get in Touch</h3>
+      <p class="mb-2" style="font-family: poppins">Phone: +1234567890</p>
+      <p class="mb-4"style="font-family: poppins">Email: aurasalon@example.com</p>
+    </div>
+      <div class="text-center md:text-left">
+      <h3 class="text-xl font-semibold mb-4"style="font-family: poppins">Quick Links</h3>
+      <ul class="mb-4">
+        <li><a href="#" class="nav-link">Home</a></li>
+        <li><a href="#" class="nav-link">Services</a></li>
+        <li><a href="#" class="nav-link">Products</a></li>
+        <a href="#" class="nav-link">Contact Us</a>
+      </ul>
+    </div>
+    <!-- Follow Us section -->
+    <div class="flex flex-col items-center md:items-start"> <!-- Change to flex-col for column layout -->
+      <h3 class="text-xl font-semibold mb-2 md:mb-4"style="font-family: poppins">Follow Us</h3> <!-- Add mb-2 for smaller screens -->
+      <div class="flex"> <!-- Wrap icons in a flex container -->
+        <a href="#" class="mr-4"><i class="fab fa-facebook text-2xl hover:text-blue-400"></i></a>
+        <a href="#"><i class="fab fa-instagram text-2xl hover:text-red-400"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+<hr class="border border-black my-4">

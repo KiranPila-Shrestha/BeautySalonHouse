@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landing Page</title>
+  <!--tailwind-->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Include Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+  <style>
+    /* CSS for hover effect and font family used */
+    .nav-link{
+      font-family: 'Syne' ;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover{
+      color: #00BCD4;
+    }
+
+      .service-image {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+     
+  </style>
+</head>
+<body> 
+    <!-- Navigation Bar -->
+    <nav class="bg-[#626262] text-white p-1 flex justify-between items-center">
+      <!-- Contact Info -->
+      <div class="flex">
+        <div class="mr-4">Email: example@example.com</div>
+        <div>Phone: +1234567890</div>
+      </div>
+      
+      <!-- Social Icons -->
+      <div class="flex mr-10">
+        <a href="#" class="mr-4"><i class="fab fa-instagram hover:text-red-400"></i></a>
+        <a href="#"><i class="fab fa-facebook hover:text-blue-400"></i></a>
+      </div>
+    </nav>
+  
+    <!-- Main Navigation Bar -->
+    <nav class="bg-white-900 text-black p-4 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <div class="text-2xl font-bold mr-10"><img src="static/Image/logo.svg" class="w-[80%] h-" alt="" /></div>
+        
+        <!-- Navigation Links -->
+        <div class="flex space-x-8 ">
+          <a href="{% url 'home' %}" class="nav-link"  >Home</a>
+          <a href="{% url 'product' %}" class="nav-link">Products</a>
+          <a href="{% url 'contact' %}" class="nav-link">Services</a>
+          <a href="#" class="nav-link">Contact Us</a>
+        </div>
+      </div>
+      
+      <!-- Book Now Button -->
+      {% if user.is_authenticated %}
+        <a href = "{% url 'booking' %}">
+         <button class="primary bg-[#009688] text-white px-8 py-2">Book Now</button>
+    </a>
+    {% else %}
+      <!-- Show a message or redirect to the login page -->
+    <p style = "font-family: 'Great Vibes', cursive "  class = "text-cyan-500">" Sign in to schedule your beauty appointment now "</p>
+    <!-- Example redirect link -->
+    <a href="{% url 'login' %}" class="text-cyan-600  hover:text-blue-500 ">Login</a>
+ {% endif %}
+    </nav>
+  
+    
+    <!-- Banner with Salon Image -->
+  <div class="relative h-90 bg-cover bg-center bg-repeat flex justify-center items-center"> <img src="static/Image/bg-3.jpg" alt="Your Salon Logo">
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+      <h1 class="text-white text-4xl font-bold mb-6" style="font-family: poppins ">Contact US</h1>
+      <div class = "ml-32" >
+      <h2 class="text-black text-2xl font-regular ml-72  mb-6" style="font-family: 'serif',cursive "> Get in touch with us today</h2>
+      <button class="bg-[#009688] text-white px-6 py-3 primary ml-72 hover:bg-[#00BCD4]">Call Now : 01-554678923</button>
+      </div>
+    </div>
+  </div>
+  hi
+
+  <div class="container mx-auto mt-10 flex"> <!-- Adjusted container class -->
+
+    <div class="w-full md:w-1/2 mt-32">
+        <h2 class="text-4xl font-semibold mb-4"  style= "font-family: poppins, Serif"> Aura Salon Details</h2>
+        <p style= "font-family: poppins,serif " class = "text-2xl font-regular mb-2"><strong>Address : </strong> 123 Salon Street, Cityville</p>
+        <p style= "font-family: poppins,serif " class = "text-2xl font-regular mb-2"><strong>Email :</strong> info@salon.com</p>
+        <p style= "font-family: poppins,serif " class = "text-2xl font-regular mb-2"><strong>Contact Number :</strong> 01-123456789</p>
+      </div>
+
+    <div class="w-full max-w-lg ml-auto"> <!-- Added ml-auto to align the form to the right -->
+      <h2 class="text-4xl font-bold mb-4" style= "font-family: poppins, cursive">Contact Us</h2>
+      <form action="submit_contact_form.php" method="POST" class="w-full">
+        <div class="flex flex-wrap -mx-3 mb-6">
+          <div class="w-full px-3 mb-6 md:mb-0">
+            <label for="name" class="block uppercase tracking-wide text-gray-700 text-1xl font-bold mb-2" style= "font-family: poppins">Your Name</label>
+            <input type="text" id="name" name="name" class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-cyan-700">
+          </div>
+          <div class="w-full px-3 mb-6 md:mb-0">
+            <label for="email" class="block uppercase tracking-wide text-gray-700 text-1xl font-bold mb-2"  style= "font-family: poppins">Your Email</label>
+            <input type="email" id="email" name="email" class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-cyan-700">
+          </div>
+          <div class="w-full px-3">
+            <label for="message" class="block uppercase tracking-wide text-gray-700 text-1xl font-bold mb-2"  style= "font-family: poppins">Message</label>
+            <textarea id="message" name="message" class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-cyan-700 h-48 resize-none"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="bg-[#009688] text-white px-6 py-3 Primary  hover:bg-[#00BCD4]"  style= "font-family: poppins">Send Message</button>
+      </form>
+    </div>
+  </div>
+  

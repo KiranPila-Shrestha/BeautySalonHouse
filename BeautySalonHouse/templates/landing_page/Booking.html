@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landing Page</title>
+  <!--tailwind-->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Include Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+  <style>
+    /* CSS for hover effect and font family used */
+    .nav-link{
+      font-family: 'Syne' ;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover{
+      color: #00BCD4;
+    }
+
+      .service-image {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+     
+  </style>
+</head>
+<body> 
+    <!-- Navigation Bar -->
+    <nav class="bg-[#626262] text-white p-1 flex justify-between items-center">
+      <!-- Contact Info -->
+      <div class="flex">
+        <div class="mr-4">Email: example@example.com</div>
+        <div>Phone: +1234567890</div>
+      </div>
+      
+      <!-- Social Icons -->
+      <div class="flex mr-10">
+        <a href="#" class="mr-4"><i class="fab fa-instagram hover:text-red-400"></i></a>
+        <a href="#"><i class="fab fa-facebook hover:text-blue-400"></i></a>
+      </div>
+    </nav>
+  
+    <!-- Main Navigation Bar -->
+    <nav class="bg-white-900 text-black p-4 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <div class="text-2xl font-bold mr-10"><img src="static/Image/logo.svg" class="w-[80%] h-" alt="" /></div>
+        
+        <!-- Navigation Links -->
+        <div class="flex space-x-8 ">
+          <a href="{% url 'home' %}" class="nav-link"  >Home</a>
+          <a href="{% url 'product'%}" class="nav-link">Products</a>
+          <a href="#" class="nav-link">Services</a>
+          <a href="{% url 'contact'%}" class="nav-link">Contact Us</a>
+        </div>
+      </div>
+      
+      <!-- Book Now Button -->
+    <div  class="flex items-center">
+    <span class="text-gray-600 mr-4"><i class="fas fa-user-circle text-2xl"></i></span>
+    <span class="text-black mr-4">User</span>
+    <button class="bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-4 rounded-full"><a href="{% url 'logout' %}" class="flex items-center"> <i  class="fas fa-sign-out-alt"></i></a></button>
+  </div>
+    </nav>
+
+
+     <!-- Banner with Salon Image -->
+  <div class="relative h-90 bg-cover bg-center bg-repeat flex justify-center items-center"> <img src="static/Image/banner-2.jpg" alt="Your Salon Logo">
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+      <h1 class="text-white text-4xl font-bold mb-4 mt-10" style="font-family: poppins ">BOOK AN APPOINTMENT</h1>
+      <h4 class="text-white text-2xl font-regular mb-10 mt-6" style="font-family: poppins ">PLEASE FILL OUT THE APPOINTMENT FORM BELOW TO MAKE APPOINTMENT</h4>
+      </div>
+  </div>
+  
+  <div class="max-w-full mx-auto mt-8 px-4" style="margin-left: 100px;">
+    <form>
+      <!-- First Column (Text Fields) -->
+      <div class="mb-6 grid grid-cols-1 gap-8 sm:grid-cols-2">
+        <div>
+          <label for="first_name" class="block text-sm font-medium text-gray-600">First Name</label>
+          <input type="text" id="first_name" name="first_name" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);" placeholder="Enter First Name">
+        </div>
+        <div>
+          <label for="last_name" class="block text-sm font-medium text-gray-600">Last Name</label>
+          <input type="text" id="last_name" name="last_name" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);" placeholder="Enter Last Name">
+        </div>
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-600">Username</label>
+          <input type="text" id="username" name="username" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);" placeholder="Enter Username">
+        </div>
+        <div>
+          <label for="address" class="block text-sm font-medium text-gray-600">Address</label>
+          <input type="text" id="address" name="address" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);" placeholder="Enter Address">
+        </div>
+        <div>
+          <label for="phone_number" class="block text-sm font-medium text-gray-600">Phone Number</label>
+          <input type="text" id="phone_number" name="phone_number" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);" placeholder="Enter Phone Number">
+        </div>
+        <div>
+          <label for="skin_problem" class="block text-sm font-medium text-gray-600">Skin Problem</label>
+          <input type="text" id="skin_problem" name="skin_problem" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);" placeholder="Enter Skin Problem">
+        </div>
+      </div>
+      <!-- Second Column (Select Options) -->
+      <div class="mb-6 grid grid-cols-1 gap-8 sm:grid-cols-2">
+        <div>
+          <label for="skin_type" class="block text-sm font-medium text-gray-600">Skin Type</label>
+          <select id="skin_type" name="skin_type" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);">
+            <option value="">Select Skin Type</option>
+            <option value="dry">Dry</option>
+            <option value="oily">Oily</option>
+            <option value="combination">Combination</option>
+          </select>
+        </div>
+        <div>
+          <label for="hair_type" class="block text-sm font-medium text-gray-600">Hair Type</label>
+          <select id="hair_type" name="hair_type" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);">
+            <option value="">Select Hair Type</option>
+            <option value="straight">Straight</option>
+            <option value="wavy">Wavy</option>
+            <option value="curly">Curly</option>
+          </select>
+        </div>
+        <div>
+          <label for="service" class="block text-sm font-medium text-gray-600">Select Service</label>
+          <select id="service" name="service" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);">
+            <option value="">Select Service</option>
+            <option value="hair_treatment">Hair Treatment</option>
+            <option value="makeup">Makeup</option>
+            <option value="skin_care">Skin Care</option>
+            <option value="laser_treatment">Laser Treatment</option>
+          </select>
+        </div>
+        <div>
+          <label for="staff" class="block text-sm font-medium text-gray-600">Select Staff</label>
+          <select id="staff" name="staff" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);">
+            <option value="">Select Staff</option>
+            <option value="staff1">Staff 1</option>
+            <option value="staff2">Staff 2</option>
+            <option value="staff3">Staff 3</option>
+          </select>
+        </div>
+        <div>
+          <label for="additional_service" class="block text-sm font-medium text-gray-600">Additional Service</label>
+          <select id="additional_service" name="additional_service" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);">
+            <option value="">Select Additional Service</option>
+            <option value="hair_styling">Hair Styling</option>
+            <option value="nail_art">Nail Art</option>
+            <!-- Add more options as needed -->
+          </select>
+        </div>
+        <div>
+          <label for="date" class="block text-sm font-medium text-gray-600">Select Date</label>
+          <input type="date" id="date" name="date" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);" placeholder="Select Date">
+        </div>
+      </div>
+      <div>
+        <label for="time" class="block text-sm font-medium text-gray-600">Select Time</label>
+        <input type="time" id="time" name="time" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(50% - 12px);"placeholder = "Select Time">
+      </div>
+      <br>
+      <!-- Button -->
+      <div class="text-center">
+        <button type="submit" class="primary bg-[#009688] text-white px-8 py-2">Book Appointment</button>
+      </div>
+    </form>
+  </div>
+
+   <!-- Footer Section -->
+ <hr class="border border-black my-4">
+ <footer class="bg-white-800 text-black py-8">
+  <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+    <div class="flex items-center mb-8 md:mb-0"> <!-- Add md:mb-0 to prevent margin on larger screens -->
+      <img src="static/Image/logo.svg" alt="Logo" class="w-17 h-17 mr-6">
+      <div>
+        <p class="font-bold text-xl" style="font-family: poppins">Aura Salon</p>
+        <p style="font-family: poppins" >Baneshwor</p> <!-- Move street name below the salon name -->
+        <p style="font-family: poppins">Kathmandu, Nepal</p> <!-- Separate the city and country -->
+      </div>
+    </div>
+    <div class="text-center md:text-left">
+      <h3 class="text-xl font-semibold mb-4"style="font-family: poppins">Get in Touch</h3>
+      <p class="mb-2" style="font-family: poppins">Phone: +1234567890</p>
+      <p class="mb-4"style="font-family: poppins">Email: aurasalon@example.com</p>
+    </div>
+      <div class="text-center md:text-left">
+      <h3 class="text-xl font-semibold mb-4"style="font-family: poppins">Quick Links</h3>
+      <ul class="mb-4">
+        <li><a href="#" class="nav-link">Home</a></li>
+        <li><a href="#" class="nav-link">Services</a></li>
+        <li><a href="#" class="nav-link">Products</a></li>
+        <a href=""{% url 'contact' %}"" class="nav-link">Contact Us</a>
+      </ul>
+    </div>
+    <!-- Follow Us section -->
+    <div class="flex flex-col items-center md:items-start"> <!-- Change to flex-col for column layout -->
+      <h3 class="text-xl font-semibold mb-2 md:mb-4"style="font-family: poppins">Follow Us</h3> <!-- Add mb-2 for smaller screens -->
+      <div class="flex"> <!-- Wrap icons in a flex container -->
+        <a href="#" class="mr-4"><i class="fab fa-facebook text-2xl hover:text-blue-400"></i></a>
+        <a href="#"><i class="fab fa-instagram text-2xl hover:text-red-400"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+<hr class="border border-black my-4">
+  

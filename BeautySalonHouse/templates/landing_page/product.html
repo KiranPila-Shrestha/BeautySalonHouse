@@ -1,0 +1,442 @@
+{% comment %} {% load customTags %} {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landing Page</title>
+  <!--tailwind-->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Include Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+  <style>
+    /* CSS for hover effect and font family used */
+    .nav-link{
+      font-family: 'Syne' ;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover{
+      color: #00BCD4;
+    }
+
+      .service-image {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+     
+  </style>
+</head>
+<body> 
+    <!-- Navigation Bar -->
+    <nav class="bg-[#626262] text-white p-1 flex justify-between items-center">
+      <!-- Contact Info -->
+      <div class="flex">
+        <div class="mr-4">Email: example@example.com</div>
+        <div>Phone: +1234567890</div>
+      </div>
+      
+      <!-- Social Icons -->
+      <div class="flex mr-10">
+        <a href="#" class="mr-4"><i class="fab fa-instagram hover:text-red-400"></i></a>
+        <a href="#"><i class="fab fa-facebook hover:text-blue-400"></i></a>
+      </div>
+    </nav>
+  
+    <!-- Main Navigation Bar -->
+    <nav class="bg-white-900 text-black p-4 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <div class="text-2xl font-bold mr-10"><img src="static/Image/logo.svg" class="w-[80%] h-" alt="" /></div>
+        
+        <!-- Navigation Links -->
+        <div class="flex space-x-8 ">
+          <a href="{% url 'home' %}" class="nav-link"  >Home</a>
+          <a href="{% url 'product'%}" class="nav-link">Products</a>
+          <a href="#" class="nav-link">Services</a>
+          <a href="{% url 'contact'%}" class="nav-link">Contact Us</a>
+        </div>
+      </div>
+      
+      <!-- Book Now Button -->
+      {% if user.is_authenticated %}
+        <a href = "{% url 'booking' %}">
+         <button class="primary bg-[#009688] text-white px-8 py-2">Book Now</button>
+    </a>
+    {% else %}
+      <!-- Show a message or redirect to the login page -->
+    <p style = "font-family: 'Great Vibes', cursive "  class = "text-cyan-500">" Sign in to schedule your beauty appointment now "</p>
+    <!-- Example redirect link -->
+    <a href="{% url 'login' %}" class="text-cyan-600  hover:text-blue-500 ">Login</a>
+ {% endif %}
+    </nav>
+  
+    
+    <!-- Banner with Salon Image -->
+    <div class="relative h-90 bg-cover bg-center bg-repeat flex">
+      <div class="absolute inset-0 bg-[rgba(0,0,0,0.19)]"></div>
+      <img src="static/Image/bg-2.jpg" alt="Your Salon Logo" class="flex-shrink-0">
+      <div class="absolute top-0 left-0 mt-48 p-10 text-white w-1/2">
+        <h6 class="text-2xl font-bold mb-6" style="font-family: poppins">New in town</h6>
+        <h1 class="text-6xl font-bold mb-6" style="font-family: poppins">Discover The New Beauty Collection: Pure Elegance</h1>
+        <h4 class="text-2xl font-regular mb-10" style="font-family: poppins">"Elevate your beauty with our latest collection, a fusion of style, sophistication and glamour "</h4>
+        <button class="bg-[#009688] text-white px-8 py-3 rounded-full hover:bg-[#00BCD4]">SHOP NOW</button>
+      </div>
+    </div>
+    
+  <br> 
+  <div class="  text-center">
+    <h5 class="text-black text-1xl font-regular mb-2" style="font-family: poppins "> INDULGE YOURSELF</h5>
+    <h2 class="text-black text-2xl font-semibold mb-3" style="font-family: poppins ">SKIN PRODUCT</h2>
+    <p class="text-gray-700 mb-8">" Flawless skin and hair donot occur by chance, they are appointments away."</p>
+  </div>
+<!-- Service Section -->
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+  <!-- First product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-1.jpg" alt="Service 1" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60 ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins" >Makeup</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 1</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+ 
+  <!-- Second product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-2.jpg" alt="Service 2" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60 ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins">Skin Care</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 2</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Third product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-3.jpg" alt="Service 3" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60  ">
+    <h3 class="text-lg font-semibold mt-4"style="font-family: poppins">Hair-cut</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 3</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Fourth product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-4.jpg" alt="Service 4" class="service-image  hover:scale-105 hover:shadow-xl w-50 h-60  ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins">Hair Color</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 4</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Repeat this structure for more products -->
+</div>
+{% comment %} 
+ for nextt  {% endcomment %}
+
+ <br> 
+  <div class="  text-center">
+    <h5 class="text-black text-1xl font-regular mb-2" style="font-family: poppins "> INDULGE YOURSELF</h5>
+    <h2 class="text-black text-2xl font-semibold mb-3" style="font-family: poppins ">MAKEUP  PRODUCT</h2>
+    <p class="text-gray-700 mb-8">" Flawless skin and hair donot occur by chance, they are appointments away."</p>
+  </div>
+<!-- Service Section -->
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+  <!-- First product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-1.jpg" alt="Service 1" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60 ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins" >Makeup</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 1</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+ 
+  <!-- Second product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-2.jpg" alt="Service 2" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60 ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins">Skin Care</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 2</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Third product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-3.jpg" alt="Service 3" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60  ">
+    <h3 class="text-lg font-semibold mt-4"style="font-family: poppins">Hair-cut</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 3</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Fourth product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-4.jpg" alt="Service 4" class="service-image  hover:scale-105 hover:shadow-xl w-50 h-60  ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins">Hair Color</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 4</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Repeat this structure for more products -->
+</div>
+
+
+{% comment %} forr 3 nect {% endcomment %}
+
+<br> 
+  <div class="  text-center">
+    <h5 class="text-black text-1xl font-regular mb-2" style="font-family: poppins "> INDULGE YOURSELF</h5>
+    <h2 class="text-black text-2xl font-semibold mb-3" style="font-family: poppins ">HAIR COLOR PRODUCT</h2>
+    <p class="text-gray-700 mb-8">" Flawless skin and hair donot occur by chance, they are appointments away."</p>
+  </div>
+<!-- Service Section -->
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+  <!-- First product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-1.jpg" alt="Service 1" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60 ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins" >Makeup</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 1</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+ 
+  <!-- Second product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-2.jpg" alt="Service 2" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60 ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins">Skin Care</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 2</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Third product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-3.jpg" alt="Service 3" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60  ">
+    <h3 class="text-lg font-semibold mt-4"style="font-family: poppins">Hair-cut</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 3</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Fourth product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-4.jpg" alt="Service 4" class="service-image  hover:scale-105 hover:shadow-xl w-50 h-60  ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins">Hair Color</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 4</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Repeat this structure for more products -->
+</div>
+
+{% comment %} for 4th text {% endcomment %}
+
+<br> 
+  <div class="  text-center">
+    <h5 class="text-black text-1xl font-regular mb-2" style="font-family: poppins "> INDULGE YOURSELF</h5>
+    <h2 class="text-black text-2xl font-semibold mb-3" style="font-family: poppins ">HAIR MASKS</h2>
+    <p class="text-gray-700 mb-8">" Flawless skin and hair donot occur by chance, they are appointments away."</p>
+  </div>
+<!-- Service Section -->
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+  <!-- First product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-1.jpg" alt="Service 1" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60 ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins" >Makeup</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 1</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+ 
+  <!-- Second product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-2.jpg" alt="Service 2" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60 ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins">Skin Care</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 2</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Third product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-3.jpg" alt="Service 3" class="service-image hover:scale-105 hover:shadow-xl w-50 h-60  ">
+    <h3 class="text-lg font-semibold mt-4"style="font-family: poppins">Hair-cut</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 3</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Fourth product -->
+  <div class="flex flex-col items-center">
+    <img src="static/Image/service-4.jpg" alt="Service 4" class="service-image  hover:scale-105 hover:shadow-xl w-50 h-60  ">
+    <h3 class="text-lg font-semibold mt-4" style="font-family: poppins">Hair Color</h3>
+    <p class="text-sm text-gray-600">Short explanation of Service 4</p>
+    <div class="flex mt-2 text-yellow-400 text-xl">
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <span>&#9733;</span>
+      <!-- Add more stars if needed -->
+    </div>
+    <!-- Add to Cart button -->
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">Add to Cart</button>
+  </div>
+  <!-- Repeat this structure for more products -->
+</div>
+
+<br>
+
+ <!-- Footer Section -->
+ <hr class="border border-black my-4">
+ <footer class="bg-white-800 text-black py-8">
+  <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+    <div class="flex items-center mb-8 md:mb-0"> <!-- Add md:mb-0 to prevent margin on larger screens -->
+      <img src="static/Image/logo.svg" alt="Logo" class="w-17 h-17 mr-6">
+      <div>
+        <p class="font-bold text-xl" style="font-family: poppins">Aura Salon</p>
+        <p style="font-family: poppins" >Baneshwor</p> <!-- Move street name below the salon name -->
+        <p style="font-family: poppins">Kathmandu, Nepal</p> <!-- Separate the city and country -->
+      </div>
+    </div>
+    <div class="text-center md:text-left">
+      <h3 class="text-xl font-semibold mb-4"style="font-family: poppins">Get in Touch</h3>
+      <p class="mb-2" style="font-family: poppins">Phone: +1234567890</p>
+      <p class="mb-4"style="font-family: poppins">Email: aurasalon@example.com</p>
+    </div>
+      <div class="text-center md:text-left">
+      <h3 class="text-xl font-semibold mb-4"style="font-family: poppins">Quick Links</h3>
+      <ul class="mb-4">
+        <li><a href="#" class="nav-link">Home</a></li>
+        <li><a href="#" class="nav-link">Services</a></li>
+        <li><a href="#" class="nav-link">Products</a></li>
+        <a href="#" class="nav-link">Contact Us</a>
+      </ul>
+    </div>
+    <!-- Follow Us section -->
+    <div class="flex flex-col items-center md:items-start"> <!-- Change to flex-col for column layout -->
+      <h3 class="text-xl font-semibold mb-2 md:mb-4"style="font-family: poppins">Follow Us</h3> <!-- Add mb-2 for smaller screens -->
+      <div class="flex"> <!-- Wrap icons in a flex container -->
+        <a href="#" class="mr-4"><i class="fab fa-facebook text-2xl hover:text-blue-400"></i></a>
+        <a href="#"><i class="fab fa-instagram text-2xl hover:text-red-400"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+<hr class="border border-black my-4">
+
+{% comment %} {% if request.user.is_authenticated and not request.user.is_superuser and request.user|in_group:"staff" %}
+    <!-- Your staff-specific content here -->
+{% endif %} {% endcomment %}

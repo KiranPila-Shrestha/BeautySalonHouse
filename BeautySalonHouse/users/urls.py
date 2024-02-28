@@ -10,6 +10,8 @@ urlpatterns = [
     path('register', views.registerUser, name='register'),
     path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
     path('EditProfile/<int:user_id>/', views.EditProfile, name='EditProfile'),
+     path('AddProduct/', views.AddProduct, name='AddProduct'),
+    path('Staff/Hair_Technician_Dashboard.html', views.StaffDashboard, name='StaffDashboard'),
     path('ChangePassword/<int:user_id>/', views.ChangePassword, name= 'ChangePassword'),
     
     # PASSWORD RESET
@@ -28,7 +30,9 @@ urlpatterns = [
     path('reset_password_complete', auth_views.PasswordResetCompleteView.as_view(
     template_name="Login_Register/Reset_Password/ResetPasswordNext.html"), 
     name="password_reset_complete"),  
- 
+    
+    
+    # path('dashboard/', views.dashboard, name='dashboard'),
     # FOR Admin
     # path('adminHome', views.adminHome, name='adminHome'),   
      

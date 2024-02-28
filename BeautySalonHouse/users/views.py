@@ -52,9 +52,7 @@ def registerUser(request):
         if form.is_valid():
             # Get the username
             username = form.cleaned_data.get('username')
-            # An atomic transaction guarantees that all operations within the block are treated as a single unit. 
-            # If any operation fails, the entire transaction is rolled back, 
-            # undoing all changes made within the block.
+            # If any operation fails, the entire transaction is rolled back, undoing all changes made within the block.
             with transaction.atomic():
 
                 user = form.save()
@@ -65,21 +63,7 @@ def registerUser(request):
                 # Saving user default profile
                 user_default_profile_picture = UserProfile(user=user)
                 user_default_profile_picture.save()
-                
-                # Save profile image
-                # if request.FILES:
-                #     document = UserDocument(user=user, image=request.FILES['img'])
-                #     document.save()
-                # #     messages.success(request,"Account Created for " + username + " Please wait before we verify.")
-                    
-                
-                # else:
-                #     # Adding user to the Tenant group if they choose to become tenant 
-                #     group = Group.objects.get(name="admin")
-                #     user.groups.add(group)
-                #     messages.success(request,"Account Created for " + username)
-                    
-                            
+                       
             return redirect('login')
             
     context = {'form': form,}
@@ -98,7 +82,7 @@ def EditProfile(request, user_id):
     user_detail = user.userdetail
 
     if request.method == 'POST':
-        # Process form data if it's a POST request
+        # Process form if POST request
         user.first_name = request.POST.get('first_name')
         user.last_name = request.POST.get('last_name')
         user.email = request.POST.get('email')
@@ -110,8 +94,8 @@ def EditProfile(request, user_id):
             user_detail.contact_number = request.POST.get('contact_number')
         user_detail.save()
         
-        messages.success(request, "User updated successfully.")
-        return redirect('/', user_id=user_id)  # Redirect to the same page after form submission
+        messages.success(request, "User Details has been updated successfully.")
+        return redirect('EditProfile', user_id=user_id)  
     
     if "save_update_image" in request.POST:
             # Saving user New profile
@@ -123,6 +107,7 @@ def EditProfile(request, user_id):
     # If it's a GET request, render the edit profile page with the user data
     return render(request, 'User_Profile_Management/EditProfile.html', {'user': user, 'user_detail': user_detail})
 
+#  Change-password function part start
 def ChangePassword(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user_detail = user.userdetail
@@ -148,55 +133,48 @@ def ChangePassword(request, user_id):
     return render(request, 'Login_Register/Reset_Password/ChangePassword.html')
 
 
-
-# def EditProfile(request, user_id):
-#     user = get_object_or_404(User, id=user_id)
-#     # user_profile_picture = UserProfilePicture.objects.filter(user=request.user).first()
-#     # if user_profile_picture:
-#     #     profile_picture = user_profile_picture.image.url
-
-#     if request.method == 'POST':
-#         if "save_details" in request.POST:
-#             # UPDATING USER MODEL
-#             user.first_name = request.POST.get('first_name')
-#             user.last_name = request.POST.get('last_name')
-#             user.email = request.POST.get('email')
-#             user.save()
-            
-#             # UPDATING UserDetail MODEL
-#             user_detail = user.userdetail
-#             user_detail.address = request.POST.get('address')
-#             user_detail.contact_number = request.POST.get('contact_number')
-#             user_detail.save()
-            
-#             messages.success(request,"User updated successful.")
-#         return render(request, 'User_Profile_Management/EditProfile.html')
-    
-    
-    # if request.user.is_authenticated:
-    #     current_user = User.objects.get(id=request.user.id)
-    #     form = CreateUserForm(request.POST or None, instance = current_user)
-    #     if form.is_valid():
-    #         form.save()
-    #         login(request, current_user)
-    #         messages.success(request,("Your profile has been updated"))
-    #         return redirect('/')
-    #     return render(request, 'User_Profile_Management/EditProfile.html',{'form':form})
-    # else:
-    #     messages.success(request,("You must logged in..."))
-    #     return redirect('/')
-    
-    # user_form = UserUpdateForm(instance=request.user)
-    # Profile_form = ProfileUpadateForm(instance=request.user.UserProfile)
-    
-    # context = {
-    #     'user_form': user_form,
-    #     'Profile_form': Profile_form
-    # }
     
 
 def AdminDashBoard(request):
-     return render(request, 'Admin_Page/AdminDashboard.html')
+    form = CreateUserForm()
+    if request.method == 'POST' and "addStaff" in request.POST:
+        print("STEP1")
+        form = CreateUserForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Get the username
+            username = form.cleaned_data.get('username')
+            # If any operation fails, the entire transaction is rolled back, undoing all changes made within the block.
+            with transaction.atomic():
+
+                user = form.save()
+                # saving user contact number and address
+                user_details = UserDetail(user=user, address=request.POST.get('address'), contact_number=request.POST.get('contact'),
+                                user_type = request.POST.get('user_type'))
+                user_details.save()  
+                
+                if "user_type" in request.POST:
+                    userType = request.POST.get('user_type')
+                    group, create = Group.objects.get_or_create(name= userType)
+                    user.groups.add(group)
+                    
+                    # MESSAGE
+                    
+                # Saving user default profile
+                user_default_profile_picture = UserProfile(user=user)
+                user_default_profile_picture.save()
+                
+                #send mail
+                user_email = user.email
+                send_mail("Welcome to our salon","You have been assigned as {userType}","pilashrestha366@gmail.com",[user_email],fail_silently=False)
+                
+                messages.success(request, " Staff added")
+                return redirect('AdminDashboard')
+            
+    
+    return render(request, 'Admin_Page/AdminDashboard.html')
+
+def StaffDashboard(request):
+    return render(request, 'Staff/Hair_Technican_Dashboard.html')
  
 def send_email():
     subject = "This email from administrator"
@@ -205,3 +183,20 @@ def send_email():
     recipient_list = ["shresthakiran607@gmail.com"]
     
     send_mail(subject, message, from_email, recipient_list)
+    
+#add product admin
+
+def AddProduct(request):
+    return render(request, 'Admin_Page/Addproduct.html')
+    
+# Custome staff as role based access
+
+# def add_staff(request):
+#     if request.method == 'POST':
+#         form = StaffCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('Admin_Page/AdminDashboard.html')  # Assuming you have a URL named 'admin_dashboard'
+#     else:
+#         form = StaffCreationForm()
+#     return render(request, 'Admin_Page/AdminDashboard.html', {'form': form})
