@@ -4,5 +4,7 @@ from . import views
 # PASSWORD RESET
 from django.contrib.auth import views as auth_views
 urlpatterns = [ 
-               path('booking', views.booking, name='booking'),]
+               path('booking/', views.booking, name='booking'),
+                path('appointments', views.Appointments, name='appointments'),
+                ]
 

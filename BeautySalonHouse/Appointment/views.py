@@ -45,14 +45,47 @@ def booking(request):
             
             return render(request, 'landing_page/Booking.html')
          
-      
+    booking_requests = BookAppointment.objects.all()
     userAndUserType = User.objects.all()
     context = {
         "userAndUserType" : userAndUserType,
+
         # 'form':form
     }
     
     return render(request, 'landing_page/Booking.html', context)
+
+
+
+def Appointments(request):
+    booking_requests = BookAppointment.objects.filter(staff=request.user)
+    
+    if request.method == 'POST':
+        bookingId = request.POST.get("bookingId")
+        booking = BookAppointment.objects.get(id=bookingId)
+        print(booking)
+        
+        if "delete" in request.POST:
+            booking.delete()
+            
+        if "approve" in request.POST:
+            booking.confirmed = True
+            booking.save()
+            print('done')
+            
+        booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=False)   
+            
+          
+            
+      
+        
+    
+    
+    context = {
+        "booking_requests": booking_requests,
+
+    }
+    return render(request, 'Staff/Hair_Technican_Dashboard.html', context)
 
 
 

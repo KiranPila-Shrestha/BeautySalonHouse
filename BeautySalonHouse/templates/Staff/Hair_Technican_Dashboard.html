@@ -26,31 +26,14 @@
               >
                 Phone Number
               </th>
-              <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Skin Problem
-              </th>
-              <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Skin Type
-              </th>
-              <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Hair Type
-              </th>
+             
+              
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 Service
               </th>
-              <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Additional Service
-              </th>
+             
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
@@ -79,9 +62,44 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <!-- Table rows will be dynamically populated here -->
+          <tr>
+
+            <form method='post' action="">
+              {% csrf_token %}
+
+
+
+
+            
+          
+            {% for booking_request in booking_requests %}
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.user.get_full_name }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.user.username }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.user.userdetail.address }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.user.userdetail.contact_number }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.service }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.staff }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookDate }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookTime }}</td>
+              
+              <td class="px-6 py-4 whitespace-nowrap">
+                  <button name ="approve" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                      Approve
+                  </button>
+              </td>
+              <input type="hidden" name="bookingApprove" value="{{booking_request.id}}"/>
+              <td class="px-6 py-4 whitespace-nowrap">
+                  <button name="delete" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                      Delete
+                  </button>
+              </td>
+              <input type="hidden" name="bookingId" value="{{booking_request.id}}"/>
+          </tr>
+          {% endfor %}
+        </form>
           </tbody>
         </table>
+
       </div>
     </div>
 {%endblock%}

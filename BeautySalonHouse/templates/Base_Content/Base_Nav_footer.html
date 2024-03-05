@@ -42,6 +42,29 @@
     #userDropdown {
       z-index : 5555;
     }
+
+    /* Style for the dropdown menu */
+    .dropdown {
+        position: relative;
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        z-index: 1;
+        width: 200px;
+
+        transition: opacity 0.3s ease-in-out; /* Opacity animation */
+    }
+
+    /* Show the dropdown menu on hover */
+    .dropdown:hover .dropdown-content {
+        display: block;
+        opacity: 1; /* Make the menu fully visible */
+    }
      
   </style>
 </head>
@@ -73,11 +96,21 @@ User is not authenticated
         <div class="text-2xl font-bold mr-10"><img src="static/Image/logo.svg" class="w-[80%] h-" alt="" /></div>
         
         <!-- Navigation Links -->
-        <div class="flex space-x-8 ">
+        <div class="flex gap-5 space-x-8 ">
           <a href="{% url 'home' %}" class="nav-link"  >Home</a>
           <a href="{% url 'product' %}" class="nav-link">Products</a>
-          <a href="{% url 'service' %}" class="nav-link">Services</a>
-          <a href="{% url 'contact' %}" class="nav-link">Contact Us</a>
+          <a href="{% url 'contact' %}" class="nav-link ">Contact Us</a>
+          <div class="dropdown">
+            <a href="{% url 'service' %}" class="nav-link ">Service</a>
+            <div class="dropdown-content flex flex-col">
+              <!-- Dropdown items -->
+              <a href="#">Dropdown Item 1</a>
+              <a href="#">Dropdown Item 2</a>
+              <!-- Add more dropdown items as needed -->
+            </div>
+          </div>
+        </div>
+         
         </div>
       </div>      
     <!---->

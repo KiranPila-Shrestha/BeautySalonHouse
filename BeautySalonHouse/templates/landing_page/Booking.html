@@ -1,7 +1,7 @@
 {% extends 'Base_content/Base_Nav_footer.html'%}   
 {% block content %} 
      <!-- Banner with Salon Image -->
-  <div class="relative h-90 bg-cover bg-center bg-repeat flex justify-center items-center"> <img src="static/Image/banner-2.jpg" alt="Your Salon Logo">
+  <div class="relative h-90 bg-cover bg-center bg-repeat flex justify-center items-center"> <img src="/static/Image/banner-2.jpg" alt="Your Salon Logo">
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
       <h1 class="text-white text-4xl font-bold mb-4 mt-10" style="font-family: poppins ">BOOK AN APPOINTMENT</h1>
       <h4 class="text-white text-2xl font-regular mb-10 mt-6" style="font-family: poppins ">PLEASE FILL OUT THE APPOINTMENT FORM BELOW TO MAKE APPOINTMENT</h4>
@@ -13,7 +13,7 @@
       {% csrf_token %}
       <!-- First Column (Text Fields) -->
       <div class="mb-6 grid grid-cols-1 gap-8 sm:grid-cols-2">
-        <div>
+        {% comment %} <div>
           <label for="first_name" class="block text-sm font-medium text-gray-600">First Name</label>
           <input type="text" value="{{user.first_name}}" name="first_name" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);" placeholder="Enter First Name">
         </div>
@@ -32,16 +32,16 @@
         <div>
           <label for="phone_number" class="block text-sm font-medium text-gray-600">Phone Number</label>
           <input type="text" value={{user.userdetail.contact_number}}  name="phone_number" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);" placeholder="Enter Phone Number">
-        </div>
+        </div> {% endcomment %}
         
         <div>
           <label for="service" class="block text-sm font-medium text-gray-600">Select Service</label>
           <select id="service" name="service" class="mt-1 p-2 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" style="width: calc(100% - 12px);">
             <option value="">Select Service</option>
-            <option value="service1">Hair service</option>
-            <option value="service2">Make-up </option> 
-            <option value="service3">Skin Care</option>
-            <option value="service4">Nail Service</option>               
+            <option value="Hair service">Hair service</option>
+            <option value="Make-up ">Make-up </option> 
+            <option value="Skin Care">Skin Care</option>
+            <option value="Nail Service">Nail Service</option>               
           </select>
         </div>
         <div>

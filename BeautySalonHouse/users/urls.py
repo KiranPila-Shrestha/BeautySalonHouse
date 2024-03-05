@@ -10,10 +10,11 @@ urlpatterns = [
     path('register', views.registerUser, name='register'),
     path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
     path('EditProfile/<int:user_id>/', views.EditProfile, name='EditProfile'),
+    path('appointmenthistory/<int:user_id>/ ', views.appointmenthistory, name='appointmenthistory'),
     path('AddProduct/', views.AddProduct, name='AddProduct'),
     path('StaffEditProfile/<int:user_id>/', views.StaffEditProfile, name='StaffEditProfile'),
     path('Staff/Hair_Technician_Dashboard.html', views.HairStaffDashboard, name='HairStaffDashboard'),
-     #path('Staff/HairAppointmentHistory.html', views.AppointmentHistory, name='HairAppointmentHistory'),
+  
     
     path('ChangePassword/<int:user_id>/', views.ChangePassword, name= 'ChangePassword'),
     
@@ -24,7 +25,7 @@ urlpatterns = [
     
     path('reset_password_sent', auth_views.PasswordResetDoneView.as_view(
     template_name="Login_Register/Reset_Password/SentPasswordReset.html"), 
-    name="password_reset_done"), 
+    name="password_reset_don    e"), 
       
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
     template_name="Login_Register/Reset_Password/ConfirmResetPassword.html"), 

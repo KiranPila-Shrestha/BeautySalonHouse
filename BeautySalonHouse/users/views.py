@@ -233,4 +233,8 @@ def StaffEditProfile(request, user_id):
 
 def AddProduct(request):
     return render(request, 'Admin_Page/Addproduct.html')
+
+def appointmenthistory(request, user_id):
+    
+     return render(request, 'User_Profile_Management/appointmenthistory.html')
     

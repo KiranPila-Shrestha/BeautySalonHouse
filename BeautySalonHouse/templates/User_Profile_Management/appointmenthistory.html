@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment History</title>
+  <!-- Include Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+
+  <div class="max-w-xl mx-auto">
+
+    <!-- Page Title -->
+    <h1 class="text-2xl font-bold mb-4">Appointment History</h1>
+
+    <!-- Appointment History Table -->
+    <table class="min-w-full bg-white border border-gray-200 shadow-md rounded-md overflow-hidden">
+      <thead class="bg-gray-100 text-gray-800">
+        <tr>
+          <th class="px-4 py-2">Date</th>
+          <th class="px-4 py-2">Time</th>
+          <th class="px-4 py-2">Service</th>
+          <th class="px-4 py-2">Stylist</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <!-- Sample Data - Replace with Dynamic Data from Backend -->
+        <tr>
+          <td class="border px-4 py-2">2024-03-01</td>
+          <td class="border px-4 py-2">10:00 AM</td>
+          <td class="border px-4 py-2">Haircut</td>
+          <td class="border px-4 py-2">Jane Doe</td>
+        </tr>
+        <tr>
+          <td class="border px-4 py-2">2024-02-20</td>
+          <td class="border px-4 py-2">3:30 PM</td>
+          <td class="border px-4 py-2">Manicure</td>
+          <td class="border px-4 py-2">John Smith</td>
+        </tr>
+        <!-- End of Sample Data -->
+      </tbody>
+    </table>
+
+  </div>
+
+</body>
+</html>
