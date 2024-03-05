@@ -1,0 +1,167 @@
+{% extends 'Base_content/Base_StaffDashBoard.html'%} {% block content %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const imageInput = document.getElementById("image-input");
+      const imagePreview = document.getElementById("image-preview");
+  
+      imageInput.addEventListener("change", function () {
+        if (this.files && this.files[0]) {
+          const reader = new FileReader();
+  
+          reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+          };
+  
+          reader.readAsDataURL(this.files[0]);
+        } else {
+          // Clear the preview when no file is selected
+          imagePreview.src = "";
+        }
+      });
+    });
+  </script>
+
+  <!-- Main Content -->
+  <main class="w-3/4 p-4">
+    <div class="bg-white shadow-lg rounded-lg p-6">
+      <h1 class="text-2xl font-bold mb-4">Edit Profile</h1>
+      <!-- Profile Form -->
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token%}
+        <!-- Profile Image -->
+        <div class="mb-4">
+          <label
+            for="profile-image"
+            class="block text-sm font-medium text-gray-700"
+            >Profile Image</label
+          >
+          <img
+            id="image-preview"
+            src="{{ user.profile_image.url }}"
+            alt="Profile Image"
+            class="h-[15%] w-[20%] object-cover rounded-full mb-4"
+            onerror="this.onerror=null; this.src='../../static/images/default_image/profiledefault.jpg';"
+          />
+          <input
+            id="image-input"
+            class=""
+            type="file"
+            name="save_update_image"
+            accept="image/png, image/jpeg"
+            multiple
+          />
+        </div>
+        <!-- Other Profile form -->
+        <!-- First Name -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              for="first-name"
+              class="block text-sm font-medium text-gray-700"
+              >First Name</label
+            >
+            <input
+              type="text"
+              name="first_name"
+              class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              value="{{user.first_name}}"
+              required
+            />
+          </div>
+          <!-- Last Name -->
+          <div>
+            <label
+              for="last-name"
+              class="block text-sm font-medium text-gray-700"
+              >Last Name</label
+            >
+            <input
+              type="text"
+              name="last_name"
+              class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              value="{{user.last_name}}"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Email</label
+          >
+          <input
+            type="email"
+            name="email"
+            class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            value="{{user.email}}"
+            required
+          />
+        </div>
+        <!-- Location -->
+        <div class="mb-4">
+          <label for="location" class="block text-sm font-medium text-gray-700"
+            >Location</label
+          >
+          <input
+            type="text"
+            name="address"
+            class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            value="{{user.userdetail.address}}"
+            required
+          />
+        </div>
+        <!-- Phone -->
+        <div class="mb-4">
+          <label for="phone" class="block text-sm font-medium text-gray-700"
+            >Phone</label
+          >
+          <input
+            type="tel"
+            name="contact_number"
+            class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            value="{{user.userdetail.contact_number}}"
+            required
+          />
+        </div>
+
+        <div class="flex justify-between items-center">
+          <button
+            type="submit"
+            class="px-4 py-2 bg-[#009688] text-white rounded-lg"
+            value="Update"
+          >
+            Update
+          </button>
+          <button
+            class="bg-[#009688] hover:bg-cyan-700 text-white py-2 px-4 rounded-full ml-4"
+          >
+            <a
+              href="{% url 'ChangePassword' user.id%}"
+              class="flex items-center"
+            >
+              <i class="fas fa-key"></i> Change Password
+            </a>
+          </button>
+
+          <button
+            type="button"
+            class="px-4 py-2 bg-gray-500 hover:bg-red-600 text-white rounded-lg ml-4"
+          >
+            Cancel
+          </button>
+        </div>
+
+        {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </form>
+    </div>
+  </main>
+</div>
+
+
+{% endblock%}

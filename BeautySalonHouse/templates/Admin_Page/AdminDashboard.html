@@ -1,6 +1,29 @@
 {% extends 'Base_content/Base_AdminDashboard.html'%}
 {% block content%}
 
+<script>
+  $(document).ready(function() {
+    $('#staff-role').change(function() {
+      var staffRole = $(this).val();
+      $.ajax({
+        url: '/get_staff/',
+        data: {'staff_role': staffRole},
+        dataType: 'json',
+        success: function(data) {
+          $('#staff').empty();
+          $.each(data.staff, function(index, staff) {
+            $('#staff').append($('<option>', {
+              value: staff.id,
+              text: staff.name
+            }));
+          });
+        }
+      });
+    });
+  });
+</script>
+
+
       <!-- Main Content -->
       <main class="flex-1 p-6">
         <h1 class="text-2xl mb-4">Add Staff</h1>
@@ -117,7 +140,7 @@
                   <option value="Hair Technician">Hair Technician</option>
                   <option value="Makeup Artist">Makeup Artist</option>
                   <option value="Nail Technician">Nail Technician</option>
-                  <option value="Laser Skin">Laser Skin</option>
+                  <option value="Laser Skin">Skin Care Technician</option>
                 </select>
                 <div
                   class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"

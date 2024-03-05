@@ -41,6 +41,7 @@ INSTALLED_APPS = [
      'PIL',
     'core',
     'users',
+    'Appointment',
     
 ]
 

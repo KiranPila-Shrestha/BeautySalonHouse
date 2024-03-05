@@ -26,6 +26,11 @@ class ProfileUpadateForm(forms.ModelForm):
 class PasswordChangeView(PasswordChangeView):
     from_class = PasswordChangeForm
     success_url = reverse_lazy('/')   
+
+# class BookAppointmentForm(forms.ModelForm):
+#     class Meta:
+#         model = BookAppointment
+#         fields = ['service','staff','hair_type', 'skin_type', 'skin_problem']
     
 
 # class StaffCreationForm(forms.ModelForm):

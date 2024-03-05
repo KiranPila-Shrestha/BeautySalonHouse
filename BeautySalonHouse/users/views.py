@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render,redirect, get_object_or_404
 from .forms import *
+
+from datetime import datetime
+from django.utils import timezone
 from django.contrib import messages
 # IMPORTING "update_session_auth_hash" to Change PASSWORD
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -20,26 +23,14 @@ def loginUser(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         
-        if user is not None or user.is_superuser:
+        if user is not None:
             login(request, user)
              
             return redirect('/')
         
         else:
-            messages.info(request, 'Username or Password is incorrect')
-        # get the UserVerify instance for the logged in user.
-        # user_verify = UserVerify.objects.filter(user=user).first()    
+            messages.info(request, 'Username or Password is invalid.')
         
-        # Checking if that user is approved or not
-        # if user is not None and user.is_superuser or(user is not None and user.groups.filter(name__in=['Owner', 'Tenant']).exists()):
-        #     login(request, user)
-        
-        # elif user is not None and not user.groups.exists():
-            
-        #     messages.info(request, 'User is not approved.')
-
-        # else:
-        #     messages.info(request, 'Username or Password is incorrect')
 
     return render(request, 'login_register/login.html')
 
@@ -97,7 +88,16 @@ def EditProfile(request, user_id):
         messages.success(request, "User Details has been updated successfully.")
         return redirect('EditProfile', user_id=user_id)  
     
-    if "save_update_image" in request.POST:
+    if "Update" in request.POST:
+        
+            profile = UserProfile.objects.get(user=user)
+            profile.image =  request.FILES['save_update_image']
+            profile.image.save()
+            
+            
+            
+            
+            #print("IMAGEEEEEEEEEEEEEEEEE", image)
             # Saving user New profile
             users_profile = UserProfile.objects.get(user=user)
             users_profile.image = request.FILES['img']
@@ -132,8 +132,16 @@ def ChangePassword(request, user_id):
                     update_session_auth_hash(request, request.user)
     return render(request, 'Login_Register/Reset_Password/ChangePassword.html')
 
-
+#sending Mail Part
+def send_email():
+    subject = "This email from administrator"
+    message =" Reset Your passsword"
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = ["shresthakiran607@gmail.com"]
     
+    send_mail(subject, message, from_email, recipient_list)
+    
+#Admin DashBoard Part start  
 
 def AdminDashBoard(request):
     form = CreateUserForm()
@@ -173,30 +181,56 @@ def AdminDashBoard(request):
     
     return render(request, 'Admin_Page/AdminDashboard.html')
 
-def StaffDashboard(request):
+
+# hair-technician dashboard started
+def HairStaffDashboard(request):
     return render(request, 'Staff/Hair_Technican_Dashboard.html')
+
+def StaffEditProfile(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user_detail = user.userdetail
+
+    if request.method == 'POST':
+        # Process form if POST request
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+        user.save()
+        
+        if 'address' in request.POST:  # Check if address is present in POST data
+            user_detail.address = request.POST.get('address')
+        if 'contact_number' in request.POST:  # Check if contact_number is present in POST data
+            user_detail.contact_number = request.POST.get('contact_number')
+        user_detail.save()
+        
+        messages.success(request, "User Details has been updated successfully.")
+        return redirect('StaffEditProfile', user_id=user_id)  
+    
+    if "Update" in request.POST:
+        
+            profile = UserProfile.objects.get(user=user)
+            profile.image =  request.FILES['save_update_image']
+            profile.image.save()
+            
+            
+            
+            #print("IMAGEEEEEEEEEEEEEEEEE", image)
+            # Saving user New profile
+            users_profile = UserProfile.objects.get(user=user)
+            users_profile.image = request.FILES['img']
+            users_profile.save()
+            messages.success(request, 'Profile Picture Changed.') 
+    
+    # If it's a GET request, render the edit profile page with the user data
+    return render(request, 'Staff/StaffEditProfile.html', {'user': user, 'user_detail': user_detail})
  
-def send_email():
-    subject = "This email from administrator"
-    message =" Reset Your passsword"
-    from_email = settings.EMAIL_HOST_USER
-    recipient_list = ["shresthakiran607@gmail.com"]
+
     
-    send_mail(subject, message, from_email, recipient_list)
     
+
+
 #add product admin
 
 def AddProduct(request):
     return render(request, 'Admin_Page/Addproduct.html')
     
-# Custome staff as role based access
-
-# def add_staff(request):
-#     if request.method == 'POST':
-#         form = StaffCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('Admin_Page/AdminDashboard.html')  # Assuming you have a URL named 'admin_dashboard'
-#     else:
-#         form = StaffCreationForm()
-#     return render(request, 'Admin_Page/AdminDashboard.html', {'form': form})

@@ -118,10 +118,14 @@
             </form>
 
             <!--  -->
-            <div class="flex flex-col items-center mt-4">
+            <div class="flex flex-col items-center mt-2">
               <img src="static/Image/logo.svg" alt="" />
               <p class="uppercase tracking-widest text-gray-400 mt-2">
-                Discover the more attractive you
+                Discover the more attractive you<br>
+                <p class="text-center text-gray-600 mt-2 ml-[30px]">
+                  Already have an account?
+                  <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Login</a>
+                </p>
               </p>
             </div>
           </div>
@@ -129,8 +133,5 @@
       </div>
     </div>
   </body>
-  <p class="text-center text-gray-600 mt-4">
-    Already have an account?
-    <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Login</a>
-  </p>
+  
 </html>

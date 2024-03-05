@@ -1,0 +1,355 @@
+{% extends 'Base_content/Base_Nav_footer.html'%} {% block content %}
+<!-- Banner with Salon Image -->
+<div class="relative h-90 bg-cover bg-center bg-repeat flex">
+  <div class="absolute inset-0 bg-repeat"></div>
+  <img
+    src="static/Image/services-bg.webp"
+    alt="Your Salon Logo"
+    class="flex-shrink-0"
+  />
+  <div class="absolute top-0 left-0 mt-48 p-10 text-white w-1/2">
+    <h6 class="text-2xl font-bold mb-6" style="font-family: poppins">
+      Your Destination for Beauty
+    </h6>
+    <h1 class="text-6xl font-bold mb-6" style="font-family: poppins">
+      Explore Our Signature Services: Timeless Beauty
+    </h1>
+    <h4 class="text-2xl font-regular mb-10" style="font-family: poppins">
+      "Discover beauty's finest with our signature services, blending elegance,
+      sophistication, and allure."
+    </h4>
+    <button
+      class="bg-[#009688] text-white px-8 py-3 primary hover:bg-[#00BCD4]"
+    >
+      Book Now
+    </button>
+  </div>
+</div>
+
+<!-- Service Section -->
+<div class="container text-center mx-auto py-12 px-4">
+  <h5
+    class="text-black text-2xl font-regular mb-2"
+    style="font-family: poppins"
+  >
+    " Journey to Beauty Begins Here"
+  </h5>
+  <h2 class="text-3xl font-bold mb-3" style="font-family: poppins">
+    Our Services
+  </h2>
+  <p
+    class="text-gray-700 mb-8 text-1.5xl"
+    style="font-family: great-vibes, cursive"
+  >
+    " Where Every Service is Defined with Passion and Perfection "
+  </p>
+  <br />
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+    <!-- Hair Service -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img
+        src="static/Image/service-4.jpg"
+        alt="Hair Service"
+        style="height: 400px; width: 350px"
+      />
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2 text-center">Hair Service</h3>
+        <p class="text-lg text-gray-600 mb-4">
+          Indulge in our premium hair services, including expert haircuts,
+          luxurious keratin treatments, transformative hair straightening, and
+          dynamic permanent curls. Experience the ultimate in haircare
+          excellence at our salon.
+        </p>
+        <br />
+        <div class="flex justify-center items-center space-x-14">
+          <button
+            class="bg-[#009688] text-white px-4 py-2 rounded-full hover:bg-[#00BCD4]"
+          >
+            Book Now
+          </button>
+          <a
+            href="{%url 'hairservice'%}"
+            class="text-[#009688] hover:underline hover-text:blue-700 text-1.5xl"
+            >Know More >>>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Makeup Service -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img
+        src="static/Image/service-1.jpg"
+        alt="Makeup Service"
+        style="height: 400px; width: 350px"
+      />
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2 text-center">Makeup Service</h3>
+        <p class="text-lg text-gray-600 mb-4">
+          Elevate your beauty with our makeup services, offering expert makeup
+          application, flawless bridal makeup, glamorous evening looks, and
+          personalized makeup consultations. Experience the art of makeup
+          transformation at our salon.
+        </p>
+        <br />
+        <div class="flex justify-center items-center space-x-14">
+          <button
+            class="bg-[#009688] text-white px-4 py-2 rounded-full hover:bg-[#00BCD4]"
+          >
+            Book Now
+          </button>
+          <a
+            href="{%url 'makeupservice'%}"
+            class="text-[#009688] hover:underline hover-text:blue-700 text-1.5xl"
+            >Know More >>>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Nail Service -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img
+        src="static/Image/snail.jpeg"
+        alt="Nail Service"
+        style="height: 400px; width: 350px"
+      />
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2 text-center">Nail Service</h3>
+        <p class="text-lg text-gray-600 mb-4">
+          Transform your nails with our nail services, featuring meticulous
+          manicures, stunning nail art designs, long-lasting gel manicures, and
+          relaxing spa pedicures. Experience the epitome of nail care at our
+          salon.
+        </p>
+        <br />
+        <div class="flex justify-center items-center space-x-14">
+          <button
+            class="bg-[#009688] text-white px-4 py-2 rounded-full hover:bg-[#00BCD4]"
+          >
+            Book Now
+          </button>
+          <a
+            href="{%url 'nailservice'%}"
+            class="text-[#009688] hover:underline hover-text:blue-700 text-1.5xl"
+            >Know More >>>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Skin Service -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img
+        src="static/Image/service-2.jpg"
+        alt="Skin Service"
+        style="height: 400px; width: 350px"
+      />
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2 text-center">Skin Service</h3>
+        <p class="text-lg text-gray-600 mb-4">
+          Revitalize your skin with our skin services, offering rejuvenating
+          facials, customized skincare treatments, relaxing massages, and
+          effective acne solutions. Experience the ultimate in skincare at our
+          salon.
+        </p>
+        <br />
+        <div class="flex justify-center items-center space-x-14">
+          <button
+            class="bg-[#009688] text-white px-4 py-2 rounded-full hover:bg-[#00BCD4]"
+          >
+            Book Now
+          </button>
+          <a
+            href="{%url 'skinservice'%}"
+            class="text-[#009688] hover:underline hover-text:blue-700 text-1.5xl"
+            >Know More >>>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- offer section -->
+<div class="container text-center mx-auto py-12 px-4">
+  <h2 class="text-3xl font-bold mb-3" style="font-family: poppins">
+    Special Offers
+  </h2>
+  <p
+    class="text-gray-700 mb-8 text-1.5xl"
+    style="font-family: great-vibes, cursive"
+  >
+    " Beauty On a Budget : Discover Our Special Offers "
+  </p>
+  <br />
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <!-- Offer  Hair Service -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img
+        src="static/Image/special-offer-1.jpg"
+        alt="Hair Service Special Offer"
+        class="h-64 w-full object-cover"
+      />
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2 text-center">Haircut & Styling</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          Get a refreshing new look with our Haircut & Styling package! Enjoy a
+          personalized consultation, precision haircut, and professional styling
+          for just $X. Book now and let our expert stylists transform your look!
+        </p>
+        <button
+          class="bg-[#009688] text-white px-4 py-2 rounded-full hover:bg-[#00BCD4]"
+        >
+          Book Now
+        </button>
+      </div>
+    </div>
+    <!-- Offer Makeup Service -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img
+        src="static/Image/special-offer-2.jpg"
+        alt="Makeup Service Special Offer"
+        class="h-64 w-full object-cover"
+      />
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2 text-center">Makeup Application</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          Enhance your natural beauty with our Makeup Application service!
+          Whether it's for a special occasion or just a night out, our skilled
+          makeup artists will create the perfect look for you. Book now and
+          receive a complimentary makeup consultation!
+        </p>
+        <button
+          class="bg-[#009688] text-white px-4 py-2 rounded-full hover:bg-[#00BCD4]"
+        >
+          Book Now
+        </button>
+      </div>
+    </div>
+    <!-- Offer Nail Service -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img
+        src="static/Image/special-offer-3.jpg"
+        alt="Nail Service Special Offer"
+        class="h-64 w-full object-cover"
+      />
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2 text-center">
+          Deluxe Manicure & Pedicure
+        </h3>
+        <p class="text-sm text-gray-600 mb-4">
+          Pamper yourself with our Deluxe Manicure & Pedicure package! Treat
+          your hands and feet to a luxurious spa experience, complete with nail
+          shaping, cuticle care, exfoliation, massage, and your choice of
+          polish. Book now and indulge in some well-deserved relaxation!
+        </p>
+        <button
+          class="bg-[#009688] text-white px-4 py-2 rounded-full hover:bg-[#00BCD4]"
+        >
+          Book Now
+        </button>
+      </div>
+    </div>
+    <!-- Offer Skin Service -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <img
+        src="static/Image/special-offer-4.jpg"
+        alt="Skin Service Special Offer"
+        class="h-64 w-full object-cover"
+      />
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2 text-center">Signature Facial</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          Revitalize your skin with our Signature Facial treatment! Our licensed
+          estheticians will customize a facial to address your specific skin
+          concerns, leaving your complexion radiant and refreshed. Book now and
+          experience the ultimate in skincare luxury!
+        </p>
+        <button
+          class="bg-[#009688] text-white px-4 py-2 rounded-full hover:bg-[#00BCD4]"
+        >
+          Book Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Testimonials Section -->
+<div class="container mx-auto py-12 px-4">
+  <h2 class="text-3xl font-bold mb-8 text-center">Client Testimonials</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- T 1 -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="p-6">
+        <p class="text-sm text-gray-600 mb-4">
+          "I absolutely love the services provided by this salon! The staff is
+          friendly, professional, and incredibly talented. I always leave
+          feeling pampered and beautiful!"
+        </p>
+        <p class="text-xs text-gray-400 mb-2">- Emily W.</p>
+      </div>
+    </div>
+    <!--  2 -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="p-6">
+        <p class="text-sm text-gray-600 mb-4">
+          "Such a wonderful experience every time I visit. The atmosphere is
+          relaxing, the treatments are top-notch, and I always leave with a
+          smile on my face. Highly recommend!"
+        </p>
+        <p class="text-xs text-gray-400 mb-2">- Michael S.</p>
+      </div>
+    </div>
+    <!--  3 -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="p-6">
+        <p class="text-sm text-gray-600 mb-4">
+          "I've been a loyal client for years, and I wouldn't trust anyone else
+          with my hair and beauty needs. The team here truly cares about their
+          clients, and it shows in everything they do."
+        </p>
+        <p class="text-xs text-gray-400 mb-2">- {{user.username}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Salon Values  -->
+<div class="container mx-auto py-12 px-4">
+  <h2 class="text-3xl font-bold mb-8 text-center">Our Values</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2">Personalized Service</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          We believe in providing personalized service to each client, tailoring
+          our treatments to meet their unique needs and preferences. Your
+          satisfaction and comfort are our top priorities.
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2">Creativity</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          At our salon, we celebrate creativity and innovation. Our skilled
+          stylists and technicians are constantly exploring new trends and
+          techniques to bring fresh ideas and inspiration to our clients.
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-2">Sustainability</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          We are committed to sustainability and environmental responsibility.
+          From using eco-friendly products to implementing energy-saving
+          practices, we strive to minimize our carbon footprint and promote a
+          healthier planet.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

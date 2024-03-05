@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, User, Group
+from django.utils import timezone
 
 
 
@@ -30,5 +31,33 @@ class UserProfile(models.Model):
    def __str__(self):
       return f'{self.user.username} UsersProfile'
 
+# class ServiceDetail(models.Model):
+#    name = models.CharField(max_length=100)
+#    description = models.TextField()
+#    price = models.DecimalField(max_digits=8, decimal_places= 2)
+   
+#    def __str__(self) -> str:
+#       return f'{self.service.name}'
+
+# class Staff(models.Model):
+#    user = models.OneToOneField(User, on_delete = models.CASCADE)
+#    role = models.CharField(max_length = 100)
+   
+#    def __str__(self):
+#       return f'{self.user.username}' - '{self.role}'
 
 
+# class BookAppointment(models.Model):
+#    user = models.ForeignKey(User, on_delete = models.CASCADE ,related_name='booked_appointments')
+#    service = models.ForeignKey(ServiceDetail, related_name='service_appointment', on_delete=models.CASCADE)
+#    staff = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff_appointment')
+#    hair_type = models.CharField(max_length=100, default = 'Straight')
+#    skin_type = models.CharField(max_length = 100, default = 'normal')
+#    skin_problem = models.TextField(max_length=100, default = 'None')
+#    BookDate = models.DateField(default=timezone.now)
+#    confirmed = models.BooleanField(default=False)
+   
+#    def __str__(self) -> str:
+#       return f"{self.user}'s Pending"
+   
+   

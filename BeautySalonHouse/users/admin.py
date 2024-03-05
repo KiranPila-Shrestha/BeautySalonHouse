@@ -5,4 +5,8 @@ from users.models import *
 
 admin.site.register(UserDetail)
 admin.site.register(UserProfile)
-# admin.site.register(StaffDetails)
+
+# admin.site.register(ServiceDetail)
+# admin.site.register(Staff)
+
+

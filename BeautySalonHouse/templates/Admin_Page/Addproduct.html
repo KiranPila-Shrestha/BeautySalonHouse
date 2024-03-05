@@ -1,39 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Product</title>
-  <!-- Include Tailwind CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
+{% extends 'Base_content/Base_AdminDashboard.html'%}
+{% block content%}
 
+ <main class="flex-1 p-6 ">
+  <h1 class="text-2xl mb-4">Add Product</h1>
+
+  <!-- Form -->
+  <form method="post" class="w-full max-w-lg">
+    {% csrf_token %}
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="product-name"
+        >
+          Product Name
+        </label>
+        <input
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          id="product-name"
+          type="text"
+          name="product_name"
+          placeholder="Enter product name"
+        />
+      </div>
+      <div class="w-full md:w-1/2 px-3">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="brand"
+        >
+          Brand
+        </label>
+        <input
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="brand"
+          type="text"
+          name="brand"
+          placeholder="Enter brand"
+        />
+      </div>
+    </div>
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          
+        >
+          Price
+        </label>
+        <input
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3  focus:outline-none focus:bg-white focus:border-gray-500"
+          id="price"
+          type="number"
+          name="price"
+          placeholder="Enter price"
+        />
+      </div>
+    </div>
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full px-3">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="short-description"
+        >
+          Short Description
+        </label>
+        <textarea
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="short-description"
+          name="short_description"
+          placeholder="Enter short description"
+        ></textarea>
+      </div>
+    </div>
+    <!-- Add Product Button -->
+    <div class="flex justify-between mb-6">
+      <button
+        name="addProduct"
+        class="bg-[#009688] hover:bg-cyan-600 text-white py-2 px-4 rounded-md mr-2"
+        type="submit"
+      >
+        <i class="fas fa-plus-circle mr-1"></i>
+        Add Product
+      </button>
+    </div>
+  </form>
+</main>
+
+<!-- Image Selection -->
+<aside class="w-full md:w-1/2 px-6">
   <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
-    <h2 class="text-2xl font-semibold text-center mb-6">Add Product</h2>
-    <!-- Product Form -->
-    <form>
-      <div class="mb-4">
-        <label for="product_name" class="block text-sm font-medium text-gray-700">Product Name</label>
-        <input type="text" id="product_name" name="product_name" class="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter Product Name">
-      </div>
-      <div class="mb-4">
-        <label for="short_explanation" class="block text-sm font-medium text-gray-700">Short Explanation</label>
-        <textarea id="short_explanation" name="short_explanation" rows="3" class="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter Short Explanation"></textarea>
-      </div>
-      <div class="mb-4">
-        <label for="rewards_point" class="block text-sm font-medium text-gray-700">Rewards Point</label>
-        <input type="number" id="rewards_point" name="rewards_point" class="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter Rewards Point">
-      </div>
-      <div class="mb-4">
-        <label for="product_image" class="block text-sm font-medium text-gray-700">Choose Image</label>
-        <input type="file" id="product_image" name="product_image" accept="image/*" class="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-      </div>
-      <div class="flex justify-center">
-        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Add Product</button>
-      </div>
-    </form>
+    <h2 class="text-2xl font-semibold text-center mb-6">Choose Image</h2>
+    <div class="mb-4">
+      <label for="product-image" class="block text-sm font-medium text-gray-700">Product Image</label>
+      <input type="file" id="product-image" name="product_image" accept="image/*" class="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+    </div>
+    <div class="flex justify-between mb-6">
+      <button
+        name="addProduct"
+        class="bg-[#009688] hover:bg-cyan-600 text-white py-2 px-4 rounded-md mr-2"
+        type="submit"
+      >
+        <i class="fas fa-plus-circle mr-1"></i>
+        Save
+      </button>
+    </div>
   </div>
+</aside>
 
-</body>
-</html>
+
+]{% endblock %}

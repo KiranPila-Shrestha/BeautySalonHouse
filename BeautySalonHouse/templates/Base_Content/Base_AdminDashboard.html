@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AdminDashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -13,6 +13,16 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
       rel="stylesheet"
     />
+    <script>    
+      document.addEventListener('DOMContentLoaded', function() {
+          var userDropdownToggle = document.getElementById('userDropdownToggle');
+          var userDropdown = document.getElementById('userDropdown');
+  
+          userDropdownToggle.addEventListener('click', function() {
+              userDropdown.classList.toggle('hidden');
+          });
+      });
+      </script>
   </head>
   <body class="bg-white text-black">
     <!-- Navigation Bar -->
@@ -42,24 +52,22 @@
       </div>
 
       <!-- User Profile -->
-      <div class="flex items-center">
-        <span class="text-gray-600 mr-2">
-          <a
-            href="{% if request.user.userdetail.user_type == 'customer' %}{% url 'EditProfile' user.id %}{% elif request.user.is_superuser %}{% url 'AdminDashBoard' %}{% else %}{% url 'StaffDashboard' %}{% endif %}"
-            class="flex items-center"
-          >
-            <i class="fas fa-user-circle text-2xl mr-2"></i>
-            {{ request.user.username }}
-          </a>
-        </span>
-        <button
-          class="bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-4 rounded-full"
-        >
-          <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i></a>
-        </button>
-      </div>
+      <div class="relative">
+        <div class="flex items-center cursor-pointer" id="userDropdownToggle">
+            <span class="text-gray-600 mr-10">
+                <i class="fas fa-user-circle text-2xl mr-2"></i>
+                {{ request.user.username }}
+            </span>
+          </div>
+            <div class="absolute hidden bg-white rounded shadow-md mt-2 py-2 w-48 hidden" style = "font-family: poppins" id="userDropdown">
+                <a href="{% url 'home' %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600"><i class="fas fa-home text-1xl text-regular mr-2"></i>Home</a>
+              <a href="{% url 'logout' %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white"> <i class="fas fa-sign-out-alt text-1xl text-regular mr-2"></i>Logout</a>
+          </div>
+            
+        </div>
+        
+    </div>
     </header>
-
     <!-- Sidebar -->
     <div class="flex">
       <div class="w-1/4 bg-gray-200 p-4">
@@ -67,15 +75,22 @@
         <ul>
           <li>
             <a
-              href="#"
+              href="{% url 'AdminDashBoard'%}"
               class="flex items-center text-gray-700 hover:text-cyan-500"
               ><i class="fas fa-user-plus mr-2"></i>Add Staff</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'AddProduct'%}"
+              class="flex items-center text-gray-700 hover:text-cyan-500"
+              ><i class="fas fa-plus-circle mr-2"></i>Add Product</a
             >
           </li>
 
           <li>
             <a
-              href="#"
+              href=""
               class="flex items-center text-gray-700 hover:text-cyan-500"
               ><i class="fas fa-chart-line mr-2"></i>Report</a
             >
