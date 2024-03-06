@@ -3,12 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AdminDashboard</title>
+    <title>Technician Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
       rel="stylesheet"
@@ -23,6 +27,12 @@
             });
         });
         </script>
+
+        <style>
+          #  * {
+              font-family: "Poppins", sans-serif;
+            }
+          </style>
   </head>
   <body class="bg-white text-black">
     <!-- Navigation Bar -->
@@ -31,25 +41,9 @@
       <div class="flex items-center relative">
         <!-- Logo -->
         <img src="/static/Image/logo.svg" alt="" class="mr-10" />
-        <!-- Adding mr-4 for right margin -->
-        <!-- Search Bar -->
-        <div class="relative">
-          <input
-            type="text"
-            class="bg-gray-300 text-black rounded-full py-2 px-7 pl-10 focus:outline-none focus:bg-white focus:text-gray-900"
-            placeholder="Search..."
-          />
-          <span
-            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600"
-            ><i class="fas fa-search"></i
-          ></span>
-          <button class="ml-2 px-4 py-2 text-white bg-[#23B7AA] rounded-full">
-            Search
-          </button>
-        </div>
-      </div>
+      
       <!-- User Profile -->
-      <div class="relative">
+      <div class="relative ml-[1200px]">
         <div class="flex items-center cursor-pointer" id="userDropdownToggle">
             <span class="text-gray-600 mr-10">
                 <i class="fas fa-user-circle text-2xl mr-2"></i>
@@ -72,7 +66,7 @@
         <ul>
           <li>
             <a
-              href="{% url 'HairStaffDashboard'%}"
+              href="{% url 'appointments'%}"
               class="flex items-center text-gray-700 hover:text-cyan-500"
               ><i class="fas fa-user-plus mr-2"></i>Daily appointment</a
             >
@@ -84,20 +78,15 @@
         </li>
           <li>
             <a
-              href="{% url 'appointments'%}"
+              href="{% url 'staffappointmenthistory' %}"
               class="flex items-center text-gray-700 hover:text-cyan-500"
-              ><i class="fas fa-chart-line mr-2"></i>Appointment History</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center text-gray-700 hover:text-cyan-500"
-              ><i class="fas fa-calendar mr-2"></i>Daily Activities</a
+              ><i class="fas fa-chart-line mr-2"></i> Booked Appointment </a
             >
           </li>
          
         </ul>
       </div>
+ 
+
 {%block content%}
 {%endblock%}

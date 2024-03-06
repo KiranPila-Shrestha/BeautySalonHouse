@@ -8,14 +8,8 @@ urlpatterns = [
     path('logout', views.logoutUser, name='logout'),
     # path('logout', views.logoutUser, name='logout'),
     path('register', views.registerUser, name='register'),
-    path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
     path('EditProfile/<int:user_id>/', views.EditProfile, name='EditProfile'),
-    path('appointmenthistory/<int:user_id>/ ', views.appointmenthistory, name='appointmenthistory'),
-    path('AddProduct/', views.AddProduct, name='AddProduct'),
-    path('StaffEditProfile/<int:user_id>/', views.StaffEditProfile, name='StaffEditProfile'),
-    path('Staff/Hair_Technician_Dashboard.html', views.HairStaffDashboard, name='HairStaffDashboard'),
-  
-    
+
     path('ChangePassword/<int:user_id>/', views.ChangePassword, name= 'ChangePassword'),
     
     # PASSWORD RESET
@@ -35,13 +29,11 @@ urlpatterns = [
     template_name="Login_Register/Reset_Password/ResetPasswordNext.html"), 
     name="password_reset_complete"),  
     
+    # For admin pathhh..
+    path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
     
-    
-    # path('dashboard/', views.dashboard, name='dashboard'),
-    # FOR Admin
-    # path('adminHome', views.adminHome, name='adminHome'),   
-     
-       
+    # for add product
+    path('AddProduct/', views.AddProduct, name='AddProduct'),
     
     
 ]

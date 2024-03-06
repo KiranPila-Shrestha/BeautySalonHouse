@@ -10,6 +10,7 @@ class BookAppointment(models.Model):
     staff = models.CharField(max_length=255, blank=False)
     bookDate = models.DateField(default=timezone.now)
     bookTime = models.TimeField(default=timezone.now)
+    description = models.TextField(blank= True, null=True)
     confirmed = models.BooleanField(default=False)
    
     def __str__(self) -> str:

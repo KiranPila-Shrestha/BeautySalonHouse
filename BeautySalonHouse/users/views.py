@@ -73,37 +73,52 @@ def EditProfile(request, user_id):
     user_detail = user.userdetail
 
     if request.method == 'POST':
-        # Process form if POST request
-        user.first_name = request.POST.get('first_name')
-        user.last_name = request.POST.get('last_name')
-        user.email = request.POST.get('email')
-        user.save()
+        if "user" in request.POST:
+            username = request.POST.get('user')
+            user = User.objects.get(username=username)
+            
+        if "Update" in request.POST:
+             #update user detail
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.email = request.POST.get('email')
+            user.save()
+           
+        #updating additional details
         
         if 'address' in request.POST:  # Check if address is present in POST data
             user_detail.address = request.POST.get('address')
         if 'contact_number' in request.POST:  # Check if contact_number is present in POST data
             user_detail.contact_number = request.POST.get('contact_number')
         user_detail.save()
-        
         messages.success(request, "User Details has been updated successfully.")
-        return redirect('EditProfile', user_id=user_id)  
-    
-    if "Update" in request.POST:
         
-            profile = UserProfile.objects.get(user=user)
-            profile.image =  request.FILES['save_update_image']
-            profile.image.save()
+        
+        if 'saveImage' in request.POST:
+            # Check if an image was uploaded
+            if 'save_update_image' in request.FILES:
+                profile, created = UserProfile.objects.get_or_create(user=user)
+                profile.image = request.FILES['save_update_image']
+                profile.save()
+                messages.success(request, 'Profile Picture Changed.')
             
-            
-            
-            
-            #print("IMAGEEEEEEEEEEEEEEEEE", image)
-            # Saving user New profile
-            users_profile = UserProfile.objects.get(user=user)
-            users_profile.image = request.FILES['img']
-            users_profile.save()
-            messages.success(request, 'Profile Picture Changed.') 
+        
+            # return redirect('EditProfile', user_id=user_id)  
+        else:
+            messages.error(request, 'No image uploaded.')
     
+       
+        
+        if "deleteImage" in request.POST:
+            users_profile = UserProfile.objects.get(user=user)
+            users_profile.delete()
+            #saving default
+            user_default_profile = UserProfile(user=user)
+            user_default_profile.save()
+            messages.success(request, 'Profile Picture Updated.')
+        #print("IMAGEEEEEEEEEEEEEEEEE", image)
+
+            return redirect('editProfile')
     # If it's a GET request, render the edit profile page with the user data
     return render(request, 'User_Profile_Management/EditProfile.html', {'user': user, 'user_detail': user_detail})
 
@@ -158,12 +173,14 @@ def AdminDashBoard(request):
                 # saving user contact number and address
                 user_details = UserDetail(user=user, address=request.POST.get('address'), contact_number=request.POST.get('contact'),
                                 user_type = request.POST.get('user_type'))
-                user_details.save()  
+                user_details.save() 
+                print("111") 
                 
                 if "user_type" in request.POST:
                     userType = request.POST.get('user_type')
                     group, create = Group.objects.get_or_create(name= userType)
                     user.groups.add(group)
+                    print("555")
                     
                     # MESSAGE
                     
@@ -173,60 +190,16 @@ def AdminDashBoard(request):
                 
                 #send mail
                 user_email = user.email
-                send_mail("Welcome to our salon","You have been assigned as {userType}","pilashrestha366@gmail.com",[user_email],fail_silently=False)
+                user_type = request.POST.get('user_type')
+                send_mail("Welcome to our salon","You have been assigned as {user_type}","pilashrestha366@gmail.com",[user_email],fail_silently=False)
                 
                 messages.success(request, " Staff added")
-                return redirect('AdminDashboard')
+                
             
     
     return render(request, 'Admin_Page/AdminDashboard.html')
 
 
-# hair-technician dashboard started
-def HairStaffDashboard(request):
-    return render(request, 'Staff/Hair_Technican_Dashboard.html')
-
-def StaffEditProfile(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    user_detail = user.userdetail
-
-    if request.method == 'POST':
-        # Process form if POST request
-        user.first_name = request.POST.get('first_name')
-        user.last_name = request.POST.get('last_name')
-        user.email = request.POST.get('email')
-        user.save()
-        
-        if 'address' in request.POST:  # Check if address is present in POST data
-            user_detail.address = request.POST.get('address')
-        if 'contact_number' in request.POST:  # Check if contact_number is present in POST data
-            user_detail.contact_number = request.POST.get('contact_number')
-        user_detail.save()
-        
-        messages.success(request, "User Details has been updated successfully.")
-        return redirect('StaffEditProfile', user_id=user_id)  
-    
-    if "Update" in request.POST:
-        
-            profile = UserProfile.objects.get(user=user)
-            profile.image =  request.FILES['save_update_image']
-            profile.image.save()
-            
-            
-            
-            #print("IMAGEEEEEEEEEEEEEEEEE", image)
-            # Saving user New profile
-            users_profile = UserProfile.objects.get(user=user)
-            users_profile.image = request.FILES['img']
-            users_profile.save()
-            messages.success(request, 'Profile Picture Changed.') 
-    
-    # If it's a GET request, render the edit profile page with the user data
-    return render(request, 'Staff/StaffEditProfile.html', {'user': user, 'user_detail': user_detail})
- 
-
-    
-    
 
 
 #add product admin
@@ -234,7 +207,5 @@ def StaffEditProfile(request, user_id):
 def AddProduct(request):
     return render(request, 'Admin_Page/Addproduct.html')
 
-def appointmenthistory(request, user_id):
-    
-     return render(request, 'User_Profile_Management/appointmenthistory.html')
+
     

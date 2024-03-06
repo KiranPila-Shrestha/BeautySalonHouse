@@ -1,48 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appointment History</title>
-  <!-- Include Tailwind CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 p-8">
-
-  <div class="max-w-xl mx-auto">
-
-    <!-- Page Title -->
-    <h1 class="text-2xl font-bold mb-4">Appointment History</h1>
-
-    <!-- Appointment History Table -->
-    <table class="min-w-full bg-white border border-gray-200 shadow-md rounded-md overflow-hidden">
-      <thead class="bg-gray-100 text-gray-800">
-        <tr>
-          <th class="px-4 py-2">Date</th>
-          <th class="px-4 py-2">Time</th>
-          <th class="px-4 py-2">Service</th>
-          <th class="px-4 py-2">Stylist</th>
-        </tr>
-      </thead>
-      <tbody class="text-gray-700">
-        <!-- Sample Data - Replace with Dynamic Data from Backend -->
-        <tr>
-          <td class="border px-4 py-2">2024-03-01</td>
-          <td class="border px-4 py-2">10:00 AM</td>
-          <td class="border px-4 py-2">Haircut</td>
-          <td class="border px-4 py-2">Jane Doe</td>
-        </tr>
-        <tr>
-          <td class="border px-4 py-2">2024-02-20</td>
-          <td class="border px-4 py-2">3:30 PM</td>
-          <td class="border px-4 py-2">Manicure</td>
-          <td class="border px-4 py-2">John Smith</td>
-        </tr>
-        <!-- End of Sample Data -->
-      </tbody>
-    </table>
-
-  </div>
-
-</body>
-</html>
+{% extends 'Base_content/Base_UserDashboard.html'%} 
+{% block content %}
+<div class="container mx-auto py-8">
+    <h1 class="text-3xl font-semibold text-left ml-8 mb-8"> My Appointments </h1>
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stylist</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for booking_request in booking_requests %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookDate }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookTime }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.user }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.staff }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.service }}</td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -26,7 +26,7 @@
 
       <!-- Main Content -->
       <main class="flex-1 p-6">
-        <h1 class="text-2xl mb-4">Add Staff</h1>
+        <h1 class="text-3xl  text-semibold mb-4" style = 'font-family: poppins'>Add Staff</h1>
 
         <!-- Form -->
         <form method="post" class="w-full max-w-lg">
@@ -40,7 +40,7 @@
                 First Name
               </label>
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-cyan-600"
                 id="first-name"
                 type="text"
                 name="first_name"
@@ -55,7 +55,7 @@
                 Last Name
               </label>
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-cyan-600"
                 id="last-name"
                 type="text"
                 name="last_name"
@@ -71,7 +71,7 @@
                 >UserName</label
               >
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-cyan-600"
                 id="username"
                 type="text"
                 name="username"
@@ -85,7 +85,7 @@
                 >Address</label
               >
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-cyan-600"
                 id="address"
                 type="text"
                 name="address"
@@ -101,7 +101,7 @@
                 >Contact</label
               >
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-cyan-600"
                 id="contact"
                 type="text"
                 name="contact"
@@ -117,7 +117,7 @@
                 >Email Address</label
               >
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-cyan-600"
                 id="email"
                 type="email"
                 name="email"
@@ -132,7 +132,7 @@
               >
               <div class="relative">
                 <select
-                  class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  class="block appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-cyan-600"
                   id="staff-role"
                   name="user_type"
                 >
@@ -140,7 +140,7 @@
                   <option value="Hair Technician">Hair Technician</option>
                   <option value="Makeup Artist">Makeup Artist</option>
                   <option value="Nail Technician">Nail Technician</option>
-                  <option value="Laser Skin">Skin Care Technician</option>
+                  <option value="Laser Skin">Skin Technician</option>
                 </select>
                 <div
                   class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
@@ -159,7 +159,7 @@
                 >Password</label
               >
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-cyan-600"
                 id="password"
                 type="password"
                 name="password1"
@@ -174,7 +174,7 @@
                 >Confirm Password</label
               >
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-cyan-600"
                 id="confirm-password"
                 type="password"
                 name="password2"
@@ -186,14 +186,14 @@
           <div class="flex justify-between">
             <button
               name="addStaff"
-              class="bg-[#009688] hover:bg-green-600 text-white py-2 px-4 rounded-md mr-2"
+              class="bg-[#009688] hover:bg-cyan-600 text-white py-2 px-4 rounded-md mr-2"
               type="submit"
             >
               <i class="fas fa-save mr-1"></i>
               Save
             </button>
             <button
-              class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md"
+              class="bg-gray-500 hover:bg-red-700 text-white py-2 px-4 rounded-md"
               type="button"
             >
               <i class="fas fa-times mr-1"></i>

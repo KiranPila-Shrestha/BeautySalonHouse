@@ -5,6 +5,11 @@ from . import views
 from django.contrib.auth import views as auth_views
 urlpatterns = [ 
                path('booking/', views.booking, name='booking'),
-                path('appointments', views.Appointments, name='appointments'),
+               path('StaffDashboard', views.HairStaffDashboard, name='HairStaffDashboard'),
+               path('appointmenthistory/', views.bookedAppointment, name='appointmenthistory'),
+               path('staffappointmenthistory/', views.bookedAppointment, name='staffappointmenthistory'),
+               path('adminappointmenthistory/', views.bookedAppointment, name='adminAppointmenthistory'),
+               path('appointments', views.Appointments, name='appointments'),
+               path('StaffEditProfile/<int:user_id>/', views.StaffEditProfile, name='StaffEditProfile'),
                 ]
 
