@@ -9,6 +9,7 @@ urlpatterns = [
     # path('logout', views.logoutUser, name='logout'),
     path('register', views.registerUser, name='register'),
     path('EditProfile/<int:user_id>/', views.EditProfile, name='EditProfile'),
+    path('StaffEditProfile/<int:user_id>/', views.EditProfile, name='StaffEditProfile'),
 
     path('ChangePassword/<int:user_id>/', views.ChangePassword, name= 'ChangePassword'),
     

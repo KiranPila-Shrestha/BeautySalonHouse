@@ -83,10 +83,25 @@ def Appointments(request):
         
         if "delete" in request.POST:
             booking.delete()
+            send_mail(
+                'Appointment is Rejected',
+                'Your appointment has been rejected by the staff member',
+                settings.EMAIL_HOST_USER,
+                [booking.user.email],
+                fail_silently=False,
+            )
             
         if "approve" in request.POST:
             booking.confirmed = True
             booking.save()
+            send_mail(
+                'Appointment has been Approved',
+                'Your appointment has been approved by the staff member on the date and time you have chosen',
+                settings.EMAIL_HOST_USER,
+                [booking.user.email],
+                fail_silently=False,
+                
+            )
             print('done')
             booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=True)   
             return redirect("appointments")
@@ -158,42 +173,3 @@ def staffappointmentHistory(request, user_id):
 # hair-technician dashboard started
 def HairStaffDashboard(request):
     return render(request, 'Staff/Technican_Dashboard.html')
-
-def StaffEditProfile(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    user_detail = user.userdetail
-
-    if request.method == 'POST':
-        # Process form if POST request
-        user.first_name = request.POST.get('first_name')
-        user.last_name = request.POST.get('last_name')
-        user.email = request.POST.get('email')
-        user.save()
-        
-        if 'address' in request.POST:  # Check if address is present in POST data
-            user_detail.address = request.POST.get('address')
-        if 'contact_number' in request.POST:  # Check if contact_number is present in POST data
-            user_detail.contact_number = request.POST.get('contact_number')
-        user_detail.save()
-        
-        messages.success(request, "User Details has been updated successfully.")
-        return redirect('StaffEditProfile', user_id=user_id)  
-    
-    if "Update" in request.POST:
-        
-            profile = UserProfile.objects.get(user=user)
-            profile.image =  request.FILES['save_update_image']
-            profile.image.save()
-            
-            
-            
-            #print("IMAGEEEEEEEEEEEEEEEEE", image)
-            # Saving user New profile
-            users_profile = UserProfile.objects.get(user=user)
-            users_profile.image = request.FILES['img']
-            users_profile.save()
-            messages.success(request, 'Profile Picture Changed.') 
-    
-    # If it's a GET request, render the edit profile page with the user data
-    return render(request, 'Staff/StaffEditProfile.html', {'user': user, 'user_detail': user_detail})
- 

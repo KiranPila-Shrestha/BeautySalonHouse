@@ -1,4 +1,4 @@
-{% extends 'Base_content/Base_UserDashBoard.html'%} {% block content %}
+{% extends 'Base_content/Base_Dashboard.html'%} {% block content %}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
       const imageInput = document.getElementById("image-input");
@@ -37,10 +37,10 @@
           >
           <img
             id="image-preview"
-            src="{{ user.profile_image.url }}"
+            src="{{ user.userprofile.image.url }}"
             alt="Profile Image"
             class="h-[15%] w-[20%] object-cover rounded-full mb-4"
-            onerror="this.onerror=null; this.src='../../static/images/default_image/profiledefault.jpg';"
+            
           />
           <input
             id="image-input"
@@ -54,6 +54,7 @@
             type="submit"
             class="px-4 py-2 bg-[#009688] text-white rounded-lg"
             value="saveImage"
+            name="saveImage"
           >
             Save
           </button>
@@ -61,6 +62,7 @@
             type="submit"
             class="px-4 py-2 bg-[#009688] text-white rounded-lg"
             value="deleteImage"
+            name="deleteImage"
           >
             delete
           </button>

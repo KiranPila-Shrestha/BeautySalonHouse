@@ -10,6 +10,6 @@ urlpatterns = [
                path('staffappointmenthistory/', views.bookedAppointment, name='staffappointmenthistory'),
                path('adminappointmenthistory/', views.bookedAppointment, name='adminAppointmenthistory'),
                path('appointments', views.Appointments, name='appointments'),
-               path('StaffEditProfile/<int:user_id>/', views.StaffEditProfile, name='StaffEditProfile'),
+               
                 ]
 

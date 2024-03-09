@@ -97,7 +97,8 @@ def EditProfile(request, user_id):
         if 'saveImage' in request.POST:
             # Check if an image was uploaded
             if 'save_update_image' in request.FILES:
-                profile, created = UserProfile.objects.get_or_create(user=user)
+                print("image ayoooooooooo")
+                profile = UserProfile.objects.get(user=user)
                 profile.image = request.FILES['save_update_image']
                 profile.save()
                 messages.success(request, 'Profile Picture Changed.')
@@ -118,7 +119,7 @@ def EditProfile(request, user_id):
             messages.success(request, 'Profile Picture Updated.')
         #print("IMAGEEEEEEEEEEEEEEEEE", image)
 
-            return redirect('editProfile')
+
     # If it's a GET request, render the edit profile page with the user data
     return render(request, 'User_Profile_Management/EditProfile.html', {'user': user, 'user_detail': user_detail})
 
