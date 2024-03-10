@@ -16,7 +16,7 @@ productCategoryChoice = (
 
 class addProduct(models.Model):
     productName = models.CharField(max_length=100)
-    productCategory = models.CharField(max_length=100)
+    productCategory = models.CharField(max_length=100, choices=productCategoryChoice)
     productBrand = models.CharField(max_length=100)
     productDescription = models.TextField()
     

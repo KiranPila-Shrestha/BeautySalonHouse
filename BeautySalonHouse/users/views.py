@@ -203,10 +203,7 @@ def AdminDashBoard(request):
 
 
 
-#add product admin
 
-def AddProduct(request):
-    return render(request, 'Admin_Page/Addproduct.html')
 
 
     

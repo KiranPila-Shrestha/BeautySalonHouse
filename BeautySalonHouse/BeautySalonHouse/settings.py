@@ -148,7 +148,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-
+APPEND_SLASH = False
 #upload Image
 #media root is for full path of the folder where we like to save the image from django
 #store in file system not in database

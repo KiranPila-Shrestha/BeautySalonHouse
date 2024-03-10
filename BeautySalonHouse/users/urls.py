@@ -33,8 +33,7 @@ urlpatterns = [
     # For admin pathhh..
     path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
     
-    # for add product
-    path('AddProduct/', views.AddProduct, name='AddProduct'),
+ 
     
     
 ]

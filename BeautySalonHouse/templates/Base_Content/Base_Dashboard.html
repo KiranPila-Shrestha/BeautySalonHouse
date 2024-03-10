@@ -32,7 +32,7 @@
       });
     </script>
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-gray-100 "style="font-family: 'Poppins'">
     <!-- Navigation -->
     <header class="bg-white shadow-sm p-4 flex justify-between items-center">
       <!-- Logo -->
@@ -86,7 +86,7 @@
             </li>
             <li>
               <a
-                href="{% url 'AddProduct'%}"
+                href="{% url 'addproduct'%}"
                 class="flex items-center text-gray-700 hover:text-cyan-500"
                 ><i class="fas fa-plus-circle mr-2"></i>Add Product</a
               >
@@ -104,6 +104,13 @@
                 href="{% url 'adminAppointmenthistory' %}"
                 class="flex items-center text-gray-700 hover:text-cyan-500"
                 ><i class="fas fa-calendar mr-2"></i>Appointment</a
+              >
+            </li>
+            <li>
+              <a
+                href="{% url 'productlist' %}"
+                class="flex items-center text-gray-700 hover:text-cyan-500"
+                ><i class="fas fa-calendar mr-2"></i>Product</a
               >
             </li>
           </ul>
