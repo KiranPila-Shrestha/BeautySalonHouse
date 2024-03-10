@@ -14,7 +14,16 @@ class BookAppointment(models.Model):
     confirmed = models.BooleanField(default=False)
    
     def __str__(self) -> str:
-      return f"{self.user}'s Pending"
+      return f"{self.service} by {self.user.username}"
+    
+    
+class AppointmentFeedback(models.Model):
+    appointment = models.ForeignKey(BookAppointment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feedback = models.TextField(blank=True)
+    
+    def __str__(self):
+      return f"Feedback for {self.appointment} by {self.user.username}"
    
 
 # Create your models here.

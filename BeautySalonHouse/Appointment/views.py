@@ -76,6 +76,8 @@ def booking(request):
 def Appointments(request):
     booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=False)
     
+
+    
     if request.method == 'POST':
         bookingId = request.POST.get("bookingId")
         booking = BookAppointment.objects.get(id=bookingId)
@@ -114,17 +116,21 @@ def Appointments(request):
     return render(request, 'Staff/Technican_Dashboard.html', context)
 
 
-# def bookedAppointment(request):
-#     # booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=True)
-    
-#     # context = {
-#     #     "booking_requests": booking_requests,
-
-#     # }
-#     # return render(request, 'Staff/technicianAppointmentHistory.html', context)
-
-    
-
+def feedback(request):
+    if request.method == "POST":
+        bookingId = request.POST.get("bookingId")
+        feedbackText = request.POST.get("feedback")
+        booking = BookAppointment.objects.get(id=bookingId)
+        
+        #save feedback
+        if feedbackText:
+            AppointmentFeedback.objects.create(appointment=booking, user=request.user, feedback=feedbackText)
+            messages.success(request, 'Feedback has been submitted successfully.')
+        else:
+            messages.error(request, 'Feedback cannot be empty')
+        
+        return redirect('appointmenthistory')
+    return render(request, 'appointmenthistory')
 
 
 @login_required
@@ -144,10 +150,11 @@ def bookedAppointment(request, user_id=None):
         else:
             booking_requests = BookAppointment.objects.filter(user=request.user, confirmed=True)
         template_name = 'User_Profile_Management/appointmenthistory.html'
-
+    current_date = datetime.now().date()  # Get the current date
     context = {
         "booking_requests": booking_requests,
         "user_id": user_id,
+        "current_date": current_date,  # Pass current date to template
     }
     return render(request, template_name, context)
 
