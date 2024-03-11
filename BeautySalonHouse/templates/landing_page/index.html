@@ -1,13 +1,12 @@
 {% extends 'Base_content/Base_Nav_footer.html'%}   
 {% block content %} 
 
-
-{% comment %} <style>
-#  * {
+<style>
+ * {
     font-family: "Poppins", sans-serif;
   }
-</style> {% endcomment %}
-
+</style> 
+<body >
     <!-- Banner with Salon Image -->
   <div class="relative h-90 bg-cover bg-center bg-repeat flex justify-center items-center"> <img src="static/Image/home_bg.svg" alt="Your Salon Logo">
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
@@ -111,46 +110,7 @@
 
 
 
-  {% comment %} {% if request.user.is_authenticated %}
-    <a href="{% url 'logout' %}">Logout</a>
-  {% else %}
-    <a href="{% url 'login' %}">Login</a>
-  {% endif %} {% endcomment %}
-
-{% comment %}  
-
-{% if request.user.is_authenticated and user.is_superuser %}
-  <a href="{% url 'AdminDashBoard' %}">ADMIN DASHBOARD</a> <br />
-{% elif request.user.is_authenticated and user.userdetail.user_type == "customer" %}
-  <br />
-  <a href="{% url 'EditProfile' user.id %}">Edit Profile</a>
-{% endif %}
-
-{% if request.user.is_authenticated and request.user.groups.exists %}
-  {% for group in request.user.groups.all %}
-      {% if group.name == "Hair Technician" %}
-          <a href="{% url 'StaffDashboard' %}">Hair Technician Dashboard</a>
-      {% elif group.name == "Makeup Artist" %}
-          <a href="{% url 'MakeupArtistDashboard' %}">Makeup Artist Dashboard</a>
-      {% elif group.name == "Nail Technician" %}
-          <a href="{% url 'NailTechnicianDashboard' %}">Nail Technician Dashboard</a>
-      {% elif group.name == "Laser Skin" %}
-          <a href="{% url 'LaserSkinDashboard' %}">Laser Skin Dashboard</a>
-      {% else %}
-          <a href="{% url 'StaffDashboard' %}">Staff Dashboard</a>
-      {% endif %}
-  {% endfor %}
-{% endif %} {% endcomment %}
-
-
-
-
-  {% comment %} <!-- Display messages -->
-  {% for message in messages %}
-    <div>{{ message }}</div>
-  {% endfor %}
-  
-   {% endcomment %}
-
    {% endblock %}
+</body>
+</html>
 
