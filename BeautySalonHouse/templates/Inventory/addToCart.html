@@ -1,0 +1,65 @@
+{% extends 'Base_content/Base_Nav_footer.html'%}   
+{% block content %} 
+<div class="container mx-auto">
+  <!-- Title and Shopping Cart Icon -->
+  <div class="flex items-center justify-between py-4">
+    <h1 class="text-2xl font-semibold">Shopping Cart</h1>
+    <div class="flex items-center">
+      <!-- Online Shopping Cart Icon from Font Awesome -->
+      <i class="fas fa-shopping-cart text-red-700 text-xl mr-2"></i>
+    </div>
+  </div>
+
+  <!-- Cart Table -->
+  <div class="overflow-x-auto">
+    <table class="table-auto w-full border-collapse border border-gray-400">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 bg-gray-200">Product</th>
+          <th class="px-4 py-2 bg-gray-200">Price</th>
+          <th class="px-4 py-2 bg-gray-200">Quantity</th>
+          <th class="px-4 py-2 bg-gray-200">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Static data for demonstration -->
+        <tr class="text-center">
+          <td class="border px-4  py-2">
+            <!-- Product Name -->
+            Product Name
+            <!-- Product Image -->
+            <img src="path/to/product-image.jpg" alt="Product Image" class="h-10 w-10">
+          </td>
+          <td class="border px-4 py-2">$10.00</td>
+          <td class="border px-4 py-2">
+            <!-- Quantity with Add/Subtract Buttons -->
+            <div class="flex items-center justify-center">
+              <button class="bg-gray-300 px-2 py-1 rounded-l">-</button>
+              <span class="px-2">1</span>
+              <button class="bg-gray-300 px-2 py-1 rounded-r">+</button>
+            </div>
+          </td>
+          <td class="border px-4 py-2 ">
+            <!-- Delete Button -->
+            <i class="fas fa-trash bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--button-->
+  <div class="mt-8 container mx-auto flex flex-col md:flex-row md:justify-between items-center">
+    <div>
+        <button class="bg-blue-600 hover:bg-cyan-700 text-white px-4 py-2 rounded">Update Cart</button>
+    </div>
+    <div class="md:mt-0 mt-4">
+        <p class="md:text-center font-semibold md:mb-4">Shipping : Cost will appear on checkout</p>
+        <button class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded">
+            <a href="{% url 'checkout' %}">Checkout</a>
+        </button>
+    </div>
+</div>
+
+
+{% endblock %}

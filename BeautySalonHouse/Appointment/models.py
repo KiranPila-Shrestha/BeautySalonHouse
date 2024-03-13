@@ -12,6 +12,7 @@ class BookAppointment(models.Model):
     bookTime = models.TimeField(default=timezone.now)
     description = models.TextField(blank= True, null=True)
     confirmed = models.BooleanField(default=False)
+    status = models.CharField(max_length=255,default='Pending')
    
     def __str__(self) -> str:
       return f"{self.service} by {self.user.username}"

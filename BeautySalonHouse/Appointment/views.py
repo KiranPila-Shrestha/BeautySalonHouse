@@ -116,21 +116,21 @@ def Appointments(request):
     return render(request, 'Staff/Technican_Dashboard.html', context)
 
 
-def feedback(request):
-    if request.method == "POST":
-        bookingId = request.POST.get("bookingId")
-        feedbackText = request.POST.get("feedback")
-        booking = BookAppointment.objects.get(id=bookingId)
+# def feedback(request):
+#     if request.method == "POST":
+#         bookingId = request.POST.get("bookingId")
+#         feedbackText = request.POST.get("feedback")
+#         booking = BookAppointment.objects.get(id=bookingId)
         
-        #save feedback
-        if feedbackText:
-            AppointmentFeedback.objects.create(appointment=booking, user=request.user, feedback=feedbackText)
-            messages.success(request, 'Feedback has been submitted successfully.')
-        else:
-            messages.error(request, 'Feedback cannot be empty')
+#         #save feedback
+#         if feedbackText:
+#             AppointmentFeedback.objects.create(appointment=booking, user=request.user, feedback=feedbackText)
+#             messages.success(request, 'Feedback has been submitted successfully.')
+#         else:
+#             messages.error(request, 'Feedback cannot be empty')
         
-        return redirect('appointmenthistory')
-    return render(request, 'appointmenthistory')
+#         return redirect('appointmenthistory')
+#     return render(request, 'appointmenthistory')
 
 
 @login_required
@@ -162,9 +162,49 @@ def bookedAppointment(request, user_id=None):
    
 
 #User Appointment History    
-def appointmenthistory(request, user_id):
+def appointmentHistory(request):
+    booking_requests = BookAppointment.objects.filter(user= request.user)
     
-     return render(request, 'User_Profile_Management/appointmenthistory.html')   
+    hasCompletedAppointments = BookAppointment.objects.filter(user= request.user, status= 'Confirmed').exists()
+    
+    
+    currentDate = datetime.now().date()
+    
+    for booking_request in booking_requests:
+        if booking_request.bookDate < currentDate:
+            bookings = BookAppointment.objects.filter(user= request.user, bookDate= booking_request.bookDate)
+            for booking in bookings:
+                booking.status = 'Confirm'
+                booking.save()
+            
+        else:
+            bookings = BookAppointment.objects.filter(user= request.user, bookDate= booking_request.bookDate)
+            for booking in bookings:
+                booking.status = 'Pending'
+                booking.save()
+         
+    for booking_request in booking_requests:
+
+        userFeedBack = AppointmentFeedback.objects.filter(user= request.user, appointment = booking_request)
+        feedback = AppointmentFeedback.objects.filter(user= request.user)
+        
+        if(userFeedBack):
+            print("aaaaaaaaaaaaaaaaaaa", userFeedBack.feedback)
+    
+    
+    # for booking_request in booking_requests:
+    #     feedback = AppointmentFeedback.objects.filter(appointment=booking_request)
+    #     booking_request.feedback = feedback.first() if feedback.exists() else None
+        
+    context = {
+        'hasCompletedAppointments' : hasCompletedAppointments,
+        'booking_requests' : booking_requests,
+        'userFeedBack' : userFeedBack,
+        'feedback' : feedback,
+        }
+
+    
+    return render(request, 'User_Profile_Management/appointmenthistory.html', context)   
  
 
  

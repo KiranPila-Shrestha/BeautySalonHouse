@@ -1,0 +1,56 @@
+{% extends 'Base_content/Base_Nav_footer.html'%}   
+{% block content %} 
+<style>
+    * {
+       font-family: "Poppins", sans-serif;
+     }
+   </style> 
+<div class="mt-8 container mx-auto ">
+    <h2 class="text-xl font-semibold text-center mb-4">Order Summary and View Details</h2>
+    <table class="w-full md:w-1/2 mx-auto table-fixed">
+        <tr>
+            <td class="border-2 px-4 py-2 flex justify-between"> <!-- Added flex and justify-between -->
+                <div>Order Summary </div> <!-- Wrapped content in div -->
+                <div class="ml-10"> <!-- Added left margin for space -->
+                    <a href="{%url 'addtocart'%}" class="text-blue-500 underline">View Details</a>
+                </div>
+            </td>
+        </tr>
+        <tr class="justify-between">
+            <td class="border px-4 py-2">
+                <table class="w-full">
+                    <tr>
+                        <td class="font-semibold">Sub-total:</td>
+                        <td class="text-right ml-4">$100.00</td> <!-- Added left margin for space -->
+                    </tr>
+                    <tr>
+                        <td class="font-semibold">Reward:</td>
+                        <td class="text-right">$10.00</td> <!-- Replace with dynamic value -->
+                    </tr>
+                    <tr>
+                        <td class="font-semibold">Total:</td>
+                        <td class="text-right">$90.00</td> <!-- Replace with dynamic value -->
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+<!-- Payment Methods -->
+<div class="mt-8 container mx-auto">
+    <h2 class="text-xl font-semibold mb-4 text-center" >Payment Methods</h2>
+    <div class="flex space-x-10 justify-center">
+        <button class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-cyan-600">Cash on Delivery</button>
+        <button class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-cyan-600">Online Payment</button>
+    </div>
+</div>
+
+<!-- Place Order Button -->
+<div class="mt-8 container mx-auto flex justify-center">
+    <button class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">Place Order</button>
+</div>
+
+{% endblock %}

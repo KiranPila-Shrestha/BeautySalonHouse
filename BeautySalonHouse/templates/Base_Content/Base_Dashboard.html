@@ -97,6 +97,13 @@
                 ><i class="fas fa-plus-circle mr-2"></i>Add Product</a
               >
             </li>
+            <li>
+              <a
+                href="{% url 'productlist' %}"
+                class="flex items-center text-gray-700 hover:text-cyan-500"
+                ><i class="fas fa-cube mr-2"></i>Product</a
+              >
+            </li>
 
             <li>
               <a
@@ -112,13 +119,7 @@
                 ><i class="fas fa-calendar mr-2"></i>Appointment</a
               >
             </li>
-            <li>
-              <a
-                href="{% url 'productlist' %}"
-                class="flex items-center text-gray-700 hover:text-cyan-500"
-                ><i class="fas fa-calendar mr-2"></i>Product</a
-              >
-            </li>
+            
           </ul>
           {% elif request.user|has_group:"Hair Technician" or request.user|has_group:"Laser Skin" or request.user|has_group:"	Nail Technician" or request.user|has_group:"Makeup Artist"  %}
             <ul>

@@ -1,12 +1,13 @@
 {% extends 'Base_content/Base_Dashboard.html'%} {% block content%}
 
+
 <main class="flex-1 p-6">
   <h1 class="text-3xl text-semibold mb-4" style="font-family: poppins">
     Add Product
   </h1>
 
   <!-- Form -->
-  <form method="post" class="w-full max-w-lg">
+  <form method="post" class="w-full max-w-lg " enctype="multipart/form-data">
     {% csrf_token %}
     <div class="flex flex-wrap -mx-3 mb-6">
       <div class="w-full px-3 mb-6 md:mb-0">
@@ -127,45 +128,75 @@
       </button>
     </div>
   </form>
+  {% if messages %}
+<div class="alert alert-success">
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
 </main>
+
 
 <!-- Image Selection -->
 <aside class="w-full md:w-1/2 px-6">
   <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
     <h2 class="text-2xl font-semibold text-center mb-6">Choose Image</h2>
     <div class="mb-4">
-      <label for="product-image" class="block text-sm font-medium text-gray-700"
-        >Product Image</label
-      >
-      <input
-        type="file"
-        id="product-image"
-        name="product_image"
-        accept="image/*"
-        class="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-      />
+      <label for="product-image" class="block text-sm font-medium text-gray-700">Product Image</label>
+      <input type="file" id="product-image" name="productImage" accept="image/*" class="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" multiple onchange="previewImages(event)" />
     </div>
+    <div id="image-preview" class="mb-4">
+      <!-- Image previews will be displayed here -->
+    </div>
+    <!-- Save and Discard Changes buttons -->
     <div class="flex justify-between mb-6">
-      <button
-        name="addProduct"
-        class="bg-[#009688] hover:bg-cyan-600 text-white py-2 px-4 rounded-md mr-2"
-        type="submit"
-      >
+      <button name="addProduct" class="bg-[#009688] hover:bg-cyan-600 text-white py-2 px-4 rounded-md mr-2" type="submit">
         <i class="fas fa-plus-circle mr-1"></i>
         Save
       </button>
+      <button name="discardChanges" class="bg-gray-300 hover:bg-cyan-700 text-black-800 py-2 px-4 rounded-md" type="button" onclick="discardChanges()">
+        <i class="fas fa-times-circle mr-1"></i>
+        Discard Changes
+      </button>
     </div>
+    
   </div>
-  {% if messages %}
-  <div class="alert alert-danger">
-    <ul>
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
+ 
 </aside>
+<!-- JavaScript for image preview -->
+<script>
+  function previewImages(event) {
+    const imagePreview = document.getElementById('image-preview');
+    const files = event.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.classList.add('mt-4', 'mx-auto', 'max-h-40');
+        imagePreview.appendChild(img);
+      }
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Function to discard changes
+  function discardChanges() {
+    // Reset the file input
+    document.getElementById('product-image').value = '';
+
+    // Remove image previews
+    const imagePreview = document.getElementById('image-preview');
+    imagePreview.innerHTML = '';
+  }
+</script>
 
 
 {% endblock %}

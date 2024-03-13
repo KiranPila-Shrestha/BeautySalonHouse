@@ -8,7 +8,8 @@ def product_add_market(request):
     productList = addProduct.objects.all()
     
     context = {
-        'productList' : productList
+        'productList' : productList,
+         'productCategoryChoice': productCategoryChoice,
     }
 
     return render(request, 'Inventory/product.html', context)
@@ -38,8 +39,9 @@ def AddProduct(request):
             product_image = request.FILES.getlist('productImage')
             for image in product_image:
                 productImage.objects.create(addProduct=instance, image=image)
+                print('ok')
                 
-            messages.success(request, "Product addes successfully")
+            messages.success(request, "Product added successfully")
             return redirect('addproduct') # redirect the page after succesfull adding 
         else:
             print("please add")
@@ -76,26 +78,9 @@ def productdetail(request, product_id):
         'product_image':product_image,
     }
     
-    return render(request, 'Inventory/product.html', context)
+    return render(request, 'Inventory/productdetail.html', context)
 
 
-# def productlist(request):
-#     products = addProduct.objects.all()
-#     context = {'products': products}
-    
-    
-#     if request.method == 'POST':
-#         product_id = request.POST.get("product_id")
-#         product = get_object_or_404(addProduct, id=product_id)
-       
-#         print(product)
-        
-#         if 'delete' in request.POST:
-#             product.delete()
-#             # Redirect or return a success message
-#             print('done')
-#             return redirect('productlist')
-#     return render(request, 'Inventory/Productlisting.html', context)
 
 
 
@@ -114,3 +99,9 @@ def productlist(request):
     products = addProduct.objects.all()
     context = {'products': products}
     return render(request, 'Inventory/Productlisting.html', context)
+
+def addtoCart(request):
+    return render(request, 'Inventory/addToCart.html')
+
+def checkout(request):
+    return render(request, 'Inventory/checkout.html')

@@ -6,11 +6,11 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [ 
                path('booking/', views.booking, name='booking'),
                path('StaffDashboard', views.HairStaffDashboard, name='HairStaffDashboard'),
-               path('appointmenthistory/', views.bookedAppointment, name='appointmenthistory'),
+               path('appointmenthistory/', views.appointmentHistory, name='appointmenthistory'),
                path('staffappointmenthistory/', views.bookedAppointment, name='staffappointmenthistory'),
                path('adminappointmenthistory/', views.bookedAppointment, name='adminAppointmenthistory'),
                path('appointments', views.Appointments, name='appointments'),
-               path('feedback', views.feedback, name='feedback'),
+            #    path('feedback', views.feedback, name='feedback'),
                
                 ]
 
