@@ -6,10 +6,12 @@ from django.contrib import messages
 # Create your views here.
 def product_add_market(request):
     productList = addProduct.objects.all()
+    # productImage = productImage.objects.filter(addProduct=productList)
     
     context = {
         'productList' : productList,
          'productCategoryChoice': productCategoryChoice,
+        #  'productImage' : productImage,
     }
 
     return render(request, 'Inventory/product.html', context)
