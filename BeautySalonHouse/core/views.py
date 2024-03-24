@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from Appointment.models import *
 
 # Create your views here.
 def index(request):
@@ -13,7 +14,13 @@ def contact(request):
 
 
 def service(request):
-    return render(request, 'landing_page/service.html')
+    feedback = AppointmentFeedback.objects.all()
+    
+    context= {
+        'feedback' : feedback
+    }
+    
+    return render(request, 'landing_page/service.html', context)
 
 def hairservice(request):
     return render(request, 'landing_page/Hairservice.html')

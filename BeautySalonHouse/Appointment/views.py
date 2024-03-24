@@ -44,21 +44,21 @@ def booking(request):
                 user=user,
                 service=service,
                 staff=staff,
-                bookDate=booked_date,  # Correct field name
+                bookDate=booked_date, 
                 bookTime=booked_time,
-                description =description # Correct field name
+                description =description 
             )
            
             try:
                 appointment_book.save()
-                # Add success message
+                #  success message
                 messages.success(request, 'Appointment has been sent for approval. You will be notified about confirmation.')
-                # Redirect to a different URL after booking
+            
                 return render(request, 'landing_page/Booking.html')
             except:
-                # Add error message if appointment fails to book
+                #  error message if appointment fails to book
                 messages.error(request, 'Failed to book appointment. Please try again later.')
-                # Redirect or render booking page with error message
+         
                 return render(request, 'landing_page/Booking.html')
          
     booking_requests = BookAppointment.objects.all()
@@ -150,7 +150,7 @@ def bookedAppointment(request, user_id=None):
         else:
             booking_requests = BookAppointment.objects.filter(user=request.user, confirmed=True)
         template_name = 'User_Profile_Management/appointmenthistory.html'
-    current_date = datetime.now().date()  # Get the current date
+    current_date = datetime.now().date()  # Get current date
     context = {
         "booking_requests": booking_requests,
         "user_id": user_id,
@@ -163,10 +163,23 @@ def bookedAppointment(request, user_id=None):
 
 #User Appointment History    
 def appointmentHistory(request):
+    if request.method == 'POST' and 'submitFeedback' in request.POST:
+        bookingID = request.POST.get('bookingId')
+        feedback = request.POST.get('feedback')
+        
+        booking = get_object_or_404(BookAppointment, id=bookingID)
+        feedback = AppointmentFeedback(appointment=booking, user=request.user, feedback=feedback)
+        feedback.save()
+        messages.success(request, 'Feedback has been submitted successfully.')
+        
+    
+        print("POST VAKO XA",bookingID, feedback)
+    
+    
+    
     booking_requests = BookAppointment.objects.filter(user= request.user)
     
     hasCompletedAppointments = BookAppointment.objects.filter(user= request.user, status= 'Confirmed').exists()
-    
     
     currentDate = datetime.now().date()
     
@@ -187,14 +200,10 @@ def appointmentHistory(request):
 
         userFeedBack = AppointmentFeedback.objects.filter(user= request.user, appointment = booking_request)
         feedback = AppointmentFeedback.objects.filter(user= request.user)
-        
         if(userFeedBack):
-            print("aaaaaaaaaaaaaaaaaaa", userFeedBack.feedback)
-    
-    
-    # for booking_request in booking_requests:
-    #     feedback = AppointmentFeedback.objects.filter(appointment=booking_request)
-    #     booking_request.feedback = feedback.first() if feedback.exists() else None
+            print("aaaaaaaaaaaaaaaaaaa", userFeedBack )
+
+
         
     context = {
         'hasCompletedAppointments' : hasCompletedAppointments,

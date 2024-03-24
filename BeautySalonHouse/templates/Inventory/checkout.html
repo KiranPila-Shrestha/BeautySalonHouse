@@ -1,10 +1,22 @@
-{% extends 'Base_content/Base_Nav_footer.html'%}   
-{% block content %} 
-<style>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page</title>
+  <style>
     * {
        font-family: "Poppins", sans-serif;
      }
    </style> 
+</head>
+
+<body>
+{% extends 'Base_Content/base.html'%}   
+{% block content %} 
+
+ 
 <div class="mt-8 container mx-auto ">
     <h2 class="text-xl font-semibold text-center mb-4">Order Summary and View Details</h2>
     <table class="w-full md:w-1/2 mx-auto table-fixed">
@@ -54,3 +66,5 @@
 </div>
 
 {% endblock %}
+</body>
+</html>

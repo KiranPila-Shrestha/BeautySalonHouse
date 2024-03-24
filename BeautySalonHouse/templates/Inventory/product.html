@@ -1,6 +1,16 @@
-{% extends 'Base_content/Base_Nav_footer.html'%}   
-{% block content %} 
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product</title>
+  
+</head>
+
+<body>
+{% extends 'Base_Content/base.html'%}   
+{% block content %} 
 <!-- Banner with Salon Image -->
 <div class="relative h-90 bg-cover bg-center bg-no-repeat flex">
   <div class="absolute inset-0 bg-black opacity-50"></div>
@@ -26,21 +36,21 @@
 </div>
 
 <!-- Service Section -->
-<div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-32">
   {% for product in productList %}
    <!-- {% if product.productCategory == category %}-->
       <div class="flex flex-col items-center">
         <!-- displaying product picture -->
         <div id="gallery" class="relative w-full" data-carousel="slide">
           <!-- Carousel wrapper -->
-          <div class="relative h-56 overflow-hidden rounded-lg">
+          <div class="relative h-72 overflow-hidden rounded-lg">
            
               {% for image in product.images.all %}
                   <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                      {% comment %} <a href="{% url 'productDetail' productdetail.id %}"> {% endcomment %}
-                          <img src="{{ image.image.url }}" alt="{{ productdetail.productName }}"
+                       <a href="{% url 'productdetail' product.id %}"> 
+                        <img src="{{ image.image.url }}" alt="{{ productdetail.productName }}"
                                class="rounded-md md:aspect-auto w-full h-full rounded-lg object-cover">
-                      {% comment %} </a> {% endcomment %}
+                    </a> 
                   </div>
               {% endfor %}
           </div>
@@ -55,12 +65,20 @@
         <p id="rating-message" class="mt-2 text-gray-600"></p>
 
         <!-- Add to Cart button -->
-        <button class="bg-teal-600 text-white px-4 py-2 rounded-md mt-2"> <a href = "{% url 'addtocart'%}">Add to Cart</a></button>
+        <button class="bg-teal-600 text-white px-4 py-2 rounded-md mt-2"> <a href = "{% url 'addtocart' product.id%}">Add to Cart</a></button>
       </div>
     <!--{% endif %}-->
   {% endfor %}
 </div>
 {% endfor %}
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
 
 <!-- Script for generating stars -->
 <script>
@@ -117,3 +135,5 @@
   });
 </script>
 {% endblock %}
+</body>
+</html>

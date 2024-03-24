@@ -1,15 +1,26 @@
-{% extends 'Base_content/Base_Nav_footer.html'%} {% block content %}
-<!-- Banner with Salon Image -->
-<style>
-  * {
-     font-family: "Poppins", sans-serif;
-   }
- </style> 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nail Service</title>
+  <style>
+    * {
+       font-family: "Poppins", sans-serif;
+     }
+   </style>
+</head>
+
 <body>
+{% extends 'Base_Content/base.html'%}   
+{% block content %} 
+<!-- Banner with Salon Image -->
+
 <div class="relative h-90 bg-cover bg-center bg-repeat flex ">
   <div class="absolute inset-0 bg-repeat"></div>
   <img
-    src="static/Image/nail1.jpg"
+    src="static/Image/nail/nail1.jpg"
     alt="Your Salon Logo"
     class="flex-shrink-0 w-full"
   />
@@ -70,7 +81,7 @@
   <!-- Right side -->
   <div class="w-1/2 pl-12">
     <img
-      src="static/Image/nail2.webp"
+      src="static/Image/nail/nail2.webp"
       alt="Left Image"
       class="w-17 h-auto pt-10 pb-10"
     />
@@ -84,7 +95,7 @@
       <div class="flex flex-col md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/nail2.jpg"
+          src="static/Image/nail/nail2.jpg"
           alt="Hair Service"
           class="w-full h-auto md:w-1/2 h-96 object-cover"
         />
@@ -106,7 +117,7 @@
       <div class="flex flex-col md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/nail4.jpg"
+          src="static/Image/nail/nail4.jpg"
           alt="Makeup Service"
           class="w-full h-64 md:w-1/2 md:h-auto object-cover"
         />
@@ -133,7 +144,7 @@
       <div class="flex flex-col md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/nail3.jpg"
+          src="static/Image/nail/nail3.jpg"
           alt="Hair Service"
           class="w-full h-64 md:w-1/2 md:h-auto object-cover"
         />
@@ -154,7 +165,7 @@
       <div class="flex flex-col md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/nail5.jpg"
+          src="static/Image/nail/nail5.jpg"
           alt="Makeup Service"
           class="w-full h-64 md:w-1/2 md:h-auto object-cover"
         />

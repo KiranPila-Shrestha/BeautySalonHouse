@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Title Here</title>
+  <!-- Add your CSS or other meta tags here -->
+</head>
+
+<body>
+  <!-- Footer Section started -->
+  <hr class="border border-black my-4">
+  <footer class="bg-white-800 text-black py-8">
+    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+      <div class="flex items-center mb-8 md:mb-0"> <!-- Add md:mb-0 to prevent margin on larger screens -->
+        <img src="static/Image/logo.svg" alt="Logoimage" class="w-17 h-17 mr-6">
+        <div>
+          <p class="font-bold text-xl" style="font-family: poppins">Aura Salon</p>
+          <p style="font-family: poppins">Baneshwor</p> <!-- Move street name below the salon name -->
+          <p style="font-family: poppins">Kathmandu, Nepal</p> <!-- Separate the city and country -->
+        </div>
+      </div>
+      <div class="text-center md:text-left">
+        <h3 class="text-xl font-semibold mb-4" style="font-family: poppins">Get in Touch</h3>
+        <p class="mb-2" style="font-family: poppins">Phone: +1234567890</p>
+        <p class="mb-4" style="font-family: poppins">Email: aurasalon@example.com</p>
+      </div>
+      <div class="text-center md:text-left">
+        <h3 class="text-xl font-semibold mb-4" style="font-family: poppins">Quick Links</h3>
+        <ul class="mb-4">
+          <li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+          <li><a href="{% url 'service' %}" class="nav-link">Services</a></li>
+          <li><a href="{% url 'productpage' %}" class="nav-link">Products</a></li>
+          <li><a href="{% url 'contact' %}" class="nav-link">Contact Us</a></li> <!-- Added missing li tag -->
+        </ul>
+      </div>
+      <!-- Follow Us section -->
+      <div class="flex flex-col items-center md:items-start"> <!-- Change to flex-col for column layout -->
+        <h3 class="text-xl font-semibold mb-2 md:mb-4" style="font-family: poppins">Follow Us</h3> <!-- Add mb-2 for smaller screens -->
+        <div class="flex"> <!-- Wrap icons in a flex container -->
+          <a href="#" class="mr-4"><i class="fab fa-facebook text-2xl hover:text-blue-400"></i></a>
+          <a href="#"><i class="fab fa-instagram text-2xl hover:text-red-400"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <hr class="border border-black my-4">
+</body>
+
+</html>

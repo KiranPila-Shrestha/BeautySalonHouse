@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .comment-user {
+            font-family: 'Libre Franklin', sans-serif;
+            /* Add additional styles as needed */
+        }
+
+        #gallery {
+            scroll-snap-type: x mandatory;
+        }
+
+        #gallery>div {
+            scroll-snap-align: start;
+        }
+
+        #gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
+</head>
+
+
+<body>
+    {% extends 'Base_Content/base.html'%}   
+    {% block content %} 
+     
+<div class="container my-[5rem] w-[80%] h-full mx-auto">
+    <div class="product-description flex h-[25rem] ml-10 w-full justify-around">
+        <!-- displaying product picture -->
+        <div id="gallery" class="relative w-[50%] ml-[10rem] overflow-hidden" data-carousel="slide">
+            <!-- Carousel wrapper -->
+            <div class="relative h-full w-[50%] overflow-hidden rounded-lg">
+                {% for image in product_image %}
+                <div class="hidden duration-700 ease-in-out w-full" data-carousel-item>
+                    <img src="{{ image.image.url }}" alt="product" class="rounded-md md:aspect-auto w-full h-full rounded-lg object-cover">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Product Details -->
+        <div class="w-[50%] pl-[5rem]">
+            <div class="px-4">
+                <h1 class="text-4xl text-black font-semibold">{{ productdetail.productName }} - {{ productdetail.productBrand }}</h1>
+                <div class="flex mt-3">
+                    <div>
+                        <p class="text-xl mt-1 mr-4 text-black">Rs {{ productdetail.productPrice }}</p>
+                    </div>
+                    <div>
+                        <p class="rating-stars" class="">
+                            <!-- Stars will be dynamically added here -->
+                        </p>
+                    </div>
+                    <div class="mt-1 ml-4">
+                        <p class="italic">reviews</p>
+                    </div>
+                </div>
+                <div>
+                    <p class="mt-3 text-l text-[#BE485D]">Stock ({{ productdetail.productStock }})</p>
+                </div>
+                <hr class="mt-4 border-1 w-[25rem]">
+                <!-- Description -->
+                <div class="mt-5 w-[30rem]">
+                    <p>{{ productdetail.productDescription }}</p>
+                </div>
+                <!-- Button -->
+                <div class="mt-5">
+                    <button type="button" class="rounded-l w-[10rem] h-10 bg-teal-600">
+                        <span class="text-white">Add To Cart</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+       
+</body>
+
+</html>

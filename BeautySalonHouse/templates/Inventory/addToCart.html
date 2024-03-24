@@ -1,4 +1,38 @@
-{% extends 'Base_content/Base_Nav_footer.html'%}   
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add To Cart</title>
+  <!-- Add your CSS or other meta tags here -->
+</head>
+<script>
+
+    function updateQuantity(productId, change, maxStock) {
+        const Inputquantity = document.getElementById(`Inputquantity-${productId}`);
+        console.log(productId);
+        console.log(`Updating quantity for product ${productId}. Current value: ${Inputquantity.value}`);
+        
+        let newQuantity = parseInt(Inputquantity.value) + change;
+
+        // Ensure the new quantity is within the limits (1 to product stock)
+        newQuantity = Math.max(1, Math.min(newQuantity, maxStock));
+
+        Inputquantity.value = newQuantity;
+        console.log(`New quantity for product ${productId}: ${newQuantity}`);
+
+        // Add additional logs to debug
+        console.log(`Change: ${change}`); 
+        console.log(`Max Stock: ${maxStock}`);
+        
+    }
+</script>
+ 
+</head>
+<body>
+{% extends 'Base_Content/base.html'%}   
 {% block content %} 
 <div class="container mx-auto">
   <!-- Title and Shopping Cart Icon -->
@@ -16,42 +50,126 @@
       <thead>
         <tr>
           <th class="px-4 py-2 bg-gray-200">Product</th>
+          <th class="px-4 py-2 bg-gray-200">Brand</th>
           <th class="px-4 py-2 bg-gray-200">Price</th>
           <th class="px-4 py-2 bg-gray-200">Quantity</th>
           <th class="px-4 py-2 bg-gray-200">Action</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Static data for demonstration -->
-        <tr class="text-center">
-          <td class="border px-4  py-2">
-            <!-- Product Name -->
-            Product Name
-            <!-- Product Image -->
-            <img src="path/to/product-image.jpg" alt="Product Image" class="h-10 w-10">
-          </td>
-          <td class="border px-4 py-2">$10.00</td>
-          <td class="border px-4 py-2">
-            <!-- Quantity with Add/Subtract Buttons -->
-            <div class="flex items-center justify-center">
-              <button class="bg-gray-300 px-2 py-1 rounded-l">-</button>
-              <span class="px-2">1</span>
-              <button class="bg-gray-300 px-2 py-1 rounded-r">+</button>
-            </div>
-          </td>
-          <td class="border px-4 py-2 ">
-            <!-- Delete Button -->
-            <i class="fas fa-trash bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"></i>
-          </td>
+      
+      <form method="post" action="{% url 'update_cart'%}"  id ="update_cart_quantity" >
+        {% csrf_token %} 
+        <!-- Your table content here -->
+
+
+    {% for cart_item in cart_item_set %}
+    <tbody class="divide-y divide-gray-200 bg-white">
+        <tr>
+            <td class="whitespace-nowrap px-4 py-4">
+                <div class="flex items-center">
+                    <div class="flex">
+                        <a href="{% url 'productdetail' cart_item.product.id %}">
+                            <img src="{{ cart_item.product.images.first.image.url }}"
+                                alt="{{ cart_item.product.productName }}"
+                                class="sm:h-38 sm:w-38 h-[8rem] w-[8rem] rounded-xl object-cover" />
+                        </a>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900">
+                            {{ cart_item.product.productName }}
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="whitespace-nowrap px-12 py-4">
+                <div class="text-sm text-gray-900">
+                    {{ cart_item.product.productBrand }}
+                </div>
+            </td>
+            <td class="whitespace-nowrap px-4 py-4">
+                Rs {{ cart_item.product.productPrice }}
+            </td>
+            <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
+                <div class="min-w-24 flex">
+                    <button type="button" class="h-7 w-7"
+                        onclick="updateQuantity('{{ cart_item.product.id }}', -1, {{ cart_item.product.productStock }})">
+                        -
+                    </button>
+                    
+                    <input type="text" name="Inputquantity-{{ cart_item.product.id }}"
+                        id="Inputquantity-{{ cart_item.product.id }}"
+                        class="mx-1 h-7 w-9 rounded-md border text-center"
+                        value="{{ cart_item.Quantity }}" readonly />
+                    <button type="button" class="flex h-7 w-7 items-center justify-center"
+                        onclick="updateQuantity('{{ cart_item.product.id }}', 1, {{ cart_item.product.productStock }})">
+                    +
+                </button>
+                </div>
+            </td>
+
+            <!-- script for quantity add and minus -->                                        
+
+
+            <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+                    
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-red-500">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+            </svg>
+            <button type="submit" value="{{cart_item.product.id }}" name="delete"
+                class="text-xs font-medium text-red-500">REMOVE</button>
+                        
+                                                     
+            </td>
         </tr>
-      </tbody>
+
+        {% endfor %}
+
+    </form>
     </table>
+    <section aria-labelledby="summary-heading" class="rounded-md bg-white lg:col-span-4 lg:mt-0 lg:p-0">
+        <h2 id="summary-heading" class="border-b border-gray-200 px-4 text-lg font-medium text-gray-900 sm:p-4">
+            Price Details
+        </h2>
+        <div>
+            <dl class="space-y-1 px-2 py-4">
+                <div class="flex items-center justify-between">
+                    <dt class="text-sm text-gray-800">Total Items in Cart</dt>
+                    <dd class="text-sm font-medium text-gray-900">
+
+                        {% with total_items=cart_items|length %}
+                        {{ total_items }}
+                        {% endwith %}</dd>  
+                </div>
+                <div class="flex items-center justify-between border-y border-dashed py-4">
+                    <dt class="text-base font-medium text-gray-900">Total Amount</dt>
+                    <dd class="text-base font-medium text-gray-900">Rs {{ user_cart.total_amount|floatformat:2 }}
+                    </dd>
+                </div>
+            </dl>
+            <div class="flex justify-center space-x-4">
+                <button type="button"
+                    class="rounded-md border border-black px-3 py-2 text-sm font-semibold text-white bg-[#61A0FF] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                    onclick="window.location.href='{% url 'productpage' %}'">
+                    Back to shop
+                </button>
+                <button type="button"
+                    class="rounded-md border border-black px-3 py-2 text-sm font-semibold text-white bg-[#FFC061] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </section>
   </div>
 
   <!--button-->
   <div class="mt-8 container mx-auto flex flex-col md:flex-row md:justify-between items-center">
     <div>
-        <button class="bg-blue-600 hover:bg-cyan-700 text-white px-4 py-2 rounded">Update Cart</button>
+        <button type="submit" form="update_cart_quantity" class="bg-blue-600 hover:bg-cyan-700 text-white px-4 py-2 rounded">Update Cart</button>
     </div>
     <div class="md:mt-0 mt-4">
         <p class="md:text-center font-semibold md:mb-4">Shipping : Cost will appear on checkout</p>

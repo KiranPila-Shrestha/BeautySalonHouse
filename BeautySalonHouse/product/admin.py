@@ -4,3 +4,5 @@ from product.models import *
 # Register your models here.
 admin.site.register(addProduct)
 admin.site.register(productImage)
+admin.site.register(cart)
+admin.site.register(Cartitem)

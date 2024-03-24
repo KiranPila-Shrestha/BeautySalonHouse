@@ -1,15 +1,26 @@
-{% extends 'Base_content/Base_Nav_footer.html'%} {% block content %}
-<!-- Banner with Salon Image -->]
-<style>
-  * {
-     font-family: "Poppins", sans-serif;
-   }
- </style> 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Makeup Service</title>
+  <style>
+    * {
+       font-family: "Poppins", sans-serif;
+     }
+   </style> 
+</head>
+
 <body>
+{% extends 'Base_Content/base.html'%}   
+{% block content %} 
+<!-- Banner with Salon Image -->
+
 <div class="relative h-90 bg-cover bg-center bg-repeat flex ">
   <div class="absolute inset-0 bg-repeat"></div>
   <img
-    src="static/Image/makeup-bg.jpg"
+    src="static/Image/makeup/makeup-bg.jpg"
     alt="Your Salon Logo"
     class="flex-shrink-0 w-full h-[750px]"
   />
@@ -61,7 +72,7 @@
   <!-- Right side -->
   <div class="w-1/2 pl-12">
     <img
-      src="static/Image/makeup.jpeg"
+      src="static/Image/makeup/makeup.jpeg"
       alt="Left Image"
       class="w-17 h-auto pt-10 pb-10"
     />
@@ -75,7 +86,7 @@
       <div class="flex flex-col md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/natural.jpg"
+          src="static/Image/makeup/natural.jpg"
           alt="Hair Service"
           class="w-full h-auto md:w-1/2 h-96 object-cover"
         />
@@ -95,7 +106,7 @@
       <div class="flex flex-col md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/bridal1.png"
+          src="static/Image/makeup/bridal1.png"
           alt="Makeup Service"
           class="w-full h-64 md:w-1/2 md:h-auto object-cover"
         />
@@ -120,7 +131,7 @@
       <div class="flex flex-col md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/soft glam.jpg"
+          src="static/Image/makeup/soft glam.jpg"
           alt="Hair Service"
           class="w-full h-64 md:w-1/2 md:h-auto object-cover"
         />
@@ -138,7 +149,7 @@
       <div class="flex flex-col w-md md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/eye.jpg"
+          src="static/Image/makeup/eye.jpg"
           alt="Makeup Service"
           class="w-full h-auto md:w-9/12 md:h-64 object-cover"
           width="1280"
@@ -164,7 +175,7 @@
       <div class="flex flex-col md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/smoke.webp"
+          src="static/Image/makeup/smoke.webp"
           alt="Hair Service"
           class="w-full h-48 md:w-1/2 md:h-auto object-cover"
         />
@@ -182,7 +193,7 @@
       <div class="flex flex-col md:flex-row">
         <!-- Image -->
         <img
-          src="static/Image/korean.jpg"
+          src="static/Image/makeup/korean.jpg"
           alt="Makeup Service"
           class="w-full h-64 md:w-1/2 md:h-auto object-cover"
         />

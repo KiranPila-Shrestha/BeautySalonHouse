@@ -1,12 +1,23 @@
-{% extends 'Base_content/Base_Nav_footer.html'%}   
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page</title>
+  <style>
+    * {
+       font-family: "Poppins", sans-serif;
+     }
+   </style> 
+</head>
+
+<body>
+{% extends 'Base_Content/base.html'%}   
 {% block content %} 
 
-<style>
- * {
-    font-family: "Poppins", sans-serif;
-  }
-</style> 
-<body >
+
+
     <!-- Banner with Salon Image -->
   <div class="relative h-90 bg-cover bg-center bg-repeat flex justify-center items-center"> <img src="static/Image/home_bg.svg" alt="Your Salon Logo">
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">

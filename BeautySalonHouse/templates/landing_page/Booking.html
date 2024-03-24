@@ -1,7 +1,19 @@
-{% extends 'Base_content/Base_Nav_footer.html'%}   
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Appointment</title>
+  <!-- Add your CSS or other meta tags here -->
+</head>
+
+<body>
+    {% extends 'Base_Content/base.html'%}   
 {% block content %} 
-     <!-- Banner with Salon Image -->
-  <div class="relative h-90 bg-cover bg-center bg-repeat flex justify-center items-center"> <img src="/static/Image/banner-2.jpg" alt="Your Salon Logo">
+
+<div class="relative h-90 bg-cover bg-center bg-repeat flex justify-center items-center"> <img src="/static/Image/banner-2.jpg" alt="Your Salon Logo">
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
       <h1 class="text-white text-4xl font-bold mb-4 mt-10" style="font-family: poppins ">BOOK AN APPOINTMENT</h1>
       <h4 class="text-white text-2xl font-regular mb-10 mt-6" style="font-family: poppins ">PLEASE FILL OUT THE APPOINTMENT FORM BELOW TO MAKE APPOINTMENT</h4>
@@ -66,7 +78,6 @@
   {% endif %}
     </form>
   </div>
-  
-  
-
- {%endblock%}
+  {% endblock %}
+</body>
+</html>
