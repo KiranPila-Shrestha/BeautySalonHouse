@@ -2,28 +2,33 @@
 {% block content %}
 <body class="bg-gray-100">
     <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-semibold text-left ml-8 mb-8"> Booked Appointments </h1>
+        <h1 class="text-3xl font-semibold text-left ml-8 mb-8">  Appointment History </h1>
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer Name</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stylist</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Time</th>
+                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">User</th>
+                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Stylist</th>
+                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Service</th>
+                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Status</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     {% for booking_request in booking_requests %}
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookDate }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookTime }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.user }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.staff }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.service }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Approve</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.bookDate }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.bookTime }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.user }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.staff }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.service }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">
+                            <span class="font-medium
+                            {% if booking_request.status == 'Pending' %}text-red-500{% elif booking_request.status == 'completed' %}text-green-500{% elif booking_request.status == 'Confirm' %}text-blue-600{% else %}text-gray-700{% endif %}">
+                   {{ booking_request.status }}
+               </span>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

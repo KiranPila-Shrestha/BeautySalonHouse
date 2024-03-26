@@ -22,10 +22,10 @@
     </div>
     <br>
     <div class="overflow-x-auto">
-        <table class="min-w-max w-full table-auto border-2 border-gray-700">
+        <table class="min-w-max w-full text-lg table-auto border-2 border-gray-700">
             <thead>
                 <tr>
-                    <th class="px-4 py-2">Product Name</th>
+                    <th class="px-4 py-2 ">Product Name</th>
                     <th class="px-4 py-2">Category</th>
                     <th class="px-4 py-2">Brand</th>
                     <th class="px-4 py-2">Price</th>
@@ -37,12 +37,12 @@
                 
                 {% for product in products %}
                 <tr class="text-center">
-                    <td class="border border-gray-800 px-4 py-2">{{ product.productName }}</td>
-                    <td class="border  border-gray-800 px-4 py-2">{{ product.productCategory }}</td>
-                    <td class="border  border-gray-800 px-4 py-2">{{ product.productBrand }}</td>
-                    <td class="border border-gray-800 px-4 py-2">{{ product.productPrice }}</td>
-                    <td class="border border-gray-800 px-4 py-2">{{ product.productStock }}</td>
-                    <td class="border border-gray-800 px-4 py-2">
+                    <td class="border-2  border-gray-800  text-md px-4 py-2">{{ product.productName }}</td>
+                    <td class="border-2  border-gray-800   text-md px-4 py-2">{{ product.productCategory }}</td>
+                    <td class="border-2  border-gray-800   text-md px-4 py-2">{{ product.productBrand }}</td>
+                    <td class="border-2 border-gray-800  text-md px-4 py-2">{{ product.productPrice }}</td>
+                    <td class="border-2 border-gray-800  text-md px-4 py-2">{{ product.productStock }}</td>
+                    <td class="border-2 border-gray-800  text-md px-4 py-2">
                         <form method="post" action="{% url 'productlist' %}">
                             {% csrf_token %}
                             <a href="{% url 'addproduct' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 mr-2 rounded focus:outline-none focus:shadow-outline">

@@ -20,25 +20,28 @@
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50 ">
+                    <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium text-gray-700 uppercase tracking-wider">Date</th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Time</th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Customer Name</th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Stylist</th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Service</th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left md:text-xl font-medium font-semibold text-gray-700 tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left md:text-xl font-medium font-semibold text-gray-700 tracking-wider">Time</th>
+                            <th scope="col" class="px-6 py-3 text-left md:text-xl font-medium font-semibold text-gray-700 tracking-wider">Customer Name</th>
+                            <th scope="col" class="px-6 py-3 text-left md:text-xl font-medium font-semibold text-gray-700 tracking-wider">Stylist</th>
+                            <th scope="col" class="px-6 py-3 text-left md:text-xl font-medium font-semibold text-gray-700 tracking-wider">Service</th>
+                            <th scope="col" class="px-6 py-3 text-left md:text-xl font-medium font-semibold text-gray-700 tracking-wider">Status</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         {% for booking_request in completed_appointments %}
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookDate }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookTime }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.user }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.staff }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.service }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.status }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ booking_request.bookDate }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ booking_request.bookTime }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-lg md:text-lg">{{ booking_request.user }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ booking_request.staff }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ booking_request.service }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg {% if booking_request.status == 'completed' %}text-green-600 font-medium{% endif %}">
+                                {{ booking_request.status }}
+                            </td>
+                            
                         </tr>
                         {% endfor %}
                     </tbody>
