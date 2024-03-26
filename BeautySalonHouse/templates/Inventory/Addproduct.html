@@ -1,10 +1,32 @@
-{% extends 'Base_content/Base_Dashboard.html'%} {% block content%}
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product</title>
+  <style>
+    /* Responsive styles */
+    @media screen and (max-width: 768px) {
+      .flex-wrap {
+        flex-direction: column;
+      }
+      .flex-1 {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+{% extends 'Base_content/Base_Dashboard.html'%} 
+{% block content%}
+<main class="flex flex-wrap gap-6 p-6">
+  <!-- Add Product Section -->
+  <section class="flex-1">
+    <h1 class="text-3xl font-semibold mb-4" style="font-family: poppins">
+      Add Product
+    </h1>
 
-<main class="flex-1 p-6">
-  <h1 class="text-3xl text-semibold mb-4" style="font-family: poppins">
-    Add Product
-  </h1>
 
   <!-- Form -->
   <form method="post" class="w-full max-w-lg " enctype="multipart/form-data">
@@ -137,11 +159,13 @@
   </ul>
 </div>
 {% endif %}
-</main>
+</section>
+
 
 
 <!-- Image Selection -->
-<aside class="w-full md:w-1/2 px-6">
+<aside class="flex-1">
+
   <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
     <h2 class="text-2xl font-semibold text-center mb-6">Choose Image</h2>
     <div class="mb-4">
@@ -166,6 +190,7 @@
   </div>
 </form>
 </aside>
+</main>
 <!-- JavaScript for image preview -->
 <script>
   function previewImages(event) {
@@ -200,3 +225,5 @@
 
 
 {% endblock %}
+</body>
+</html>

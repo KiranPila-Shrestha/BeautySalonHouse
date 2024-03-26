@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Completed Appointment</title>
+  <style>
+    * {
+       font-family: "Poppins", sans-serif;
+     }
+   </style> 
+</head>
+{% extends 'Base_content/Base_Dashboard.html'%} 
+{% block content %}
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-semibold text-left ml-8 mb-8"> My Appointments </h1>
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50 ">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium text-gray-700 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Time</th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Customer Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Stylist</th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Service</th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for booking_request in completed_appointments %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookDate }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.bookTime }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.user }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.staff }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.service }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ booking_request.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

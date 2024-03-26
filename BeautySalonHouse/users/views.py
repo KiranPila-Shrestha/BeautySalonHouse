@@ -76,6 +76,7 @@ def EditProfile(request, user_id):
         if "user" in request.POST:
             username = request.POST.get('user')
             user = User.objects.get(username=username)
+            print(user)
             
         if "Update" in request.POST:
              #update user detail
@@ -83,6 +84,7 @@ def EditProfile(request, user_id):
             user.last_name = request.POST.get('last_name')
             user.email = request.POST.get('email')
             user.save()
+            print(user)
            
         #updating additional details
         
@@ -92,6 +94,7 @@ def EditProfile(request, user_id):
             user_detail.contact_number = request.POST.get('contact_number')
         user_detail.save()
         messages.success(request, "User Details has been updated successfully.")
+        
         
         
         if 'saveImage' in request.POST:

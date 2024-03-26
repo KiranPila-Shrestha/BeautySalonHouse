@@ -10,6 +10,8 @@ urlpatterns = [
                path('staffappointmenthistory/', views.bookedAppointment, name='staffappointmenthistory'),
                path('adminappointmenthistory/', views.bookedAppointment, name='adminAppointmenthistory'),
                path('appointments', views.Appointments, name='appointments'),
+                 path('completeappointments', views.CompleteAppointments, name='completeappointments'),
+                 path('Usercompleteappointments', views.UserCompleteAppointments, name='Usercompleteappointments'),
             #    path('feedback', views.feedback, name='feedback'),
                
                 ]
