@@ -158,55 +158,60 @@ def cart_view(request):
     
 # for update the cart
 def update_cart(request):
-    #print the post data request
-    print("POST data:", request.POST)
+    if request.method == 'POST':
+        #print the post data request
+        print("POST data:", request.POST)
 
-    #Get or create the user's cart
-    user_cart, created = cart.objects.get_or_create(user=request.user)
-    
-    print(user_cart)
-    
-    #initialize total
-    total_amount =0
-    
-    if "delete" in request.POST:
-        pId = request.POST.get('delete')
-        item_delete = Cartitem.objects.filter(product_id = pId).first()
-        print(item_delete)
+        #Get or create the user's cart
+        user_cart, created = cart.objects.get_or_create(user=request.user)
         
-        if item_delete:
-            item_price = item_delete.product.productPrice
-            print('item_price', item_price)
+        print(user_cart)
+        
+        #initialize total
+        total_amount =0
+        
+        if "delete" in request.POST:
+            pId = request.POST.get('delete')
+            item_delete = Cartitem.objects.filter(product_id = pId).first()
+            print(item_delete)
             
-            #remove item from cart
-            item_delete.delete()
-            
-            #for recalculation of total
-            user_cart.total_amount -= item_price * item_delete.Quantity
-            if user_cart.total_amount < 0:
-                user_cart.total_amount = 0
+            if item_delete:
+                item_price = item_delete.product.productPrice
+                print('item_price', item_price)
                 
-            #save cart
-            user_cart.save()
-    
-    #iterate through product in cart and update quantites
-    for cart_item in user_cart.cartitem_set.all():
-        print('cart items:', cart_item.Quantity)
-        #using product id to modify cart items
-        cartID= str(cart_item.product.id)
-        new_quantity = request.POST.get('Inputquantity-'+ cartID)
-        print('Inputquantity-'+cartID)
+                #remove item from cart
+                item_delete.delete()
+                
+                #for recalculation of total
+                user_cart.total_amount -= item_price * item_delete.Quantity
+                if user_cart.total_amount < 0:
+                    user_cart.total_amount = 0
+                    
+                #save cart
+                print('donee')
+                user_cart.save()
         
-        if new_quantity == None:
-            old_quantity = cart_item.Quantity
-            #update the cat item quantiy
-            cart_item.Quantity = old_quantity
-            cart_item.save()
-        else:
-            cart_item.Quantity = new_quantity
-            cart_item.save()
+        #iterate through product in cart and update quantites
+        for cart_item in user_cart.cartitem_set.all():
+            print('cart items:', cart_item.Quantity)
+            #using product id to modify cart items
+            cartID= str(cart_item.product.id)
+            new_quantity = request.POST.get('Inputquantity-'+ cartID)
+            print('Inputquantity-'+cartID)
             
-        user_cart.update_total_amount()
+            if new_quantity == None:
+                old_quantity = cart_item.Quantity
+                #update the cat item quantiy
+                cart_item.Quantity = old_quantity
+                cart_item.save()
+            else:
+                cart_item.Quantity = new_quantity
+                cart_item.save()
+                
+            user_cart.update_total_amount()
+            print("Total amount before saving:", user_cart.total_amount)
+            user_cart.save()
+            print("Total amount after saving:", user_cart.total_amount)
     return redirect('cartview')
     
 def checkout(request):

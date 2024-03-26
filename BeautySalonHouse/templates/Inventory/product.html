@@ -11,6 +11,14 @@
 <body>
 {% extends 'Base_Content/base.html'%}   
 {% block content %} 
+{% if messages %}
+  <div id="notification" class="bg-green-500 text-white px-4 py-2 rounded-md fixed bottom-5 right-5 z-50">
+    {% for message in messages %}
+      <span class="mr-2"><i class="fas fa-check-circle"></i></span>{{ message }}
+    {% endfor %}
+  </div>
+{% endif %}
+
 <!-- Banner with Salon Image -->
 <div class="relative h-90 bg-cover bg-center bg-no-repeat flex">
   <div class="absolute inset-0 bg-black opacity-50"></div>
@@ -71,13 +79,8 @@
   {% endfor %}
 </div>
 {% endfor %}
-{% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
+
+
 
 
 <!-- Script for generating stars -->

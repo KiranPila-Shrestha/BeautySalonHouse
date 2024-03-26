@@ -35,10 +35,26 @@ def booking(request):
             booked_date = request.POST.get('BookDate')
             booked_time = request.POST.get('BookTime')
             description = request.POST.get('description')
+            print("Service:", service)
+            print("Staff:", staff)
+            print("Booked Date:", booked_date)
+            print("Booked Time:", booked_time)
+            print("Description:", description)
+        
             
             if not service or not staff or not booked_date or not booked_time:
                 messages.error(request, 'Please fill out all required fields.')
+                print("Missing required fields")
                 return render(request, 'landing_page/Booking.html')
+                # Combine the selected date and time
+            selected_datetime = timezone.make_aware(timezone.datetime.strptime(booked_date + ' ' + booked_time, '%Y-%m-%d %H:%M'))
+
+            if selected_datetime < timezone.now():
+                messages.error(request, 'Please select a time in the future.')
+                print("Selected time is in the past")
+                return render(request, 'landing_page/Booking.html')
+            # Show error message if selected datetime is in the past
+            
             
             appointment_book = BookAppointment(
                 user=user,
@@ -52,7 +68,7 @@ def booking(request):
             try:
                 appointment_book.save()
                 #  success message
-                messages.success(request, 'Appointment has been sent for approval. You will be notified about confirmation.')
+                messages.success(request, 'Appointment has been sent for approval. You will be notified about confirmation.', extra_tags='success')
             
                 return render(request, 'landing_page/Booking.html')
             except:
@@ -75,7 +91,6 @@ def booking(request):
 
 def Appointments(request):
     booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=False)
-    
 
     
     if request.method == 'POST':

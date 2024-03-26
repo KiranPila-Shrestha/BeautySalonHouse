@@ -141,7 +141,7 @@
                     <dt class="text-sm text-gray-800">Total Items in Cart</dt>
                     <dd class="text-sm font-medium text-gray-900">
 
-                        {% with total_items=cart_items|length %}
+                        {% with total_items=cart_item_set|length %}
                         {{ total_items }}
                         {% endwith %}</dd>  
                 </div>

@@ -24,7 +24,7 @@
             <td class="border-2 px-4 py-2 flex justify-between"> <!-- Added flex and justify-between -->
                 <div>Order Summary </div> <!-- Wrapped content in div -->
                 <div class="ml-10"> <!-- Added left margin for space -->
-                    <a href="{%url 'addtocart'%}" class="text-blue-500 underline">View Details</a>
+                    <a href="{%url 'cartview'%}" class="text-blue-500 underline">View Details</a>
                 </div>
             </td>
         </tr>
@@ -33,15 +33,15 @@
                 <table class="w-full">
                     <tr>
                         <td class="font-semibold">Sub-total:</td>
-                        <td class="text-right ml-4">$100.00</td> <!-- Added left margin for space -->
+                        <td class="text-right ml-4">Rs {{ user_cart.total_amount|floatformat:2 }}</td> <!-- Use dynamic total amount -->
                     </tr>
                     <tr>
                         <td class="font-semibold">Reward:</td>
-                        <td class="text-right">$10.00</td> <!-- Replace with dynamic value -->
+                        <td class="text-right">Rs 10.00</td> <!-- Replace with dynamic value -->
                     </tr>
                     <tr>
                         <td class="font-semibold">Total:</td>
-                        <td class="text-right">$90.00</td> <!-- Replace with dynamic value -->
+                        <td class="text-right">Rs 90.00</td> <!-- Replace with dynamic value -->
                     </tr>
                 </table>
             </td>

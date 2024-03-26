@@ -12,6 +12,18 @@
 <body>
     {% extends 'Base_Content/base.html'%}   
 {% block content %} 
+{% comment %} {% if messages %}
+  <div id="notification" class="bg-green-500 text-white px-4 py-2 rounded-md fixed bottom-5 right-5 z-50">
+    {% for message in messages %}
+      <div class="flex items-center">
+        <span class="mr-2"><i class="fas fa-check-circle"></i></span>
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %} {% endcomment %}
+
+
 
 <div class="relative h-90 bg-cover bg-center bg-repeat flex justify-center items-center"> <img src="/static/Image/banner-2.jpg" alt="Your Salon Logo">
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
@@ -68,14 +80,15 @@
         <button type="submit" class="primary bg-[#009688] text-white px-8 py-2">Book Appointment</button>
       </div>
       {% if messages %}
-  <div class="alert alert-danger">
-    <ul>
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
+      <div class="alert alert-danger">
+        <ul>
+          {% for message in messages %}
+            <li><i class=" text-red-500 mr-1"></i>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+    
     </form>
   </div>
   {% endblock %}
