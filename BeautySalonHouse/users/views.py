@@ -80,6 +80,7 @@ def EditProfile(request, user_id):
             
         if "Update" in request.POST:
              #update user detail
+            print("updaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaateeeeeeeeee")
             user.first_name = request.POST.get('first_name')
             user.last_name = request.POST.get('last_name')
             user.email = request.POST.get('email')

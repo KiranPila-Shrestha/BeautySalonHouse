@@ -57,10 +57,7 @@
         </tr>
       </thead>
       
-      <form method="post" action="{% url 'update_cart'%}"  id ="update_cart_quantity" >
-        {% csrf_token %} 
-        <!-- Your table content here -->
-
+    
 
     {% for cart_item in cart_item_set %}
     <tbody class="divide-y divide-gray-200 bg-white">
@@ -145,23 +142,9 @@
                         {{ total_items }}
                         {% endwith %}</dd>  
                 </div>
-                <div class="flex items-center justify-between border-y border-dashed py-4">
-                    <dt class="text-base font-medium text-gray-900">Total Amount</dt>
-                    <dd class="text-base font-medium text-gray-900">Rs {{ user_cart.total_amount|floatformat:2 }}
-                    </dd>
-                </div>
+                
             </dl>
-            <div class="flex justify-center space-x-4">
-                <button type="button"
-                    class="rounded-md border border-black px-3 py-2 text-sm font-semibold text-white bg-[#61A0FF] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                    onclick="window.location.href='{% url 'productpage' %}'">
-                    Back to shop
-                </button>
-                <button type="button"
-                    class="rounded-md border border-black px-3 py-2 text-sm font-semibold text-white bg-[#FFC061] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
-                    Checkout
-                </button>
-            </div>
+           
         </div>
     </section>
   </div>

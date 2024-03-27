@@ -186,6 +186,7 @@ def update_cart(request):
                 user_cart.total_amount -= item_price * item_delete.Quantity
                 if user_cart.total_amount < 0:
                     user_cart.total_amount = 0
+                    print( user_cart.total_amount)
                     
                 #save cart
                 print('donee')
@@ -214,7 +215,13 @@ def update_cart(request):
             print("Total amount after saving:", user_cart.total_amount)
     return redirect('cartview')
     
+
+    
 def checkout(request):
-   return render(request, 'Inventory/checkout.html')
+   cartItems = cart.objects.filter(user=request.user)
+   context= {
+       'cartItems' : cartItems
+   }
+   return render(request, 'Inventory/checkout.html', context)
 #def addtoCart(request):
  #   return render(request, 'Inventory/addToCart.html')

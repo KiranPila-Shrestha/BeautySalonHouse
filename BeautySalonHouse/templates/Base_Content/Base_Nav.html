@@ -202,6 +202,7 @@ User is not authenticated
               <i class="fas fa-user-circle text-2xl mr-2"></i>
               {{ request.user.username }}
           </span>
+          
         </div>
           <div class="absolute hidden bg-white rounded shadow-md mt-2 py-2 w-48 " style = "font-family: poppins" id="userDropdown">
             <a href="{% if request.user.userdetail.user_type == 'customer' %}{% url 'EditProfile' user.id %}{% elif request.user.is_superuser %}{% url 'AdminDashBoard' %}{% else %}{% url 'HairStaffDashboard' %}{% endif %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white"> <i class="fas fa-user-circle text-1.5xl mr-2 "></i>Account</a>

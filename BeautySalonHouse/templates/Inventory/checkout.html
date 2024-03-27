@@ -19,6 +19,7 @@
  
 <div class="mt-8 container mx-auto ">
     <h2 class="text-xl font-semibold text-center mb-4">Order Summary and View Details</h2>
+    {% for cartItem in cartItems %}
     <table class="w-full md:w-1/2 mx-auto table-fixed">
         <tr>
             <td class="border-2 px-4 py-2 flex justify-between"> <!-- Added flex and justify-between -->
@@ -33,7 +34,7 @@
                 <table class="w-full">
                     <tr>
                         <td class="font-semibold">Sub-total:</td>
-                        <td class="text-right ml-4">Rs {{ user_cart.total_amount|floatformat:2 }}</td> <!-- Use dynamic total amount -->
+                        <td class="text-right ml-4">Rs {{ cartItem.total_amount}}</td> <!-- Use dynamic total amount -->
                     </tr>
                     <tr>
                         <td class="font-semibold">Reward:</td>
@@ -47,6 +48,7 @@
             </td>
         </tr>
     </table>
+    {% endfor %}
 </div>
 
 

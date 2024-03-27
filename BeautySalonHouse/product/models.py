@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import redirect
 from django.contrib.auth.models import User, Group
 # Create your models here.
 
@@ -45,7 +46,10 @@ class cart(models.Model):
         total = sum(item.product.productPrice * item.Quantity for item in self.cartitem_set.all())
         self.total_amount = total
         self.save()
+    
         
+    
+            
 class Cartitem(models.Model):
     cart = models.ForeignKey(cart, on_delete = models.CASCADE)
     product = models.ForeignKey('addProduct', on_delete = models.CASCADE)
