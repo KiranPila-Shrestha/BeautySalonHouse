@@ -12,6 +12,7 @@ urlpatterns = [
                path('appointments', views.Appointments, name='appointments'),
                  path('completeappointments', views.CompleteAppointments, name='completeappointments'),
                  path('Usercompleteappointments', views.UserCompleteAppointments, name='Usercompleteappointments'),
+                  path('Cancelappointments', views.CancelAppointments, name='Cancelappointments'),
             #    path('feedback', views.feedback, name='feedback'),
                
                 ]

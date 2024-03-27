@@ -123,6 +123,12 @@
                 <i class="fas fa-chart-line mr-2"></i> Complete Appointment
               </a>
             </li>
+           
+            <li class="mb-4">
+              <a href="{% url 'Cancelappointments' %}" class="block text-gray-700 hover:text-cyan-500">
+                <i class="fas fa-chart-line mr-2"></i> Rejected Appointment
+              </a>
+            </li>
             <li class="mb-4">
               <a href="{% url 'EditProfile' user_id=request.user.id %}" class="block text-gray-700 hover:text-cyan-500">
                 <i class="fas fa-user mr-2"></i>Edit Profile

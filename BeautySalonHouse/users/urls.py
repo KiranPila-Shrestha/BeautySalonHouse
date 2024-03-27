@@ -34,6 +34,6 @@ urlpatterns = [
     path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
     
  
-    
+
     
 ]
