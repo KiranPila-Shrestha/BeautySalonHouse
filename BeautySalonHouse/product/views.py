@@ -3,6 +3,10 @@ from . models import *
 from .forms import *
 from django.contrib import messages
 from django.db.models import Sum, F
+import json
+# import requests
+from django.http import HttpResponse
+from django.db import transaction
 
 
 # Create your views here.
@@ -217,11 +221,158 @@ def update_cart(request):
     
 
     
-def checkout(request):
+def checkoutpage(request):
    cartItems = cart.objects.filter(user=request.user)
    context= {
        'cartItems' : cartItems
    }
    return render(request, 'Inventory/checkout.html', context)
+
+
 #def addtoCart(request):
  #   return render(request, 'Inventory/addToCart.html')
+ 
+# def place_order(request):
+#     if request.method == 'POST':
+#         # Retrieve cart details
+#         user_cart = cart.objects.get(user=request.user)
+#         cart_items = user_cart.cartitem_set.all()
+        
+#         # Construct the product details and prices strings
+#         products_details = "\n".join([f"{item.product.productName} - Quantity: {item.Quantity}" for item in cart_items])
+#         prices = "\n".join([f"{item.product.productName}: {item.product.productPrice}" for item in cart_items])
+        
+#         # Calculate total amount
+#         total_amount = sum(item.product.productPrice * item.Quantity for item in cart_items)
+        
+#         # Create order history record
+#         orderHistory.objects.create(
+#             user=request.user,
+#             products=products_details,
+#             prices=prices,
+#             total_amount=total_amount
+#         )
+        
+#         # Clear the cart
+#         user_cart.cartitem_set.all().delete()
+        
+#         messages.success(request, "Your order has been placed successfully!")
+#         return redirect('home')  # Redirect to home page or any other page
+        
+#     # Handle cases where the request method is not POST
+#     return redirect('cartview')  # Redirect back to the cart view if the request method is not POST
+
+
+# def order_history_view(request):
+#     orders = orderHistory.objects.all()
+#     return render(request, 'orderhistory.html', {'orders': orders})
+
+def checkout(request):
+    if request.method == 'POST':
+        new_address = request.POST.get('address')
+        new_number = request.POST.get('phone_number')
+        
+        user_cart, created = cart.objects.get_or_create(user=request.user)
+
+        # Update the address and number in the cart
+        user_cart, created = cart.objects.get_or_create(user=request.user)
+        user_cart.new_address = new_address
+        user_cart.new_number = new_number
+        user_cart.save()
+        return redirect('checkout')
+        
+    return render(request, 'Inventory/checkout.html')
+
+
+# #paymenttt
+# def initkhalti(request):
+    
+#     user = request.user.username
+#     userinformation = request.user
+#     contact = userinformation.userdetail.contact_number
+#     email = userinformation.email
+
+#     url = "https://a.khalti.com/api/v2/epayment/initiate/"
+    
+#     return_url = request.POST.get('return_url')
+#     purchase_order_id = request.POST.get('purchase_order_id')
+#     amount = request.POST.get('amount')
+#     print(amount)
+
+#     payload = json.dumps({
+#         "return_url": return_url,
+#         "website_url": "http://127.0.0.1:8000",
+#         "amount": amount,
+#         "purchase_order_id": purchase_order_id,
+#         "purchase_order_name": "test",
+#         "customer_info": {
+#             "name": user,
+#             "email": email,
+#             "phone": contact,
+#         }
+#     })
+#     headers = {
+#         'Authorization': 'key 74a324b745f74fa8aa2d8be8128e5ede', 
+#         'Content-Type': 'application/json',
+#     }
+
+#     try:
+#         response = requests.request("POST", url, headers=headers, data=payload)
+#         new_res = json.loads(response.text)
+
+#         payment_url = new_res.get('payment_url')
+#         if payment_url:
+#             return redirect(payment_url)
+#         else:
+#             print("No payment found", new_res)
+#             return HttpResponse("Payment URL not found")
+#     except Exception as e:
+#         print("Error occurred during payment initiation:", e)
+#         return HttpResponse("An error occurred during payment")
+     
+     
+     
+
+# def verifyKhalti(request):
+#     url = "https://a.khalti.com/api/v2/epayment/lookup/"
+#     if request.method == 'GET':
+#         headers = {
+#             'Authorization': 'key 74a324b745f74fa8aa2d8be8128e5ede',
+#             'Content-Type': 'application/json',
+#         }
+#         pidx = request.GET.get('pidx')
+        
+#         payload = json.dumps({
+#         'pidx': pidx
+#         })
+        
+#         res = requests.request('POST',url,headers=headers,data=payload)
+        
+#         new_res = json.loads(res.text)
+#         print("new_res",new_res)
+        
+
+#         if new_res['status'] == 'Completed':
+
+            
+#             cart = get_object_or_404(cart, user=request.user)
+#             print(cart)
+#             with transaction.atomic():
+
+                
+#                 return redirect('cartview')
+
+
+
+            
+        
+#         else:
+#             pass
+#             # return redirect('error')
+
+
+
+
+def paymentSuccess(request):
+    return render(request, 'payment/paymentsuccess.html')
+

@@ -10,7 +10,11 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <script src="sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="sweetalert2.min.css">
   </head>
+ 
   <body class="overflow-y-hidden">
     <div class="login-wrapper-container">
       <div class="login-child flex">
@@ -62,7 +66,7 @@
               <!--  -->
               <div class="login-button w-full">
                 <button
-                  class="w-full bg-[#009688] py-2 text-white uppercase tracking-widest"
+                  class="w-full bg-[#009688] py-2 text-white uppercase tracking-widest" onclick="login()"
                 >
                   Login
                 </button>
@@ -91,6 +95,7 @@
                 Discover the more attractive you
               </p>
             </div>
+            <button onclick="alert_()">SHOW NOTIFI</button>
           </div>
         </div>
       </div>
@@ -107,4 +112,25 @@
     {% endif %}
 
   </body>
+  <script>
+    function alert_() {
+    
+    Swal.fire({
+      title: 'Error! Password Invalid',
+      text: 'Do you want to continue',
+      icon: 'error',
+      confirmButtonText: 'Cool'
+    })
+    
+    }
+    function login() {
+      Swal.fire({
+        title: 'SUccessfully Login!',
+        text: 'You have SUccessfully login!',
+        icon: 'Success',
+        confirmButtonText: 'Got it'
+      });
+    }
+    </script>
+
 </html>

@@ -91,16 +91,17 @@ def booking(request):
 
 def Appointments(request):
  
-    booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=False)
+    booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=False, status="Pending")
     
     if request.method == 'POST':
         bookingId = request.POST.get("bookingId")
-        booking = BookAppointment.objects.get(id=bookingId)
+        booking = BookAppointment.objects.get(id=bookingId, confirmed=False, status="Pending")
         print(booking)
         
         if "cancel" in request.POST:
             # Mark the appointment as canceled
             booking.status = 'Canceled'
+            booking.Canceled = True
             booking.save()
             
             # Save the details in the canceled appointments model
@@ -131,7 +132,6 @@ def Appointments(request):
                 
             )
             print('done')
-            booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=True)   
             return redirect("appointments")
           
     
@@ -146,7 +146,7 @@ def Appointments(request):
 
 def CancelAppointments(request):
     # Retrieve all canceled appointments
-    canceled_appointments = BookAppointment.objects.filter(status='Canceled')
+    canceled_appointments = BookAppointment.objects.filter(staff=request.user, status='Canceled')
     
     context = {
         'canceled_appointments': canceled_appointments
@@ -259,8 +259,6 @@ def UserCompleteAppointments(request):
     userFeedBack = None
     feedback = None
    
-    
-
     if request.method == 'POST' and 'submitFeedback' in request.POST:
         bookingID = request.POST.get('bookingId')
         print(bookingID)

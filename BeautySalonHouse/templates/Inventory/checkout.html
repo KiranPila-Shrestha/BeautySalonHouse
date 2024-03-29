@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Landing Page</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
   <style>
     * {
        font-family: "Poppins", sans-serif;
@@ -34,17 +36,21 @@
                 <table class="w-full">
                     <tr>
                         <td class="font-semibold">Sub-total:</td>
-                        <td class="text-right ml-4">Rs {{ cartItem.total_amount}}</td> <!-- Use dynamic total amount -->
+                        <input type="hidden" name="purchase_order_id" id="pid" value="{{ request.user }}">
+                        <td class="text-right ml-4">Rs {{ cartItem.total_amount}}</td> 
                     </tr>
                     <tr>
                         <td class="font-semibold">Reward:</td>
-                        <td class="text-right">Rs 10.00</td> <!-- Replace with dynamic value -->
+                        <td class="text-right">10 credit</td>
                     </tr>
                     <tr>
+                        <input type="hidden" name="amount" value="{{cartItem.total_amount}}" id="amt">
                         <td class="font-semibold">Total:</td>
-                        <td class="text-right">Rs 90.00</td> <!-- Replace with dynamic value -->
+                        <td class="text-right">Rs {{ cartItem.total_amount}}</td> 
                     </tr>
                 </table>
+                 <input type="hidden" name="return_url" value="http://127.0.0.1:9000">
+
             </td>
         </tr>
     </table>
@@ -54,19 +60,97 @@
 
 
 <!-- Payment Methods -->
-<div class="mt-8 container mx-auto">
-    <h2 class="text-xl font-semibold mb-4 text-center" >Payment Methods</h2>
-    <div class="flex space-x-10 justify-center">
-        <button class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-cyan-600">Cash on Delivery</button>
-        <button class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-cyan-600">Online Payment</button>
+
+
+<!-- Place Order Button -->
+{% comment %} <div class="mt-8 container mx-auto flex justify-center">
+    <input type="hidden" name="return_url" value="http://127.0.0.1:9000/verify">
+    <button class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">Check Out</button>
+</div> {% endcomment %}
+
+<div class="mt-8 container mx-auto flex justify-center">
+<button data-modal-target="crud-modal" data-modal-toggle="crud-modal" type="button"
+class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
+<span class="text-white">Checkout</span>
+</button>
+</div>
+<!-- checkout modal  -->
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full md:inset-0">
+    <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
+        <form id="" method="post" action="{% url 'checkout' %}">
+            {% csrf_token %}
+            <!-- Modal content -->
+            <div class="relative">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Do you want to change the address and location?
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                    <div class="col-span-2 p-4 md:p-5">
+                        <div class="flex gap-2">
+                            <label class="mt-2">Address </label>
+                            <input name="address" value="{% if user_cart.new_address %}{{ user_cart.new_address }}{% else %}{{ user.userdetail.address }}{% endif %}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <label class="mt-2">Number </label>
+                            <input name="phone_number" value="{% if user_cart.new_number %}{{ user_cart.new_number }}{% else %}{{ user.userdetail.contact_number }}{% endif %}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-around">
+                    <button type="submit" class="mb-2 flex justify-center text-white w-[10rem] h-auto inline-flex items-center ml-[1rem] bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
+                        <div class="flex">
+                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            Save
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <br>
+        <form action="#" method="POST">
+            {% csrf_token %}
+            <button type="submit" 
+                class=" mb-2 text-white inline-flex items-center ml-[1rem] justify-center bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500 ">
+                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                Pay with Khalti
+                <input type="hidden" name="amount" id="amt" value="{{ user_cart.total_amount }}">
+
+                <input type="hidden" name="purchase_order_id" id="pid" value="{{request.user}}">
+
+                <input type="hidden" name="return_url"
+                    value="http://127.0.0.1:8000">
+            </button>
+        </form>
     </div>
 </div>
 
-<!-- Place Order Button -->
-<div class="mt-8 container mx-auto flex justify-center">
-    <button class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">Place Order</button>
-</div>
-
+<script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('modal', () => ({
+        open: false,
+        toggle() {
+          this.open = !this.open;
+        },
+      }));
+    });
+  </script>
 {% endblock %}
 </body>
 </html>

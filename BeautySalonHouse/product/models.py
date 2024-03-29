@@ -37,6 +37,9 @@ class cart(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     products = models.ManyToManyField('addProduct')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    new_address = models.CharField(max_length=100, blank = True, default='')
+    new_number = models.CharField(max_length=10, blank = True, default='')
+    
     
     def __str__(self):
         return f"Cart for {self.user.username}"
@@ -49,7 +52,7 @@ class cart(models.Model):
     
         
     
-            
+#for cart items save         
 class Cartitem(models.Model):
     cart = models.ForeignKey(cart, on_delete = models.CASCADE)
     product = models.ForeignKey('addProduct', on_delete = models.CASCADE)
@@ -58,3 +61,11 @@ class Cartitem(models.Model):
     def __str__(self):
         return f"{self.Quantity} x {self.product.productName} in Cart for {self.cart.user.username}"
     
+    # 
+    
+# class orderHistory(models.Model):
+#     user = models.ForeignKey(User, on_delete = models.CASCADE)
+#     product = models.TextField()
+#     prices = models.TextField() 
+#     total_amount =models.DecimalField(max_digits=10, decimal_places=2)
+#     date_ordered = models.DateTimeField(auto_now_add=True)

@@ -1,0 +1,112 @@
+{% extends 'Base_content/Base_Dashboard.html'%}
+{% block content%}
+<div class="container mx-auto">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ml-3rem mb-10 gap-6">
+    <div class="bg-white h-[6rem] lg:mr-3 bg-white grid grid-cols-2 rounded-l shadow-md">
+      <div class="h-full flex items-center justify-center w-16 ml-16">
+        <i class="fas fa-cut text-blue-500 text-3xl"></i> <!-- Font Awesome icon for Hair Technician -->
+      </div>
+      <div class="text-xl font-medium mt-4 mr-3">
+        <p class="mb-1">Hair Technician</p>
+        <p>3</p>
+      </div>
+    </div>
+    <div class="bg-white h-[6rem] lg:mr-3 bg-white grid grid-cols-2 rounded-l shadow-md">
+      <div class="h-full flex items-center justify-center w-16 ml-16">
+        <i class="fas fa-hand-sparkles text-green-500 text-3xl"></i> <!-- Font Awesome icon for Nail Technician -->
+      </div>
+      <div class="text-xl font-medium mt-4 mr-3">
+        <p class="mb-1">Nail Technician</p>
+        <p>3</p>
+      </div>
+    </div>
+    <div class="bg-white h-[6rem] lg:mr-2 bg-white grid grid-cols-2 rounded-l shadow-md">
+      <div class="h-full flex items-center justify-center w-16 ml-16">
+        <i class="fas fa-spa text-red-500 text-3xl"></i> <!-- Font Awesome icon for Skin Technician -->
+      </div>
+      <div class="text-xl font-medium mt-4 mr-3">
+        <p class="mb-1">Skin Technician</p>
+        <p>3</p>
+      </div>
+    </div>
+    <div class="bg-white h-[6rem] lg:mr-3 bg-white grid grid-cols-2 rounded-l shadow-md">
+      <div class="h-full flex items-center justify-center w-16 ml-16">
+        <i class="fas fa-paint-brush  text-pink-500 text-3xl"></i> <!-- Font Awesome icon for Makeup Artist -->
+      </div>
+      <div class="text-xl font-medium mt-4 mr-3">
+        <p class="mb-1">Makeup Artist</p>
+        <p>3</p>
+      </div>
+    </div>
+    <div class="bg-white h-[6rem] lg:mr-3 bg-white grid grid-cols-2 rounded-l shadow-md">
+      <div class="h-full flex items-center justify-center w-16 ml-16">
+        <i class="fas fa-user text-yellow-500 text-3xl"></i> <!-- Font Awesome icon for Customer -->
+      </div>
+      <div class="text-xl font-medium mt-4 mr-3">
+        <p class="mb-1">Customer</p>
+        <p>3</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- tbale section -->
+<h1 class="ml-5 text-3xl font-bold">Users</h1>
+<div class="mt-5">
+  <div class="overflow-x-auto">
+    <table class="w-full table border border-gray-200" id="myTable">
+        <thead class="bg-gray-300 border-2 border-gray-200">
+            <tr>
+              <th scope="col" class="px-4 py-3.5 text-center text-lg font-semibold text-gray-700 border-2">
+                User_ID
+              </th>
+              <th scope="col" class="px-4 py-3.5 text-left text-lg font-semibold text-gray-700 border-r-2">
+                Email
+              </th>
+              <th scope="col" class="px-4 py-3.5 text-left text-lg font-semibold text-gray-700 border-r-2">
+                Username
+              </th>
+              <th scope="col" class="px-8 py-3.5 text-left text-lg font-semibold text-gray-700 border-r-2">
+                User Type
+              </th>
+              <th scope="col" class="px-4 py-3.5 text-right text-lg font-semibold text-gray-700 border-r-2">
+                View
+              </th>
+              <th scope="col" class="px-4 py-3.5 text-right text-lg font-semibold text-gray-700">
+                Delete
+              </th>
+            </tr>
+          </thead>
+          
+      <tbody class="divide-y divide-gray-300 bg-white">
+        {% for user_detail in allUserlogin %}
+        <tr>
+          <td class="whitespace-nowrap px-4 py-4 text-center">{{user_detail.id}}</td>
+          <td class="whitespace-nowrap px-4 py-4">{{user_detail.email}}</td>
+          <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">{{user_detail}}</td>
+          <td class="whitespace-nowrap px-12 py-4">
+            <div class="text-sm text-gray-900">{{user_detail.groups.first.name}}</div>
+          </td>
+          <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+            <a href="#" class="text-blue-700 text-center"><i class="fas fa-eye"></i></a>
+          </td>
+          <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+            <form method="post" action="">
+              {% csrf_token %}
+              <input type="hidden" name="username" value="{{user_detail.user}}">
+              <button type="submit" name="userdelete" class="text-red-600"><i class="fas fa-trash-alt"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

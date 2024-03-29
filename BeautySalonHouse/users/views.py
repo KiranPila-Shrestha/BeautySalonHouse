@@ -206,8 +206,48 @@ def AdminDashBoard(request):
 
 
 
+###for user details view by admin
+
+def is_superuser(user):
+    return user.is_superuser
 
 
+@login_required(login_url='login')
+@user_passes_test(is_superuser)
 
-
+def userdetail_admin(request):
+    if request.method =='POST':
+        print('click')
+        if 'userdelete' in request.POST:
+            username = request.POST.get('username')
+            user = User.objects.get(User, username=username)
+            
+            print(username)
+            print(user, "user")
+            
+            #delete user
+            user.delete()
+            messages.success(request, "User Deleted")
+            
+            return redirect('useradmin')
+    requestedUserType = UserDetail.objects.all()
+    requestedUser = UserDetail.objects.filter(user_type='customer')
     
+    allUserlogin = User.objects.filter(groups__name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"] )
+    
+    total_hairtechnician = User.objects.filter(groups__name='Hair Technician').exclude(is_superuser=True).count()
+    total_skintechnician = User.objects.filter(groups__name='Laser Skin').exclude(is_superuser=True).count()
+    total_nailtechnician = User.objects.filter(groups__name='Nail Technician').exclude(is_superuser=True).count()
+    total_makeuptechnician = User.objects.filter(groups__name='Makeup Artist').exclude(is_superuser=True).count()
+
+    context = {
+        ' requestedUserType':  requestedUserType,
+        'total_hairtechnician':total_hairtechnician,
+        'total_skintechnician': total_skintechnician,
+        'total_nailtechnician': total_nailtechnician,
+        ' total_makeuptechnician':  total_makeuptechnician,
+        'allUserlogin':allUserlogin,
+        'requestedUser':requestedUser,
+    }
+
+    return render(request, 'Admin_Page/Userdetails.html', context)
