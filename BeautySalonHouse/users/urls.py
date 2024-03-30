@@ -33,7 +33,7 @@ urlpatterns = [
     # For admin pathhh..
     path('AdminDashBoard/', views.AdminDashBoard, name='AdminDashBoard'),
      path('Admin_UserDetail/', views. userdetail_admin, name='useradmin'),
-    
+      path('Admin_Visualize', views. adminchart, name='adminchart'),
  
 
     

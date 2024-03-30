@@ -15,7 +15,8 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
 
-
+##appointment models
+from Appointment.models import *
 # LOGIN
 def loginUser(request):
     if request.method == 'POST':
@@ -251,3 +252,85 @@ def userdetail_admin(request):
     }
 
     return render(request, 'Admin_Page/Userdetails.html', context)
+
+
+###Data visualization admin part
+
+def adminchart(request):
+    staff_data = {}
+    user_types = UserDetail.objects.values_list('user_type', flat=True)
+    
+
+    # Count available of each user type
+    user_type_counts = {}
+    for user_type in user_types:
+        user_type_counts[user_type] = user_type_counts.get(user_type, 0) + 1
+    
+    # Prepare data for Chart.js (for user type distribution)
+    labels = list(user_type_counts.keys())
+    data = list(user_type_counts.values())
+    table_data = [(label, count) for label, count in user_type_counts.items()]
+    
+    #appointment  staff having view starts
+    
+    # Group appointments by status
+    appointment_statuses = BookAppointment.objects.values('status').annotate(count=models.Count('id'))
+    print(appointment_statuses)
+    
+    # Prepare data for staff appointment distribution 
+    appointment_status_data = {status['status']: status['count'] for status in appointment_statuses}
+    print( appointment_status_data)
+    
+  
+    # Retrieve staff data for appointment distribution
+    staff_appointments = BookAppointment.objects.values('staff', 'status').annotate(count=models.Count('id'))
+    print(staff_appointments)
+    
+
+    
+    
+    # Fetch users with a specific user type
+    requested_users = UserDetail.objects.filter(user_type='customer')
+    
+    # Fetch users belonging to specific groups
+    all_user_login = User.objects.filter(groups__name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"])
+    
+    for appointment in staff_appointments:
+        staff = appointment['staff']
+        status = appointment['status']
+        count = appointment['count']
+        
+        print(f"Staff: {staff},  Status: {status}, Count: {count}") 
+     
+        # Initialize staff data if not already present
+        if staff not in staff_data:
+            staff_data[staff] = {'Pending': 0, 'Confirm': 0, 'Canceled': 0, 'completed': 0}
+        if status not in staff_data[staff]:
+            staff_data[staff][status] = 0
+    
+        # Update staff data with the count for the corresponding status
+        staff_data[staff][status] = count
+        
+        print("staff: {staff_data}")
+        
+        #fro service used by user customer
+        
+          # Fetch service distribution data
+    service_distribution = BookAppointment.objects.values('service').annotate(count=models.Count('id'))
+    service_data = {service['service']: service['count'] for service in service_distribution}
+    print(service_data)
+    
+    
+    context = {
+        'labels': labels,
+        'data': data,
+        'table_data': table_data,
+        'appointment_status_data': appointment_status_data,
+        'staff_data': staff_data,
+        'requested_users': requested_users,
+        'all_user_login': all_user_login,
+        'service_data': service_data,
+    }
+    
+    
+    return render(request, 'Admin_Page/ChartAdmin.html', context)

@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Type Distribution</title>
+    <style>
+        /* Center the canvas */
+        #chart-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
+            height: 60vh; /* Adjust the height as needed */
+            
+        }
+        #userTypeChart {
+            max-width: 60%; /* Set the maximum width of the chart */
+            max-height: 400px; /* Set the maximum height of the chart */
+        }
+        #table-container {
+            margin-left: 20px; /* Adjust the left margin as needed */
+            text-align: center;
+            max-width: 100%; /* Set the maximum width of the table */
+            overflow: auto; /* Add scroll if table exceeds container */
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 2px solid #ddd;
+            padding: 15px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-semibold;
+        }
+        .custom-hr {
+            border-top: 2px solid black;
+            /* Other styling properties */
+        }
+        
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    {% extends 'Base_content/Base_Dashboard.html'%}
+    
+    {% block content %}
+  
+
+    <br>
+   {# pie chart started#}
+    <h1 class="font-bold text-3xl text-center">User Type Distribution: Chart and Data Table</h1>
+    <br>
+    <br>
+    <div id="chart-container">
+        <canvas id="userTypeChart"></canvas> {#piechart#}
+        <div id="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User Type</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for label, count in table_data %}
+                    <tr>
+                        <td>{{ label }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+  {#Next bar graph starts#}
+    <hr class="custom-hr mb-1000px">
+    <br>
+    <h1 class="font-bold text-3xl text-center">Appointment Status Distribution</h1>
+    <br>
+    
+    <canvas id="staffAppointmentChart"></canvas> {#bargraph#}
+<br>
+<br>
+<h3 class="font-semibold text-2xl text-center">Table showing staff groups</h3>
+<br>
+    <table>
+        <thead>
+            <tr>
+                <th>Staff</th>
+                <th>User Type</th>
+                <th>Pending</th>
+                <th>Confirmed</th>
+                <th>Canceled</th>
+                <th>Completed</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tbody>
+                {% for staff, data in staff_data.items %}
+                    <tr>
+                        <td>{{ staff }}</td>
+                        <td>
+                            {% for user in all_user_login %}
+                                {% if user.username == staff %}
+                                    {{ user.groups.first }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+
+
+                        <td>{{ data.Pending }}</td>
+                        <td>{{ data.Confirm }}</td>
+                        <td>{{ data.Canceled }}</td>
+                        <td>{{ data.completed }}</td>
+                    </tr>
+               
+            {% endfor %}
+        </tbody>
+        
+    </table>
+    <br>
+    <hr class="custom-hr">
+    {#end of bar graph#}
+<br>
+<br>
+<h1 class="font-bold text-3xl text-center">Distribution of Services Booked by Users</h1>
+<br>
+
+     <!-- Service Distribution Chart -->
+     <div id="serviceChartContainer">
+        <canvas id="serviceChart"></canvas>
+    </div>
+    {# First script for pie chart shows usertype distribution#}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('userTypeChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: {{ labels|safe }},
+                    datasets: [{
+                        label: 'User Type Distribution',
+                        data: {{ data|safe }},
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',  // Red
+                            'rgba(54, 162, 235, 0.7)',  // Blue
+                            'rgba(255, 206, 86, 0.7)',  // Yellow
+                            'rgba(75, 192, 192, 0.9)',  // Green
+                            'rgba(153, 102, 255, 0.8)', // Purple
+                        ],
+                        borderColor: [
+                            'rgba(255, 255, 255, 1)', 
+                            'rgba(255, 255, 255, 1)', 
+                            'rgba(255, 255, 255, 1)', 
+                            'rgba(255, 255, 255, 1)', 
+                            'rgba(255, 255, 255, 1)', 
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    // Customize options as needed
+                }
+            });
+        });
+    </script>
+    {# Second script appointment distribution and its status #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('staffAppointmentChart').getContext('2d');
+            var staffData = {{ staff_data|safe }};
+            var labels = Object.keys(staffData);
+            var datasets = [];
+            var statusLabels = ['Pending', 'Confirm', 'Canceled', 'completed'];
+            var backgroundColors = ['rgba(255, 99, 132, 0.7)', 'rgba(54, 162, 235, 0.7)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.9)'];
+            var borderColors = ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'];
+    
+            statusLabels.forEach(function (status, index) {
+                var data = labels.map(function (staff) {
+                    return staffData[staff][status] || 0;
+                });
+    
+                datasets.push({
+                    label: status,
+                    data: data,
+                    backgroundColor: backgroundColors[index],
+                    borderColor: borderColors[index],
+                    borderWidth: 1
+                });
+            });
+    
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Staff Appointment Status Distribution',
+                            fontSize: 18,
+                            fontColor: '#333',
+                            padding: {
+                                top: 10,
+                                bottom: 10
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Staff'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Number of Appointments'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    
+
+{#third script of service#}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+       
+        var serviceData = {{ service_data|safe }};
+        var serviceLabels = Object.keys(serviceData);
+        var serviceCounts = Object.values(serviceData);
+
+        var serviceColors = [
+            'rgba(255, 99, 132, 0.9)',   // Red
+            'rgba(54, 162, 235, 0.9)',   // Blue
+            'rgba(255, 159, 64, 0.8)',   // Orange
+            'rgba(75, 192, 192, 0.9)',   // Green
+          
+            
+           
+           
+        ];
+
+        var serviceCtx = document.getElementById('serviceChart').getContext('2d');
+        var serviceChart = new Chart(serviceCtx, {
+            type: 'bar',
+            data: {
+                labels: serviceLabels,
+                datasets: [{
+                    label: 'Service Distribution',
+                    data: serviceCounts,
+                    backgroundColor: serviceColors,
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribution of Services ',
+                        fontSize: 20,
+                        fontColor: '#333',
+                        padding: {
+                            top: 10,
+                            bottom: 10
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Service'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Number of Bookings'
+                        }
+                    }
+                },
+                indexAxis: 'x', // applied to x-axis
+        barPercentage: 0.7, //  control bar width
+        categoryPercentage: 0.6 //  control space between bars
+            }
+        });
+    });
+</script>
+
+    {% endblock %}
+</body>
+</html>
