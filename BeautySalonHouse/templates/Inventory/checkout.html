@@ -37,16 +37,23 @@
                     <tr>
                         <td class="font-semibold">Sub-total:</td>
                         <input type="hidden" name="purchase_order_id" id="pid" value="{{ request.user }}">
-                        <td class="text-right ml-4">Rs {{ cartItem.total_amount}}</td> 
+                        <input type="hidden" name="totalAmountHidden" id="totalAmountHidden" value="{{ cartItem.total_amount }}">
+                        
+                        <td class="text-right ml-4">Rs {{ cartItem.total_amount }}</td> 
                     </tr>
                     <tr>
                         <td class="font-semibold">Reward:</td>
-                        <td class="text-right">10 credit</td>
+                        <td class="text-right"><span class="rewardShow" id="rewardShow">{{ request.user.userdetail.reward_points }}</span> credit</td>
+                        <input type="hidden" name="reward" id="rewardHidden" value="{{ request.user.userdetail.reward_points }}">
                     </tr>
                     <tr>
-                        <input type="hidden" name="amount" value="{{cartItem.total_amount}}" id="amt">
+                        <td class="font-semibold">Use Reward:</td>
+                        <td><input type="checkbox" name="useReward" id="useRewardCheckBox" {% if request.user.userdetail.reward_points >= 10 %} {% else %}disabled{% endif %} ></td>
+                    </tr>
+                    <tr>
+                        <input type="hidden" name="amount2" value="{{cartItem.total_amount}}" id="amt2">
                         <td class="font-semibold">Total:</td>
-                        <td class="text-right">Rs {{ cartItem.total_amount}}</td> 
+                        <td class="text-right">Rs <span id="totalShow">{{ cartItem.total_amount}}</span></td> 
                     </tr>
                 </table>
                  <input type="hidden" name="return_url" value="http://127.0.0.1:9000">
@@ -77,7 +84,7 @@ class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
 <!-- checkout modal  -->
 <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full md:inset-0">
     <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
-        <form id="" method="post" action="{% url 'checkout' %}">
+        <form id="" method="post" action="">
             {% csrf_token %}
             <!-- Modal content -->
             <div class="relative">
@@ -96,18 +103,20 @@ class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
                 <!-- Modal body -->
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="col-span-2 p-4 md:p-5">
+                        {% for cartItem in cartItems %}
                         <div class="flex gap-2">
                             <label class="mt-2">Address </label>
-                            <input name="address" value="{% if user_cart.new_address %}{{ user_cart.new_address }}{% else %}{{ user.userdetail.address }}{% endif %}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="address" value="{% if cartItem.new_address %}{{ cartItem.new_address }}{% else %}{{ user.userdetail.address }}{% endif %}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div class="flex gap-2 mt-4">
                             <label class="mt-2">Number </label>
-                            <input name="phone_number" value="{% if user_cart.new_number %}{{ user_cart.new_number }}{% else %}{{ user.userdetail.contact_number }}{% endif %}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="phone_number" value="{% if cartItem.new_number %}{{ cartItem.new_number }}{% else %}{{ user.userdetail.contact_number }}{% endif %}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="flex justify-around">
-                    <button type="submit" class="mb-2 flex justify-center text-white w-[10rem] h-auto inline-flex items-center ml-[1rem] bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
+                    <button type="submit" name="saveDetails" class="mb-2 flex justify-center text-white w-[10rem] h-auto inline-flex items-center ml-[1rem] bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
                         <div class="flex">
                             <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
@@ -119,9 +128,9 @@ class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
             </div>
         </form>
         <br>
-        <form action="#" method="POST">
+        <form action="{% url 'initiate' %}" method="POST">
             {% csrf_token %}
-            <button type="submit" 
+            <button type="submit" name="payWithKhalti" 
                 class=" mb-2 text-white inline-flex items-center ml-[1rem] justify-center bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500 ">
                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -130,12 +139,13 @@ class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
                         clip-rule="evenodd"></path>
                 </svg>
                 Pay with Khalti
-                <input type="hidden" name="amount" id="amt" value="{{ user_cart.total_amount }}">
-
+                {% for cartItem in cartItems %}
+                <input type="hidden" name="amount" id="amt" value="{{ cartItem.total_amount }}">
+                {% endfor %}
                 <input type="hidden" name="purchase_order_id" id="pid" value="{{request.user}}">
 
                 <input type="hidden" name="return_url"
-                    value="http://127.0.0.1:8000">
+                    value="http://127.0.0.1:8000/paymentSucessful">
             </button>
         </form>
     </div>
@@ -151,6 +161,38 @@ class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
       }));
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var totalAmount = parseFloat(document.getElementById('totalAmountHidden').value); // Get the initial total amount
+       // var totalAmountHidden = parseFloat(document.getElementById('totalAmountHidden').innerText);
+        console.log("total amoooouunttt " + document.getElementById('totalAmountHidden').value )
+
+
+
+        
+        document.getElementById('useRewardCheckBox').addEventListener('change', function() {
+            var rewardPoints = parseInt(document.getElementById('rewardShow').innerText); // Get the reward points
+            var useReward = this.checked; // Check if the checkbox is checked
+            
+            if (useReward && rewardPoints >= 10) { // If checkbox is checked and user has enough reward points
+                var newTotal = totalAmount - rewardPoints; // Subtract
+                document.getElementById('totalShow').innerText = newTotal.toFixed(2); // Update total amount
+                document.getElementById('amt').value = String(newTotal.toFixed(2));
+                console.log( document.getElementById('amt').value )
+
+
+            } else {
+                document.getElementById('totalShow').innerText = totalAmount; // Update total amount
+                document.getElementById('amt').value = totalAmount.toFixed(2); // Reset total amount
+                console.log(document.getElementById('amt').value)
+
+            }
+                
+            console.log("FINALLLLL" + document.getElementById('amt').value )
+        });
+    });
+    </script>
+    
 {% endblock %}
 </body>
 </html>

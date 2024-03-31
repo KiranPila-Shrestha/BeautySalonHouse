@@ -18,6 +18,7 @@ class UserDetail(models.Model):
    address = models.CharField(max_length=255,blank=False)
    contact_number = models.CharField(max_length=15,blank=False)
    user_type = models.CharField(max_length=15,blank=False, default="customer")
+   reward_points = models.IntegerField(default=0)
    
    def __str__(self):
         return f"{self.user.username}'s Details"
