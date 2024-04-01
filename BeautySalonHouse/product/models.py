@@ -1,6 +1,7 @@
 from django.db import models
 from django.shortcuts import redirect
 from django.contrib.auth.models import User, Group
+from django.utils import timezone
 # Create your models here.
 
 
@@ -63,9 +64,14 @@ class Cartitem(models.Model):
     
     # 
     
-# class orderHistory(models.Model):
-#     user = models.ForeignKey(User, on_delete = models.CASCADE)
-#     product = models.TextField()
-#     prices = models.TextField() 
-#     total_amount =models.DecimalField(max_digits=10, decimal_places=2)
-#     date_ordered = models.DateTimeField(auto_now_add=True)
+class orderHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(addProduct, on_delete=models.CASCADE)  
+    quantity = models.PositiveIntegerField(default=1) 
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    rewardpoint = models.IntegerField(default=0)
+    date_ordered = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=255, default='Pending')
+
+    def __str__(self):
+        return f"Order by {self.user.username} on {self.date_ordered}"

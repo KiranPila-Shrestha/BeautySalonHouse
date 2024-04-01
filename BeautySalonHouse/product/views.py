@@ -213,11 +213,10 @@ def update_cart(request):
                 cart_item.Quantity = new_quantity
                 cart_item.save()
                 
-            user_detail =  UserDetail.objects.get(user=request.user)
-            reward_points = user_detail.reward_points
+           
 
         # Check if reward points are sufficient for a discount
-        if reward_points >= 10:
+       
             
             user_cart.update_total_amount()
             print("Total amount before saving:", user_cart.total_amount)
@@ -280,9 +279,10 @@ def checkoutpage(request):
 #     return redirect('cartview')  # Redirect back to the cart view if the request method is not POST
 
 
-# def order_history_view(request):
-#     orders = orderHistory.objects.all()
-#     return render(request, 'orderhistory.html', {'orders': orders})
+# @login_required
+# def order_history(request):
+#     orders = OrderHistory.objects.filter(user=request.user).order_by('-date_ordered')
+#     return render(request, 'order_history.html', {'orders': orders})
 
 def checkout(request):        
     return render(request, 'Inventory/checkout.html')
@@ -361,15 +361,39 @@ def verifyKhalti(request):
         new_res = json.loads(res.text)
         print("new_res",new_res)
         
-
         if new_res['status'] == 'Completed':
             print("SUCCESS PAYMENT")
             cart = get_object_or_404(cart, user=request.user)
             print("cartcartcartcartcartcartcartcartcartcartcartcartcartcartcartcart: ", cart)
-            with transaction.atomic():
+            # with transaction.atomic():
+            cart_items = cart.cartitem_set.all()  #get the cart items before clearing
+            cart.items.clear()
+            
+            #calculate total amount including if rewards is incluede
+            
+            total_amount = cart.total_amount()
+            
+            #check if reward us used
+            user_detail = UserDetail.objects.get(User = request.user)
+            if  user_detail.reward_points >= 10:
+                reward_point_used = user_detail.reward_points
+                total_amount -= reward_point_used 
+                
+                user_detail.reward_points += 1
+                user_detail.save()
+                
+            else:
+                reward_point_used = 0
+                
+             # Award 1 reward point for each purchase
+            user_detail.reward_points += 1
+            user_detail.save()
+            
+            #created an object to store about order
+            order = orderHistory.objects.create(user = request.user, total_amount = total_amount, product='\n'.join([f"{item.Quantity} x {item.product.productName} ({item.product.productBrand}): ${item.product.productPrice}" for item in cart_items]),quantity=sum([item.Quantity for item in cart_items]),rewardpoint=reward_point_used, status='Pending')
 
-                print("SUCCESS PAYMENT")
-                return redirect('cartview')
+            print("SUCCESS PAYMENT")
+            return redirect('addtocart')
         else:
             print("ERRRRRRRRRRRRRRRRRRRRRROR")
             pass
