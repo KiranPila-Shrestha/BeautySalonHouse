@@ -52,7 +52,11 @@
       <div class="relative">
         <div class="flex items-center cursor-pointer" id="userDropdownToggle">
           <span class="text-gray-600 mr-10">
+            {% if request.user.userprofile.image %}
+            <img class="h-12 w-12 rounded-full mr-2" src="{{ request.user.userprofile.image.url }}" alt="Profile Image">
+            {% else %}
             <i class="fas fa-user-circle text-2xl mr-2"></i>
+            {% endif %}
             {{ request.user.username }}
           </span>
         </div>
@@ -114,6 +118,7 @@
                 <i class="fas fa-calendar mr-2"></i>User Track
               </a>
             </li>
+            
           {% elif request.user|has_group:"Hair Technician" or request.user|has_group:"Laser Skin" or request.user|has_group:"Nail Technician" or request.user|has_group:"Makeup Artist"  %}
             <li class="mb-4">
               <a href="{% url 'appointments'%}" class="block text-gray-700 hover:text-cyan-500">

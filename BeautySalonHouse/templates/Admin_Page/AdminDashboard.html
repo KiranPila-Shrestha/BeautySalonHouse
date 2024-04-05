@@ -202,5 +202,18 @@
           </div>
         </form>
       </main>
+     {% if messages %}
+  {% for message in messages %}
+    <div class="bg-{{ message.tags }}-100 border-2 border-{{ message.tags }}-400 text-{{ message.tags }}-700 text-medium px-4 py-3 rounded relative" role="alert">
+      {% if message.tags == 'success' %}
+        <i class="fas fa-check-circle mr-2"></i>
+      {% elif message.tags == 'error' %}
+        <i class="fas fa-exclamation-circle mr-2"></i>
+      {% endif %}
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
     </div>
  {% endblock%}

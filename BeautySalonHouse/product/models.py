@@ -64,14 +64,30 @@ class Cartitem(models.Model):
     
     # 
     
-class orderHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(addProduct, on_delete=models.CASCADE)  
-    quantity = models.PositiveIntegerField(default=1) 
+class orderplaced(models.Model):
+    Buyeruser = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_contact_number = models.CharField(max_length=10)   
+    order_address = models.CharField(max_length=100)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     rewardpoint = models.IntegerField(default=0)
     date_ordered = models.DateTimeField(default=timezone.now)
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+    )
     status = models.CharField(max_length=255, default='Pending')
 
     def __str__(self):
         return f"Order by {self.user.username} on {self.date_ordered}"
+    
+    
+    
+class orderhistory(models.Model):
+    order_for = models.ForeignKey(orderplaced, on_delete=models.CASCADE)
+    product = models.ForeignKey('addProduct', on_delete=models.CASCADE, related_name='ordered_products')
+    quantity = models.PositiveIntegerField() 
+    total_amount_product = models.DecimalField(max_digits=10, decimal_places=2) 
+
+    def __str__(self):
+        return f"Order details for {self.order_for} - {self.id}"

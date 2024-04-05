@@ -9,7 +9,25 @@
     * {
        font-family: "Poppins", sans-serif;
      }
-   </style> 
+   
+     /* Custom CSS for feedback section */
+     .overflow-y-auto::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .overflow-y-auto::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .overflow-y-auto::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 4px;
+    }
+
+    .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
 </head>
 
 <body>
@@ -234,6 +252,30 @@
     </div>
   </div>
   <br />
+
+<!-- hairservice.html -->
+{% if hairfeedback|length != 0 %}
+<div class="container mx-auto py-12 px-4">
+  <h2 class="text-3xl font-bold mb-6">Feedbacks from Users</h2>
+  <div class="max-h-80 overflow-y-auto">
+    <div class="grid grid-cols-1 gap-6">
+      {% for feedback in hairfeedback %}
+      <div class="flex rounded-lg overflow-hidden border-2 shadow-lg px-6 py-4">
+        <div class="flex-grow">
+          <div class="font-bold text-xl mb-2">{{ feedback.user }}</div>
+          <p class="text-gray-700 text-base">{{ feedback.feedback }}</p>
+        </div>
+        <div class="flex-shrink-0 ml-4">
+          <!-- User profile image link -->
+          <a href="#"><img src="static/Image/hair10.jpg" alt="User Profile" class="w-20 h-20 rounded-full"></a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
   <br />
   <div
     class="flex flex-col items-center justify-center"
@@ -259,17 +301,6 @@
 </div>
 
 
-<!-- hairservice.html -->
-{% for feedback in feedbacks %}
-<div class="max-w-sm rounded overflow-hidden border-2 shadow-lg">  
-    <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2">{{ feedback.user }}</div>
-        <p class="text-gray-700 text-base">
-            {{ feedback.feedback }}
-        </p>
-    </div>
-</div>
-{% endfor %}
 
 {% endblock %}
 </body>

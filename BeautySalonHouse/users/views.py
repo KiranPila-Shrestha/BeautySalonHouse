@@ -199,7 +199,10 @@ def AdminDashBoard(request):
                 user_type = request.POST.get('user_type')
                 send_mail("Welcome to our salon","You have been assigned as {user_type}","pilashrestha366@gmail.com",[user_email],fail_silently=False)
                 
-                messages.success(request, " Staff added")
+                messages.success(request, " Staff Has been added Successfully")
+        else:
+            messages.error(request, "Error occur while staff adding.")
+                
                 
             
     
@@ -232,23 +235,29 @@ def userdetail_admin(request):
             
             return redirect('useradmin')
     requestedUserType = UserDetail.objects.all()
-    requestedUser = UserDetail.objects.filter(user_type='customer')
+    requested_users = UserDetail.objects.filter(user_type='customer').count()
+    print(requested_users)
     
-    allUserlogin = User.objects.filter(groups__name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"] )
+    allUserlogin = User.objects.filter(is_superuser=False)
+    # User.objects.filter(groups__name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"] )
     
     total_hairtechnician = User.objects.filter(groups__name='Hair Technician').exclude(is_superuser=True).count()
     total_skintechnician = User.objects.filter(groups__name='Laser Skin').exclude(is_superuser=True).count()
     total_nailtechnician = User.objects.filter(groups__name='Nail Technician').exclude(is_superuser=True).count()
     total_makeuptechnician = User.objects.filter(groups__name='Makeup Artist').exclude(is_superuser=True).count()
+    print("sakjgdhsagdjhsdghg",total_makeuptechnician)
+    
+  
 
     context = {
-        ' requestedUserType':  requestedUserType,
+        'requestedUserType':  requestedUserType,
         'total_hairtechnician':total_hairtechnician,
         'total_skintechnician': total_skintechnician,
         'total_nailtechnician': total_nailtechnician,
-        ' total_makeuptechnician':  total_makeuptechnician,
+        
+        'total_makeuptechnician':  total_makeuptechnician,
         'allUserlogin':allUserlogin,
-        'requestedUser':requestedUser,
+        'requested_users':requested_users,
     }
 
     return render(request, 'Admin_Page/Userdetails.html', context)
@@ -318,6 +327,7 @@ def adminchart(request):
           # Fetch service distribution data
     service_distribution = BookAppointment.objects.values('service').annotate(count=models.Count('id'))
     service_data = {service['service']: service['count'] for service in service_distribution}
+    
     print(service_data)
     
     

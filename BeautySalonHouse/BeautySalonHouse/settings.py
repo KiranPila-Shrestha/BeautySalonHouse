@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'Appointment',
     'product',
     'Payment',
+    'sweetify',
     
 ]
 

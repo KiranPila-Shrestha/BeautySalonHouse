@@ -21,7 +21,7 @@ from django.conf import settings
 
 # Create your views here.
 
-
+# booking by customer views.
 def booking(request): 
     username = request.POST.get('username')
     user = request.user 
@@ -87,7 +87,7 @@ def booking(request):
     
     return render(request, 'landing_page/Booking.html', context)
 
-
+#appointment cancel and approve handling vies by stafff.
 
 def Appointments(request):
  
@@ -122,6 +122,7 @@ def Appointments(request):
             
         if "approve" in request.POST:
             booking.confirmed = True
+            booking.status = 'confirm'
             booking.save()
             send_mail(
                 'Appointment has been Approved',
@@ -159,29 +160,14 @@ def CompleteAppointments(request):
     currentUser = str(request.user)
 
     completed_appointments = BookAppointment.objects.filter(staff=currentUser, status="completed")
-    
+    print("abcdddddddddddeeeeeeeeeee: ", completed_appointments)
     context = {
         "completed_appointments": completed_appointments,
     }
     return render(request, 'Staff/completedappointment.html', context)
 
 
-# def feedback(request):
-#     if request.method == "POST":
-#         bookingId = request.POST.get("bookingId")
-#         feedbackText = request.POST.get("feedback")
-#         booking = BookAppointment.objects.get(id=bookingId)
-        
-#         #save feedback
-#         if feedbackText:
-#             AppointmentFeedback.objects.create(appointment=booking, user=request.user, feedback=feedbackText)
-#             messages.success(request, 'Feedback has been submitted successfully.')
-#         else:
-#             messages.error(request, 'Feedback cannot be empty')
-        
-#         return redirect('appointmenthistory')
-#     return render(request, 'appointmenthistory')
-
+# See all the confirm appointment dashboard logic for staff and admin and customer.
 
 @login_required
 def bookedAppointment(request, user_id=None):
@@ -205,7 +191,7 @@ def bookedAppointment(request, user_id=None):
         
     elif request.user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists():
         # For staff members
-        booking_requests = BookAppointment.objects.filter(staff=currentUser, status="Confirm")
+        booking_requests = BookAppointment.objects.filter(staff=currentUser, status="confirm")
         print("booking_requestsbooking_requestsbooking_requests:", booking_requests)
         template_name = 'Staff/technicianAppointmentHistory.html'
     else:
@@ -214,6 +200,7 @@ def bookedAppointment(request, user_id=None):
             booking_requests = BookAppointment.objects.filter(user_id=user_id, confirmed=True)
         else:
             booking_requests = BookAppointment.objects.filter(user=request.user, confirmed=True)
+            print(booking_requests)
         template_name = 'User_Profile_Management/appointmenthistory.html'
     current_date = datetime.now().date()  # Get current date
     context = {
@@ -227,6 +214,7 @@ def bookedAppointment(request, user_id=None):
    
 
 
+# views for appointment information for user only.
 
 def appointmentHistory(request):
     #filter appoint of current user
@@ -242,57 +230,49 @@ def appointmentHistory(request):
     return render(request, 'User_Profile_Management/appointmenthistory.html', context)
 
     
-#staff appointment History
-def staffappointmentHistory(request, user_id):
-    
-    return render(request, 'Staff/technicianAppointmentHistory.html')
-
-
-
-# hair-technician dashboard started
-def HairStaffDashboard(request):
-    return render(request, 'Staff/Technican_Dashboard.html')
-
 
 #user history of complete appointment.
+
+
 def UserCompleteAppointments(request):
     userFeedBack = None
     feedback = None
-   
+    
     if request.method == 'POST' and 'submitFeedback' in request.POST:
         bookingID = request.POST.get('bookingId')
-        print(bookingID)
-        feedback = request.POST.get('feedback')
+        feedback_text = request.POST.get('feedback')
         
         booking = get_object_or_404(BookAppointment, id=bookingID)
-        feedback = AppointmentFeedback(appointment=booking, user=request.user, feedback=feedback)
-        feedback.save()
-        messages.success(request, 'Feedback has been submitted successfully.')
         
+        # Check if user has already given feedback for this booking
+        existing_feedback = AppointmentFeedback.objects.filter(user=request.user, appointment=booking)
+        
+        if existing_feedback.exists():
+            # Update existing feedback
+            existing_feedback.update(feedback=feedback_text)
+            messages.success(request, 'Feedback has been added successfully to our service page.')
+        else:
+            # Add new feedback
+            feedback = AppointmentFeedback(appointment=booking, user=request.user, feedback=feedback_text)
+            feedback.save()
+            messages.success(request, 'Feedback has been submitted successfully.')
+        return redirect('Usercompleteappointments') 
     
-        print("POST VAKO XA",bookingID, feedback)
-    booking_complete = BookAppointment.objects.filter(user= request.user)
-    hasCompletedAppointment = BookAppointment.objects.filter(user= request.user, status= 'Completed').exists()
-    for booking_request in  booking_complete:
-        userFeedBack = AppointmentFeedback.objects.filter(user= request.user, appointment = booking_request)
-        feedback = AppointmentFeedback.objects.filter(user= request.user)
+    booking_complete = BookAppointment.objects.filter(user=request.user)
+    
+    for booking_request in booking_complete:
+        userFeedBack = AppointmentFeedback.objects.filter(user=request.user, appointment=booking_request)
+        feedback = AppointmentFeedback.objects.filter(user=request.user)
         
-
-            
-    if(userFeedBack):
-        print("aaaaaaaaaaaaaaaaaaa", userFeedBack )
-    currentUser = str(request.user)
+    if userFeedBack:
+        print("Existing feedback:", userFeedBack)
    
-    # print( booking_requests )
-    completed_appointment_user = BookAppointment.objects.filter(user= request.user, status= 'completed')
-    print("yo ho: ",completed_appointment_user )
+    completed_appointment_user = BookAppointment.objects.filter(user=request.user, status= 'completed')
+    print("Completed appointments:", completed_appointment_user)
     
     context = {
-        "completed_appointment_user": completed_appointment_user ,
-        'userFeedBack' : userFeedBack,
-        'feedback' : feedback,
-        
-        
+        "completed_appointment_user": completed_appointment_user,
+        'userFeedBack': userFeedBack,
+        'feedback': feedback,
     }
     return render(request, 'User_Profile_Management/Usercompletedappointment.html', context)
-

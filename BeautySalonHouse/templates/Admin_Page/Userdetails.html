@@ -8,7 +8,7 @@
       </div>
       <div class="text-xl font-medium mt-4 mr-3">
         <p class="mb-1">Hair Technician</p>
-        <p>3</p>
+        <p>{{total_hairtechnician}}</p>
       </div>
     </div>
     <div class="bg-white h-[6rem] lg:mr-3 bg-white grid grid-cols-2 rounded-l shadow-md">
@@ -17,7 +17,7 @@
       </div>
       <div class="text-xl font-medium mt-4 mr-3">
         <p class="mb-1">Nail Technician</p>
-        <p>3</p>
+        <p> {{total_nailtechnician}}</p>
       </div>
     </div>
     <div class="bg-white h-[6rem] lg:mr-2 bg-white grid grid-cols-2 rounded-l shadow-md">
@@ -26,7 +26,7 @@
       </div>
       <div class="text-xl font-medium mt-4 mr-3">
         <p class="mb-1">Skin Technician</p>
-        <p>3</p>
+        <p>{{total_skintechnician}}</p>
       </div>
     </div>
     <div class="bg-white h-[6rem] lg:mr-3 bg-white grid grid-cols-2 rounded-l shadow-md">
@@ -35,7 +35,7 @@
       </div>
       <div class="text-xl font-medium mt-4 mr-3">
         <p class="mb-1">Makeup Artist</p>
-        <p>3</p>
+        <p>{{total_makeuptechnician}}</p>
       </div>
     </div>
     <div class="bg-white h-[6rem] lg:mr-3 bg-white grid grid-cols-2 rounded-l shadow-md">
@@ -44,7 +44,7 @@
       </div>
       <div class="text-xl font-medium mt-4 mr-3">
         <p class="mb-1">Customer</p>
-        <p>3</p>
+        <p>{{ requested_users }}</p>
       </div>
     </div>
   </div>
@@ -87,7 +87,13 @@
           <td class="whitespace-nowrap px-4 py-4">{{user_detail.email}}</td>
           <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">{{user_detail}}</td>
           <td class="whitespace-nowrap px-12 py-4">
-            <div class="text-sm text-gray-900">{{user_detail.groups.first.name}}</div>
+            <div class="text-sm text-gray-900">
+              {% if user_detail.userdetail.user_type == "customer" or user_detail.groups.first.name == "" %}
+              Customer
+              {% else %}
+              {{user_detail.groups.first.name}}</div>
+              {% endif %}
+              
           </td>
           <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
             <a href="#" class="text-blue-700 text-center"><i class="fas fa-eye"></i></a>

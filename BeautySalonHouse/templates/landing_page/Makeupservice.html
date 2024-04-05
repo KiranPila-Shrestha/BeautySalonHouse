@@ -234,6 +234,22 @@
     </button>
   </div>
 </div>
+
+{% if makeup_feedback|length != 0 %}
+
+
+{% for feedbacks in makeup_feedback %}
+<div class="max-w-sm rounded overflow-hidden border-2 shadow-lg">  
+    <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2"><p>{{ feedbacks.user }}<p></div>
+        <p class="text-gray-700 text-base">
+            {{ feedbacks.feedback }}
+        </p>
+    </div>
+</div>
+{% endfor %}
+
+{% endif %}
 {% endblock %}
 </body>
 <html>

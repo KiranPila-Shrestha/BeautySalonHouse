@@ -39,6 +39,13 @@
             border-top: 2px solid black;
             /* Other styling properties */
         }
+        #serviceChartContainer {
+            max-width: 80%; /* Adjust the maximum width of the chart container */
+            margin: 0 auto; /* Center the chart container */
+        }
+        #serviceChart {
+            max-width: 100%; /* Adjust the maximum width of the chart */
+        }
         
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -274,6 +281,9 @@
                         padding: {
                             top: 10,
                             bottom: 10
+                        },
+                        font: {
+                            weight: 'bold' // Make the title text bold
                         }
                     }
                 },
@@ -281,18 +291,34 @@
                     x: {
                         title: {
                             display: true,
-                            text: 'Service'
+                            text: 'Service',
+                            font: {
+                                weight: 'bold' // Make the x-axis scale text bold
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                weight: 'bold' // Make the x-axis tick text bold
+                            }
                         }
                     },
                     y: {
                         title: {
                             display: true,
-                            text: 'Number of Bookings'
+                            text: 'Number of Bookings',
+                            font: {
+                                weight: 'bold' // Make the y-axis scale text bold
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                weight: 'bold' 
+                            }
                         }
                     }
                 },
                 indexAxis: 'x', // applied to x-axis
-        barPercentage: 0.7, //  control bar width
+        barPercentage: 0.5, //  control bar width
         categoryPercentage: 0.6 //  control space between bars
             }
         });
