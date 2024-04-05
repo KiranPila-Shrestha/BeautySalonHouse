@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from Appointment.models import *
-
+from .forms import ContactForm
+from django.core.mail import send_mail
+from django.contrib import messages
+import sweetify
 # Create your views here.
 def index(request):
     return render(request, 'landing_page/index.html')
@@ -10,6 +13,26 @@ def product(request):
     return render(request, 'landing_page/product.html')
 
 def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            
+            recipient_email = 'pilashrestha366@gmail.com'  #admin mail
+            
+            # Send email
+            send_mail(
+                f'New message from {name}',
+                f'Name: {name}\nEmail: {email}\n\nMessage:\n{message}',
+                email,
+                [recipient_email],
+                fail_silently=False,
+            )
+            messages.success(request, " Form has been submitted")  # Display a success page or redirect as needed
+    else:
+        form = ContactForm()
     return render(request, 'landing_page/Contact.html')
 
 
@@ -100,4 +123,4 @@ def skinservice(request):
         "skinfeedback" : skinfeedback
     }    
     
-    return render(request, 'landing_page/skinservice.html')
+    return render(request, 'landing_page/skinservice.html', context)

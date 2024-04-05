@@ -27,30 +27,6 @@ class PasswordChangeView(PasswordChangeView):
     from_class = PasswordChangeForm
     success_url = reverse_lazy('/')   
 
-# class BookAppointmentForm(forms.ModelForm):
-#     class Meta:
-#         model = BookAppointment
-#         fields = ['service','staff','hair_type', 'skin_type', 'skin_problem']
-    
-
-# class StaffCreationForm(forms.ModelForm):
-#     first_name = forms.CharField(label='First Name', max_length=100)
-#     last_name = forms.CharField(label='Last Name', max_length=100)
-#     address = forms.CharField(label='Address', widget=forms.Textarea)
-#     staff_role = forms.ChoiceField(label='Staff Role', choices=[
-#         ('', 'Select staff role'),
-#         ('Hair Technician', 'Hair Technician'),
-#         ('Makeup Artist', 'Makeup Artist'),
-#         ('Nail Technician', 'Nail Technician'),
-#         ('Laser Skin', 'Laser Skin')
-#     ])
-#     password = forms.CharField(label='Password', widget=forms.PasswordInput)
-#     confirm_password = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
-
-#     class Meta:
-#         model = StaffDetails
-#         fields = ['first_name', 'last_name', 'address', 'staff_role', 'password', 'confirm_password']
-
 
     def clean_confirm_password(self):
         password = self.cleaned_data.get('password')
