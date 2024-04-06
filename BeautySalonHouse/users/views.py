@@ -110,6 +110,7 @@ def EditProfile(request, user_id):
         if 'contact_number' in request.POST:  # Check if contact_number is present in POST data
             user_detail.contact_number = request.POST.get('contact_number')
         user_detail.save()
+        
         sweetify.success(request, "User Details has been updated successfully.")
         
         
@@ -125,8 +126,9 @@ def EditProfile(request, user_id):
             
         
             # return redirect('EditProfile', user_id=user_id)  
-        else:
-            messages.error(request, 'No image uploaded.')
+            else:
+                 sweetify.error(request, 'No image uploaded.')
+
     
        
         
@@ -136,7 +138,7 @@ def EditProfile(request, user_id):
             #saving default
             user_default_profile = UserProfile(user=user)
             user_default_profile.save()
-            messages.success(request, 'Profile Picture Updated.')
+            sweetify.success(request, 'Profile Picture Delected.')
         #print("IMAGEEEEEEEEEEEEEEEEE", image)
 
 

@@ -207,7 +207,11 @@
   <div class="absolute hidden bg-white rounded shadow-md mt-2 py-2 w-48" style="font-family: poppins; right: 0;" id="userDropdown">
     <span id="profileToggle" class="cursor-pointer profile">
       <a href="{% if request.user.userdetail.user_type == 'customer' %}{% url 'appointmenthistory' %}{% elif request.user.is_superuser %}{% url 'adminchart' %}{% else %}{% url 'appointments' %}{% endif %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white">
-        <img class="h-6 w-6 rounded-full mr-2" src="{{ request.user.userprofile.image.url }}" alt="profile">Account</a>
+        {% if request.user.userprofile.image %}
+        <img class="h-6 w-6 rounded-full mr-2" src="{{ request.user.userprofile.image.url }}" alt="profile">Account
+    {% else %}
+        <i class="fas fa-user-circle text-white-500 text-lg mr-2"></i>Account
+    {% endif %}
     </span>
     <a href="{% url 'logout' %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white"> <i class="fas fa-sign-out-alt text-1xl text-regular mr-2"></i>Logout</a>
   </div>

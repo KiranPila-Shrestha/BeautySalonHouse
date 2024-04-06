@@ -187,69 +187,132 @@ def cart_view(request):
     return render(request, 'Inventory/addToCart.html', context)
     
 # for update the cart
+# def update_cart(request):
+#     if request.method == 'POST':
+#         #print the post data request
+#         print("POST data:", request.POST)
+
+#         #Get or create the user's cart
+#         user_cart, created = cart.objects.get_or_create(user=request.user)
+        
+#         print(user_cart)
+#             # Initialize success messages list
+#         removal_success_messages = []
+#         update_success_messages = []
+        
+#         #initialize total
+#         total_amount =0
+        
+#         if "delete" in request.POST:
+#             pId = request.POST.get('delete')
+#             item_delete = Cartitem.objects.filter(product_id = pId).first()
+#             print(item_delete)
+            
+            
+#             if item_delete:
+#                 item_price = item_delete.product.productPrice
+#                 print('item_price', item_price)
+                
+#                 #remove item from cart
+#                 item_delete.delete()
+                
+#                 #for recalculation of total
+#                 user_cart.total_amount -= item_price * item_delete.Quantity
+#                 if user_cart.total_amount < 0:
+#                     user_cart.total_amount = 0
+#                     print( user_cart.total_amount)
+                    
+#                 #save cart
+#                 print('donee')
+#                 user_cart.save()
+#             # Add success message
+#                 removal_success_messages.append("Cart item has been removed successfully.")
+        
+#         #iterate through product in cart and update quantites
+#         for cart_item in user_cart.cartitem_set.all():
+#             print('cart items:', cart_item.Quantity)
+#             #using product id to modify cart items
+#             cartID= str(cart_item.product.id)
+#             new_quantity = request.POST.get('Inputquantity-'+ cartID)
+#             print('Inputquantity-'+cartID)
+            
+#             if new_quantity == None:
+#                 old_quantity = cart_item.Quantity
+#                 #update the cat item quantiy
+#                 cart_item.Quantity = old_quantity
+#                 cart_item.save()
+#             else:
+#                 cart_item.Quantity = new_quantity
+#                 cart_item.save()
+                
+           
+    
+#             user_cart.update_total_amount()
+#             print("Total amount before saving:", user_cart.total_amount)
+#             user_cart.save()
+#             print("Total amount after saving:", user_cart.total_amount)
+            
+#                   # Add success message
+#             update_success_messages.append.append("Cart item has been updated successfully.")
+#             print("Success messages:", update_success_messages)
+    
+#          # Add success messages to Django messages framework
+#         for message in removal_success_messages:
+#             sweetify.success(request, message + " (Removal)")
+        
+#         for message in update_success_messages:
+#             sweetify.success(request, message + " (Update)")
+    
+#     return redirect('cartview')
+    
 def update_cart(request):
     if request.method == 'POST':
-        #print the post data request
-        print("POST data:", request.POST)
-
-        #Get or create the user's cart
+        # Get or create the user's cart
         user_cart, created = cart.objects.get_or_create(user=request.user)
         
-        print(user_cart)
+        # Initialize success messages list
+        removal_success_messages = []
+        update_success_messages = []
         
-        #initialize total
-        total_amount =0
-        
+        # Check for item deletion
         if "delete" in request.POST:
             pId = request.POST.get('delete')
-            item_delete = Cartitem.objects.filter(product_id = pId).first()
-            print(item_delete)
-            
+            item_delete = Cartitem.objects.filter(product_id=pId).first()
             if item_delete:
                 item_price = item_delete.product.productPrice
-                print('item_price', item_price)
-                
-                #remove item from cart
                 item_delete.delete()
-                
-                #for recalculation of total
                 user_cart.total_amount -= item_price * item_delete.Quantity
                 if user_cart.total_amount < 0:
                     user_cart.total_amount = 0
-                    print( user_cart.total_amount)
-                    
-                #save cart
-                print('donee')
                 user_cart.save()
+                # Add success message for item removal
+                removal_success_messages.append("Cart item has been removed successfully.")
         
-        #iterate through product in cart and update quantites
+        # Iterate through products in cart and update quantities
         for cart_item in user_cart.cartitem_set.all():
-            print('cart items:', cart_item.Quantity)
-            #using product id to modify cart items
-            cartID= str(cart_item.product.id)
-            new_quantity = request.POST.get('Inputquantity-'+ cartID)
-            print('Inputquantity-'+cartID)
-            
-            if new_quantity == None:
+            cartID = str(cart_item.product.id)
+            new_quantity = request.POST.get('Inputquantity-' + cartID)
+            if new_quantity is None:
                 old_quantity = cart_item.Quantity
-                #update the cat item quantiy
                 cart_item.Quantity = old_quantity
                 cart_item.save()
             else:
                 cart_item.Quantity = new_quantity
                 cart_item.save()
-                
-           
-
-        # Check if reward points are sufficient for a discount
-       
-            
             user_cart.update_total_amount()
-            print("Total amount before saving:", user_cart.total_amount)
             user_cart.save()
-            print("Total amount after saving:", user_cart.total_amount)
-    return redirect('cartview')
+            # Add success message for item update
+            update_success_messages.append("Cart item has been updated successfully.")
     
+        # Add success messages to Django messages framework
+        for message in removal_success_messages:
+            sweetify.success(request, message + " (Removal)")
+        
+        for message in update_success_messages:
+            sweetify.success(request, message + " (Update)")
+    
+    return redirect('cartview')
+
 
     
 def checkoutpage(request):
