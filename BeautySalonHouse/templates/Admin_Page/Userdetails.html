@@ -101,8 +101,8 @@
               {% if user.is_authenticated and user.is_superuser %}
               <form action="" method="post">
                   {% csrf_token %}
-                  <input type="hidden" name="user" value="{{ user_detail.user.id }}">
-                
+                <input type="hidden" name="user" value="{{user_detail.id}}">
+              
                 {% if user_detail.hasUserBlocked %}
                 <button class="border border-[#2FDD92] rounded mr-7" name="unblock">
                   Unblock

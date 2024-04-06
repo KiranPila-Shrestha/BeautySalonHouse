@@ -238,31 +238,21 @@ def is_superuser(user):
 
 def userdetail_admin(request):
     if request.method == 'POST':
-        if 'block' in request.POST or 'unblock' in request.POST:
-            print("clickkkk")
+        if "block" in request.POST:
             username = request.POST.get("user")
-            print(username)
-            try:
-                user = User.objects.get(username=username)
-                user_detail = UserDetail.objects.get(user=user)
-                if 'block' in request.POST:
-                    user_detail.hasUserBlocked= True
-                    sweetify.success(request, 'User blocked successfully')
-                elif 'unblock' in request.POST:
-                    user_detail.hasUserBlocked = False
-                    sweetify.success(request, 'User unblocked successfully')
-                user_detail.save()
-            except User.DoesNotExist:
-                sweetify.error(request, 'User does not exist')
-        elif 'userdelete' in request.POST:
-            username = request.POST.get('username')
-            try:
-                user = User.objects.get(username=username)
-                user.delete()
-                sweetify.success(request, 'User deleted successfully')
-                return redirect('useradmin')
-            except User.DoesNotExist:
-                sweetify.error(request, 'User does not exist')
+            user = User.objects.get(username=username)
+            userDetail = UserDetail.objects.get(user=user)
+            userDetail.has_blocked = True
+            userDetail.save()
+            sweetify.success(request, 'User Blocked successfully')
+        
+        elif "unblock" in request.POST:
+            username = request.POST.get("user")
+            user = User.objects.get(username=username)
+            userDetail = UserDetail.objects.get(user=user)
+            userDetail.has_blocked = False
+            userDetail.save()
+            sweetify.success(request, 'User Unblocked successfully')
             
             
             return redirect('useradmin')
