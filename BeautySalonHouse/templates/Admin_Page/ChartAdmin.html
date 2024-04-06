@@ -10,18 +10,18 @@
             flex-direction: row;
             justify-content: flex-start;
             align-items: flex-start;
-            height: 60vh; /* Adjust the height as needed */
+            height: 60vh;
             
         }
         #userTypeChart {
-            max-width: 60%; /* Set the maximum width of the chart */
-            max-height: 400px; /* Set the maximum height of the chart */
+            max-width: 60%; 
+            max-height: 400px;
         }
         #table-container {
-            margin-left: 20px; /* Adjust the left margin as needed */
+            margin-left: 20px; 
             text-align: center;
-            max-width: 100%; /* Set the maximum width of the table */
-            overflow: auto; /* Add scroll if table exceeds container */
+            max-width: 100%; 
+            overflow: auto; 
         }
         table {
             border-collapse: collapse;
@@ -37,16 +37,25 @@
         }
         .custom-hr {
             border-top: 2px solid black;
-            /* Other styling properties */
+           
         }
         #serviceChartContainer {
-            max-width: 80%; /* Adjust the maximum width of the chart container */
-            margin: 0 auto; /* Center the chart container */
+            max-width: 80%; 
+            margin: 0 auto; 
         }
         #serviceChart {
-            max-width: 100%; /* Adjust the maximum width of the chart */
+            max-width: 100%; 
         }
-        
+
+        #orderStatusChart {
+            max-width: 80%; 
+            max-height: 400px; 
+            margin-right: 20px;
+        }
+        #orderStatusTable {
+            width: 20%; /* Adjust width as needed */
+            
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -140,6 +149,48 @@
      <div id="serviceChartContainer">
         <canvas id="serviceChart"></canvas>
     </div>
+    <br>
+     <!-- SProduct Availability chart -->
+    <hr class="custom-hr mb-1000px">
+    <br>
+<h1 class="font-bold text-3xl text-center">Product Inventory Availability</h1>
+<br>
+    <canvas id="productChart" width="800" height="400"></canvas>
+    <br>
+    <hr class="custom-hr mb-1000px">
+     <!-- Order status chart -->
+    <br>
+    <h1 class="font-bold text-3xl text-center">Order Status Analysis</h1>
+    <br>
+    <div style="display: flex; flex-direction: row;">
+        <div style="flex: 1; ">
+            <canvas id="orderStatusChart" ></canvas>
+        </div>
+        <br>
+        <div style="flex: 1;">
+            <h3>Order Status Distribution Table</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_data %}
+                    <tr>
+                        <td>{{ item.status }}</td>
+                        <td>{{ item.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+    <br>
+    <hr class="custom-hr mb-1000px">
+    
     {# First script for pie chart shows usertype distribution#}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -320,6 +371,137 @@
                 indexAxis: 'x', // applied to x-axis
         barPercentage: 0.5, //  control bar width
         categoryPercentage: 0.6 //  control space between bars
+            }
+        });
+    });
+</script>
+
+    {# 4th script product Availability chart #}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var productLabels = {{ product_names|safe }};
+        var productCounts = {{ product_stock|safe }};
+        
+        var productColors = [
+            'rgba(255, 99, 132, 0.9)',   // Red
+            'rgba(54, 162, 235, 0.9)',   // Blue
+            'rgba(255, 159, 64, 0.8)',   // Orange
+            'rgba(75, 192, 192, 0.9)',   // Green
+            // Add more colors if needed
+        ];
+
+        var productCtx = document.getElementById('productChart').getContext('2d');
+        var productChart = new Chart(productCtx, {
+            type: 'bar',
+            data: {
+                labels: productLabels,
+                datasets: [{
+                    label: 'Stock Availability',
+                    data: productCounts,
+                    backgroundColor: productColors,
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Product Stock Availability',
+                        fontSize: 20,
+                        fontColor: '#333',
+                        padding: {
+                            top: 10,
+                            bottom: 10
+                        },
+                        font: {
+                            weight: 'bold' // Make the title text bold
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Product',
+                            font: {
+                                weight: 'bold' // Make the x-axis scale text bold
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                weight: 'bold' // Make the x-axis tick text bold
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Stock Availability',
+                            font: {
+                                weight: 'bold' // Make the y-axis scale text bold
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                weight: 'bold' 
+                            }
+                        }
+                    }
+                },
+                indexAxis: 'x', // applied to x-axis
+                barPercentage: 0.5, // control bar width
+                categoryPercentage: 0.6 // control space between bars
+            }
+        });
+    });
+</script>
+
+
+
+    {# 5th script order status  chart#}
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var orderStatusLabels = {{ order_statuses|safe }};
+        var orderStatusCounts = {{ order_counts|safe }};
+
+        var orderStatusColors = [
+            'rgba(255, 99, 132, 0.9)',   // Red
+            'rgba(54, 162, 235, 0.9)',   // Blue
+            'rgba(255, 159, 64, 0.8)'    // Orange
+        ];
+
+        var orderStatusCtx = document.getElementById('orderStatusChart').getContext('2d');
+        var orderStatusChart = new Chart(orderStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: orderStatusLabels,
+                datasets: [{
+                    label: 'Order Status',
+                    data: orderStatusCounts,
+                    backgroundColor: orderStatusColors,
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Order Status Analysis',
+                        fontSize: 20,
+                        fontColor: '#333',
+                        padding: {
+                            top: 10,
+                            bottom: 10
+                        },
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
+                }
             }
         });
     });

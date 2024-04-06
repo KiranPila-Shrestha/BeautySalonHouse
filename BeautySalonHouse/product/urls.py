@@ -16,6 +16,8 @@ path('placeorder', views.checkoutpage, name='checkoutpage'),
 #for payment
 path('paymentSucessful', views.verifyKhalti, name='paymentSucessful'),
 path('initiate', views.initkhalti, name='initiate'),
+#for payment history
+path('paymentHistory', views.paymentHistory, name='paymentHistory'),
 
 
 ]

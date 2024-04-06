@@ -14,9 +14,14 @@ from django.contrib.auth.models import User
 # SEND MAIL
 from django.core.mail import send_mail
 from django.conf import settings
+import sweetify
 
 ##appointment models
 from Appointment.models import *
+##product modeks
+from product.models import *
+from django.db.models import Sum
+
 # LOGIN
 def loginUser(request):
     if request.method == 'POST':
@@ -25,12 +30,15 @@ def loginUser(request):
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
+            # if user.userdetail.has_blocked == True:
+            #     sweetify.error(request, 'Your account has been blocked. Please contact to admin.')
+            # else:
             login(request, user)
-             
+            sweetify.success(request, "Successfully Login. Welcome to our site.")
             return redirect('/')
         
         else:
-            messages.info(request, 'Username or Password is invalid.')
+            sweetify.info(request, 'Username or Password is invalid.')
         
 
     return render(request, 'login_register/login.html')
@@ -55,6 +63,13 @@ def registerUser(request):
                 # Saving user default profile
                 user_default_profile_picture = UserProfile(user=user)
                 user_default_profile_picture.save()
+            sweetify.success(request, 'Registration successful. You can now log in.')
+            return redirect('login')
+        else:
+            # Display error message
+            sweetify.error(request, 'Registration failed. Please correct the errors below.')
+            
+
                        
             return redirect('login')
             
@@ -95,7 +110,7 @@ def EditProfile(request, user_id):
         if 'contact_number' in request.POST:  # Check if contact_number is present in POST data
             user_detail.contact_number = request.POST.get('contact_number')
         user_detail.save()
-        messages.success(request, "User Details has been updated successfully.")
+        sweetify.success(request, "User Details has been updated successfully.")
         
         
         
@@ -106,7 +121,7 @@ def EditProfile(request, user_id):
                 profile = UserProfile.objects.get(user=user)
                 profile.image = request.FILES['save_update_image']
                 profile.save()
-                messages.success(request, 'Profile Picture Changed.')
+                sweetify.success(request, 'Profile Picture Changed.')
             
         
             # return redirect('EditProfile', user_id=user_id)  
@@ -139,16 +154,16 @@ def ChangePassword(request, user_id):
             print("CHANGE PASSWORD clicked")
             
             if not request.user.check_password(current_password):
-                messages.error(request, 'Current password is incorrect.')
+                sweetify.error(request, 'Current password is incorrect.')
                 print("error pass")
             else:
                 if new_password != confirm_new_password:
-                    messages.error(request, 'New password and confirm password do not match.')
+                    sweetify.error(request, 'New password and confirm password do not match.')
                 else:
                     # Change the user's password
                     request.user.set_password(new_password)
                     request.user.save()
-                    messages.success(request, 'Password Changed')
+                    sweetify.success(request, 'Password Changed')
                     # Updating the user's session to prevent logout
                     update_session_auth_hash(request, request.user)
     return render(request, 'Login_Register/Reset_Password/ChangePassword.html')
@@ -199,9 +214,9 @@ def AdminDashBoard(request):
                 user_type = request.POST.get('user_type')
                 send_mail("Welcome to our salon","You have been assigned as {user_type}","pilashrestha366@gmail.com",[user_email],fail_silently=False)
                 
-                messages.success(request, " Staff Has been added Successfully")
+                sweetify.success(request, " Staff has been added Successfully")
         else:
-            messages.error(request, "Error occur while staff adding.")
+            sweetify.error(request, "Error occur while staff adding.")
                 
                 
             
@@ -220,18 +235,33 @@ def is_superuser(user):
 @user_passes_test(is_superuser)
 
 def userdetail_admin(request):
-    if request.method =='POST':
-        print('click')
-        if 'userdelete' in request.POST:
-            username = request.POST.get('username')
-            user = User.objects.get(User, username=username)
-            
+    if request.method == 'POST':
+        if 'block' in request.POST or 'unblock' in request.POST:
+            print("clickkkk")
+            username = request.POST.get("user")
             print(username)
-            print(user, "user")
+            try:
+                user = User.objects.get(username=username)
+                user_detail = UserDetail.objects.get(user=user)
+                if 'block' in request.POST:
+                    user_detail.hasUserBlocked= True
+                    sweetify.success(request, 'User blocked successfully')
+                elif 'unblock' in request.POST:
+                    user_detail.hasUserBlocked = False
+                    sweetify.success(request, 'User unblocked successfully')
+                user_detail.save()
+            except User.DoesNotExist:
+                sweetify.error(request, 'User does not exist')
+        elif 'userdelete' in request.POST:
+            username = request.POST.get('username')
+            try:
+                user = User.objects.get(username=username)
+                user.delete()
+                sweetify.success(request, 'User deleted successfully')
+                return redirect('useradmin')
+            except User.DoesNotExist:
+                sweetify.error(request, 'User does not exist')
             
-            #delete user
-            user.delete()
-            messages.success(request, "User Deleted")
             
             return redirect('useradmin')
     requestedUserType = UserDetail.objects.all()
@@ -295,8 +325,6 @@ def adminchart(request):
     staff_appointments = BookAppointment.objects.values('staff', 'status').annotate(count=models.Count('id'))
     print(staff_appointments)
     
-
-    
     
     # Fetch users with a specific user type
     requested_users = UserDetail.objects.filter(user_type='customer')
@@ -330,6 +358,24 @@ def adminchart(request):
     
     print(service_data)
     
+    products = addProduct.objects.all()
+    product_names = [product.productName for product in products]
+    product_stock = [product.productStock for product in products]
+    print('name', product_names)
+    print('stock', product_stock)
+    
+    
+   # Prepare data for visualization
+    order_statuses = ['Pending', 'Completed', 'Cancelled']
+    order_counts = [
+    orderplaced.objects.filter(status='Pending').count(),
+    orderplaced.objects.filter(status='Completed').count(),
+    orderplaced.objects.filter(status='Cancelled').count()
+]
+
+# Create order_data list of dictionaries
+    order_data = [{'status': status, 'count': count} for status, count in zip(order_statuses, order_counts)]
+
     
     context = {
         'labels': labels,
@@ -340,6 +386,12 @@ def adminchart(request):
         'requested_users': requested_users,
         'all_user_login': all_user_login,
         'service_data': service_data,
+        'product_names': product_names,
+        'product_stock': product_stock,
+        
+        'order_statuses': order_statuses,
+        'order_counts': order_counts,
+        'order_data': order_data ,
     }
     
     

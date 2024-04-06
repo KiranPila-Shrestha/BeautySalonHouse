@@ -49,6 +49,10 @@
                                 <button name="complete" class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded">Complete </button>
                             </td>
                             <input type="hidden" name="appointmentID" value="{{booking_request.id}}">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button name="cancel" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded">Cancel </button>
+                            </td>
+                            <input type="hidden" name="appointmentID" value="{{booking_request.id}}">
                         </tr>
                         {% endfor %}
                     </form>

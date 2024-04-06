@@ -3,8 +3,8 @@
 {% block content %}
 <body class="bg-gray-100">
     <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-semibold text-left ml-8 mb-8"> Rejected Appointments </h1>
-        {% if canceled_appointments %}
+        <h1 class="text-3xl font-semibold text-left ml-8 mb-8"> Canceled Booked Appointment </h1>
+        {% if canceled_booked_appointment %}
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -19,14 +19,14 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            {% for appointment in canceled_appointments %}
+                            {% for appointment in canceled_booked_appointment %}
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ appointment.bookDate }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ appointment.bookTime }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-lg md:text-lg">{{ appointment.user }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ appointment.staff }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ appointment.service }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg {% if appointment.status == 'Canceled' %}text-red-600 font-medium{% endif %}">
+                                <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg {% if appointment.status == 'cancel Booking' %}text-red-600 font-medium{% endif %}">
                                     {{ appointment.status }}
                                 </td>
                             </tr>
@@ -36,7 +36,7 @@
                 </div>
             </div>
         {% else %}
-            <p class="text-center text-lg font-semibold mt-4">No Rejected appointments</p>
+            <p class="text-center text-lg font-semibold mt-4">No canceled appointments</p>
         {% endif %}
     </div>
 </body>

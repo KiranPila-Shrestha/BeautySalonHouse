@@ -25,7 +25,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.service }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">
                             <span class="font-medium
-                            {% if booking_request.status == 'Pending' %}text-red-500{% elif booking_request.status == 'completed' %}text-green-500{% elif booking_request.status == 'Confirm' %}text-blue-600{% else %}text-gray-700{% endif %}">
+                            {% if booking_request.status == 'Pending' %}text-yellow-500{% elif booking_request.status == 'completed' %}text-green-500{% elif booking_request.status == 'Confirm' %}text-blue-600{% elif booking_request.status == 'cancel' %}text-red-600{% else %}text-red-700{% endif %}">
                    {{ booking_request.status }}
                </span>
                         </td>

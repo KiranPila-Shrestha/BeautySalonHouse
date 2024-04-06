@@ -110,34 +110,27 @@ def productlist(request):
 
 
 #for add to cart
-# def addtoCart(request, product_id):
-#     product = get_object_or_404(addProduct, id=product_id)
-    
-#     #get or create the user cart
-#     user_cart,created = cart.objects.get_or_create(user=request.user)
-#     #check if the product is already in the cart
-#     cart_item, item_created = Cartitem.objects.get_or_create(cart=user_cart, product=product)
-    
-#     #increae the quantity of cart if it is in cart
-#     if not item_created:
-#         cart_item.Quantity += 1
-#         cart_item.save()
-        
-#     else:
-#         cart_item.Quantity = 1 # initial quantity set as 1 for first 
-#         cart_item.save()
-        
-#     user_cart.total_amount = Cartitem.objects.filter(cart=user_cart).aggregate(total=Sum(F('product__productPrice') * F('Quantity')))['total']
-#     user_cart.save()
-    
-#     messages.success(request, "Product has been added to the cart successfully.")
-#     return redirect ('productpage')
 
-#change function
 
 def addtoCart(request, product_id):
+  # Check if the user is authenticated and is of type 'customer'
+    if request.user.is_authenticated:
+        try:
+            user_detail = request.user.userdetail
+            if user_detail.user_type != 'customer':
+                sweetify.error(request, 'Authentication Error', text='You must be logged in as a customer to add items to the cart.')
+                return redirect('productpage')  # Redirect to login page or any other page as per your requirement
+        except UserDetail.DoesNotExist:
+            sweetify.error(request, 'User Detail Error', text='User detail does not exist.')
+            return redirect('productpage')  # Redirect to login page or any other page as per your requirement
+    else:
+        sweetify.error(request, 'Authentication Error', text='You must be logged in as a customer to add items to the cart.')
+        return redirect('productpage')  # Redirect to login page or any other page as per your requirement
+    
+    
     product = get_object_or_404(addProduct, id=product_id)
     
+
     #get or create the user cart
     user_cart,created = cart.objects.get_or_create(user=request.user)
     #check if the product is already in the cart
@@ -146,10 +139,10 @@ def addtoCart(request, product_id):
     productQuantity = product.productStock
     cartQuantity = cart_item.Quantity
     
-    if productQuantity == cartQuantity:
+    if not item_created and cartQuantity == productQuantity:
         sweetify.error(request, "Maximum quantity reached !!")
         return redirect ('productpage')
-
+    
     
     #increae the quantity of cart if it is in cart
     if not item_created:
@@ -322,176 +315,6 @@ def checkout(request):
 
 
 # #paymenttt
-# def initkhalti(request):
-#     print("YAAAAAAAAAAAAAAAAAAAAAAAAAA AAYO")
-#     user = request.user.username
-#     userinformation = request.user
-#     contact = userinformation.userdetail.contact_number
-#     email = userinformation.email
-
-#     url = "https://a.khalti.com/api/v2/epayment/initiate/"
-     
-    
-#     return_url = request.POST.get('return_url')
-#     purchase_order_id = request.POST.get('purchase_order_id')
-#     stramount = request.POST.get('amount')
-#     amount = float(stramount)
-#     print(amount)
-
-#     payload = json.dumps({
-#         "return_url": return_url,
-#         "website_url": "http://127.0.0.1:8000",
-#         "amount": amount,
-#         "purchase_order_id": purchase_order_id,
-#         "purchase_order_name": "test",
-#         "customer_info": {
-#             "name": user,
-#             "email": email,
-#             "phone": contact,
-#         }
-#     })
-#     headers = {
-#          'accept': 'application/json',
-#         'Content-Type': 'application/json',
-#         'Authorization': 'key 38f188dd685e4006b1a2015725fa77f5', 
-        
-#     }
-#     print("headerrrrrrr", headers)
-#     # try:
-#     response = requests.request("POST", url, headers=headers, data=payload)
-#     print("responseresponse:", response)
-#     new_res = json.loads(response.text)
-#     print("new_resnew_resnew_res:", new_res)
-    
-
-#     payment_url = new_res.get('payment_url')
-#     print("payment_urlpayment_urlpayment_urlpayment_url:", payment_url)
-    
-#     if payment_url:
-#         return redirect(payment_url)
-#     else:
-#         messages.error(request, "Something went wrong.")
-#         print("No payment found", new_res)
-#         return HttpResponse("Payment URL not found")
-#     # except Exception as e:
-#     #     print("Error occurred during payment initiation:", e)
-#     #     return HttpResponse("An error occurred during payment")
-     
-     
-     
-
-# def verifyKhalti(request):
-#     url = "https://a.khalti.com/api/v2/epayment/lookup/"
-#     if request.method == 'GET':
-#         headers = {
-#              'accept': 'application/json',
-#             'Authorization': 'key 38f188dd685e4006b1a2015725fa77f5', #10e9db6041cf49bc91884313102e3173
-#             'Content-Type': 'application/json',
-#         }
-#         pidx = request.GET.get('pidx')
-        
-#         payload = json.dumps({
-#         'pidx': pidx
-#         })
-        
-#         res = requests.request('POST',url,headers=headers,data=payload)
-        
-#         new_res = json.loads(res.text)
-#         print("new_res",new_res)
-        
-#         if new_res['status'] == 'Completed':
-#             print("SUCCESS PAYMENT")
-#             Buyeruser = request.user
-#             cart = get_object_or_404(cart, user=Buyeruser)
-#             print("cartcartcartcartcartcartcartcartcartcartcartcartcartcartcartcart: ", cart)
-#             cart_items = Cartitem.objects.filter(cart = cart)
-#             # with transaction.atomic():
-            
-#             #get the cart items before clearing
-#             # cart.items.clear()
-            
-#             order = orderplaced.objects.create(
-#                 Buyeruser = Buyeruser,
-#                 total_amount = cart.total_amount,
-#                 order_contact_number = cart.new_number,
-#                 order_address =cart.new_address,
-#                 status = 'Pending'
-#             )
-            
-            
-#             user_detail = UserDetail.objects.get(user = Buyeruser)
-#             user_detail.reward_points += 1
-#             user_detail.save()
-            
-#             reward_point_used = 0
-#             if user_detail. reward_points >= 10:
-#                 reward_point_used = user_detail.reward_points
-#                 order.total_amount -= reward_point_used
-#                 user_detail.reward_points += 1
-#                 user_detail.save()
-            
-#             for cart_item in Cartitem:
-#                 product = cart_item.product
-#                 quantity = cart_item.Quantity
-#                 total_amount_product = product.productPrice * quantity
-                
-#                 orderhistory.objects.create(
-#                     order_for = order,
-#                     product = product,
-#                     quantity = quantity,
-#                     total_amount_product =total_amount_product
-#                 )
-#             order.rewardpoint = reward_point_used
-#             order.save()
-#             cart.delete()
-            
-            
-#         else:
-#             pass
-#             # return redirect('error')
-#     else:
-#         pass
-            
-            
-#         #     #calculate total amount including if rewards is incluede
-            
-#         #     total_amount = cart.total_amount()
-            
-#         #     #check if reward us used
-#         #     user_detail = UserDetail.objects.get(User = request.user)
-#         #     if  user_detail.reward_points >= 10:
-#         #         reward_point_used = user_detail.reward_points
-#         #         total_amount -= reward_point_used 
-                
-#         #         user_detail.reward_points += 1
-#         #         user_detail.save()
-                
-#         #     else:
-#         #         reward_point_used = 0
-                
-#         #      # Award 1 reward point for each purchase
-#         #     user_detail.reward_points += 1
-#         #     user_detail.save()
-            
-#         #     #created an object to store about order
-#         #     order = orderHistory.objects.create(user = request.user, total_amount = total_amount, product='\n'.join([f"{item.Quantity} x {item.product.productName} ({item.product.productBrand}): ${item.product.productPrice}" for item in cart_items]),quantity=sum([item.Quantity for item in cart_items]),rewardpoint=reward_point_used, status='Pending')
-
-#         #     print("SUCCESS PAYMENT")
-#         #     return redirect('addtocart')
-#         # else:
-#         #     print("ERRRRRRRRRRRRRRRRRRRRRROR")
-#         #     pass
-#         #     # return redirect('error')
-#     return render(request, 'payment/paymentsuccess.html')
-
-
-# # cart bata Sub total nikalne 
-# # if reward xa sub minus 
-
-# def paymentSuccess(request):
-#     return render(request, 'payment/paymentsuccess.html')
-
-
 
 def initkhalti(request):
     print("YAAAAAAAAAAAAAAAAAAAAAAAAAA AAYO")
@@ -548,7 +371,7 @@ def initkhalti(request):
         # return redirect("error") 
      
      
-# CHANGESMADEBYME
+# CHANGE for khalti
 def verifyKhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/lookup/"
     if request.method == 'GET':
@@ -631,3 +454,40 @@ def verifyKhalti(request):
 def paymentSuccess(request):
     return render(request, 'payment/paymentsuccess.html')
 
+#for payment history 
+def paymentHistory(request):
+    orderDetails = []
+    allOrderDetails = []
+    
+    
+    orderPaymentHistory = orderplaced.objects.filter(Buyeruser=request.user)
+    allOrderPaymentHistory = orderplaced.objects.all()
+    for order in allOrderPaymentHistory:
+        orderDetail = orderhistoryDetails.objects.filter(order_for=order)
+        allOrderDetails.append(orderDetail)
+    
+    for order in orderPaymentHistory:
+        orderDetail = orderhistoryDetails.objects.filter(order_for=order)
+        orderDetails.append(orderDetail)
+        
+    if request.method == 'POST':
+        if "confirmOrder" in request.POST:
+            orderID = request.POST.get("orderID")
+            orderHistory = orderhistoryDetails.objects.get(pk=orderID)
+            orderHistory.status = "Completed"
+            sweetify.success(request, "Order updated successfully!!")
+            
+        elif "cancelOrder" in request.POST:
+            orderID = request.POST.get("orderID")
+            orderHistory = orderhistoryDetails.objects.get(pk=orderID)
+            orderHistory.status = "Rejected"
+            sweetify.success(request, "Order updated successfully!!")
+
+    context = {
+        'orderPaymentHistory' : orderPaymentHistory,
+        'orderDetails' : orderDetails,
+        'allOrderDetails' : allOrderDetails,
+        'allOrderPaymentHistory' : allOrderPaymentHistory
+    }
+
+    return render(request, 'payment/paymentHistory.html', context)

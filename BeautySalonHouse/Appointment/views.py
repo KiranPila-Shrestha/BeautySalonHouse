@@ -173,7 +173,7 @@ def CompleteAppointments(request):
 def bookedAppointment(request, user_id=None):
     currentUser = str(request.user)
     print(currentUser)
-    #add status complete one
+    #add status complete one after approve
     if request.method == "POST" and "complete" in request.POST:
         appID = request.POST.get("appointmentID")
         print("appID", appID)
@@ -181,6 +181,14 @@ def bookedAppointment(request, user_id=None):
         booking_requests.status = "completed"
         booking_requests.save()
         print("booking_requests", booking_requests)
+    #views after showing the appointment cancels after approve
+    if request.method == "POST" and "cancel" in request.POST:
+        book_id = request.POST.get("appointmentID")
+        print("datttt", book_id)
+        booking_requests = BookAppointment.objects.get(pk=book_id)
+        booking_requests.status = "cancel Booking"
+        booking_requests.save()
+        print("canelkooooo",booking_requests)
         
     
     
@@ -210,8 +218,17 @@ def bookedAppointment(request, user_id=None):
     }
     return render(request, template_name, context)
 
-
-   
+# views after showing the appointment cancels after approve data showing
+def CancelbookedAppointement(request):
+    # Retrieve all canceled appointments
+    canceled_booked_appointment = BookAppointment.objects.filter(staff=request.user, status='cancel Booking')
+    print("aoooooooooo",canceled_booked_appointment)
+    
+    context = {
+        'canceled_booked_appointment': canceled_booked_appointment
+    }
+    
+    return render(request, 'Staff/cancel_bookedAppointment.html', context)
 
 
 # views for appointment information for user only.

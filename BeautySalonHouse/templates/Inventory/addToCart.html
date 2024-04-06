@@ -149,20 +149,46 @@
         </div>
     </section>
   </div>
+  
 
-  <!--button-->
-  <div class="mt-8 container mx-auto flex flex-col md:flex-row md:justify-between items-center">
-    <div>
-        <button type="submit" form="update_cart_quantity" class="bg-blue-600 hover:bg-cyan-700 text-white px-4 py-2 rounded">Update Cart</button>
-    </div>
-    <div class="md:mt-0 mt-4">
-        <p class="md:text-center font-semibold md:mb-4">Shipping : Cost will appear on place order</p>
-      
-        <button class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded">
-            <a href="{% url 'checkoutpage' %}">Place Order</a>
-        </button>
-    </div>
+<!--button-->
+<!--button-->
+{% if cart_item_set %}
+<div class="mt-8 container mx-auto flex flex-col md:flex-row md:justify-between items-center">
+  <div>
+    <button type="submit" form="update_cart_quantity" class="bg-blue-600 hover:bg-cyan-700 text-white px-4 py-2 rounded">Update Cart</button>
+  </div>
+  <div class="md:mt-0 mt-4">
+    <p class="md:text-center font-semibold md:mb-4">Shipping : Cost will appear on place order</p>
+    <!-- Place Order button only appears when there are items in the cart -->
+    <button class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded">
+      <a href="{% url 'checkoutpage' %}">Place Order</a>
+    </button>
+  </div>
 </div>
+{% else %}
+<!-- Modal content -->
 
+<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+        No items in cart
+      </h3>
+      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </div>
+   <!-- Message body -->
+  <div class="p-4 md:p-5">
+    <p class="text-gray-700 dark:text-gray-300">Your shopping cart is currently empty. Start shopping now to add items to your cart!</p>
+    <br>
+    <a href="{% url 'productpage' %}" class="mt-4 bg-blue-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md">Start Shopping</a>
+  </div>
+  </div>
+{% endif %}
 
 {% endblock %}

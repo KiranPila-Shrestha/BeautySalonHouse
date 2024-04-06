@@ -95,15 +95,37 @@
               {% endif %}
               
           </td>
+          
           <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-            <a href="#" class="text-blue-700 text-center"><i class="fas fa-eye"></i></a>
+            <div class="pl-10">
+              {% if user.is_authenticated and user.is_superuser %}
+              <form action="" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="user" value="{{ user_detail.user.username }}">
+                
+                {% if user_detail.hasUserBlocked %}
+                <button class="border border-[#2FDD92] rounded mr-7" name="unblock">
+                  Unblock
+                </button>
+                {% else %}
+                <button class="border border-[#FF3131] rounded mr-7" name="block">
+                  Block
+                </button>
+                {% endif %}
+              </form>
+              {% endif %}
+          </div>
+          
+          <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+              {% if user.is_authenticated and user.is_superuser %}
+              <form method="post" action="">
+                  {% csrf_token %}
+                  <input type="hidden" name="username" value="{{ user_detail.user }}">
+                  <button type="submit" name="userdelete" class="text-red-600"><i class="fas fa-trash-alt"></i></button>
+              </form>
+              {% endif %}
           </td>
-          <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-            <form method="post" action="">
-              {% csrf_token %}
-              <input type="hidden" name="username" value="{{user_detail.user}}">
-              <button type="submit" name="userdelete" class="text-red-600"><i class="fas fa-trash-alt"></i></button>
-            </form>
+          
           </td>
         </tr>
         {% endfor %}

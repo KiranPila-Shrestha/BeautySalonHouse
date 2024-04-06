@@ -30,7 +30,7 @@ def contact(request):
                 [recipient_email],
                 fail_silently=False,
             )
-            messages.success(request, " Form has been submitted")  # Display a success page or redirect as needed
+            sweetify.success(request, " Form has been submitted")  # Display a success page or redirect as needed
     else:
         form = ContactForm()
     return render(request, 'landing_page/Contact.html')
