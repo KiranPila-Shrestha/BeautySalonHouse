@@ -110,6 +110,31 @@ def productlist(request):
 
 
 #for add to cart
+# def addtoCart(request, product_id):
+#     product = get_object_or_404(addProduct, id=product_id)
+    
+#     #get or create the user cart
+#     user_cart,created = cart.objects.get_or_create(user=request.user)
+#     #check if the product is already in the cart
+#     cart_item, item_created = Cartitem.objects.get_or_create(cart=user_cart, product=product)
+    
+#     #increae the quantity of cart if it is in cart
+#     if not item_created:
+#         cart_item.Quantity += 1
+#         cart_item.save()
+        
+#     else:
+#         cart_item.Quantity = 1 # initial quantity set as 1 for first 
+#         cart_item.save()
+        
+#     user_cart.total_amount = Cartitem.objects.filter(cart=user_cart).aggregate(total=Sum(F('product__productPrice') * F('Quantity')))['total']
+#     user_cart.save()
+    
+#     messages.success(request, "Product has been added to the cart successfully.")
+#     return redirect ('productpage')
+
+#change function
+
 def addtoCart(request, product_id):
     product = get_object_or_404(addProduct, id=product_id)
     
@@ -117,6 +142,14 @@ def addtoCart(request, product_id):
     user_cart,created = cart.objects.get_or_create(user=request.user)
     #check if the product is already in the cart
     cart_item, item_created = Cartitem.objects.get_or_create(cart=user_cart, product=product)
+    
+    productQuantity = product.productStock
+    cartQuantity = cart_item.Quantity
+    
+    if productQuantity == cartQuantity:
+        sweetify.error(request, "Maximum quantity reached !!")
+        return redirect ('productpage')
+
     
     #increae the quantity of cart if it is in cart
     if not item_created:
@@ -289,6 +322,177 @@ def checkout(request):
 
 
 # #paymenttt
+# def initkhalti(request):
+#     print("YAAAAAAAAAAAAAAAAAAAAAAAAAA AAYO")
+#     user = request.user.username
+#     userinformation = request.user
+#     contact = userinformation.userdetail.contact_number
+#     email = userinformation.email
+
+#     url = "https://a.khalti.com/api/v2/epayment/initiate/"
+     
+    
+#     return_url = request.POST.get('return_url')
+#     purchase_order_id = request.POST.get('purchase_order_id')
+#     stramount = request.POST.get('amount')
+#     amount = float(stramount)
+#     print(amount)
+
+#     payload = json.dumps({
+#         "return_url": return_url,
+#         "website_url": "http://127.0.0.1:8000",
+#         "amount": amount,
+#         "purchase_order_id": purchase_order_id,
+#         "purchase_order_name": "test",
+#         "customer_info": {
+#             "name": user,
+#             "email": email,
+#             "phone": contact,
+#         }
+#     })
+#     headers = {
+#          'accept': 'application/json',
+#         'Content-Type': 'application/json',
+#         'Authorization': 'key 38f188dd685e4006b1a2015725fa77f5', 
+        
+#     }
+#     print("headerrrrrrr", headers)
+#     # try:
+#     response = requests.request("POST", url, headers=headers, data=payload)
+#     print("responseresponse:", response)
+#     new_res = json.loads(response.text)
+#     print("new_resnew_resnew_res:", new_res)
+    
+
+#     payment_url = new_res.get('payment_url')
+#     print("payment_urlpayment_urlpayment_urlpayment_url:", payment_url)
+    
+#     if payment_url:
+#         return redirect(payment_url)
+#     else:
+#         messages.error(request, "Something went wrong.")
+#         print("No payment found", new_res)
+#         return HttpResponse("Payment URL not found")
+#     # except Exception as e:
+#     #     print("Error occurred during payment initiation:", e)
+#     #     return HttpResponse("An error occurred during payment")
+     
+     
+     
+
+# def verifyKhalti(request):
+#     url = "https://a.khalti.com/api/v2/epayment/lookup/"
+#     if request.method == 'GET':
+#         headers = {
+#              'accept': 'application/json',
+#             'Authorization': 'key 38f188dd685e4006b1a2015725fa77f5', #10e9db6041cf49bc91884313102e3173
+#             'Content-Type': 'application/json',
+#         }
+#         pidx = request.GET.get('pidx')
+        
+#         payload = json.dumps({
+#         'pidx': pidx
+#         })
+        
+#         res = requests.request('POST',url,headers=headers,data=payload)
+        
+#         new_res = json.loads(res.text)
+#         print("new_res",new_res)
+        
+#         if new_res['status'] == 'Completed':
+#             print("SUCCESS PAYMENT")
+#             Buyeruser = request.user
+#             cart = get_object_or_404(cart, user=Buyeruser)
+#             print("cartcartcartcartcartcartcartcartcartcartcartcartcartcartcartcart: ", cart)
+#             cart_items = Cartitem.objects.filter(cart = cart)
+#             # with transaction.atomic():
+            
+#             #get the cart items before clearing
+#             # cart.items.clear()
+            
+#             order = orderplaced.objects.create(
+#                 Buyeruser = Buyeruser,
+#                 total_amount = cart.total_amount,
+#                 order_contact_number = cart.new_number,
+#                 order_address =cart.new_address,
+#                 status = 'Pending'
+#             )
+            
+            
+#             user_detail = UserDetail.objects.get(user = Buyeruser)
+#             user_detail.reward_points += 1
+#             user_detail.save()
+            
+#             reward_point_used = 0
+#             if user_detail. reward_points >= 10:
+#                 reward_point_used = user_detail.reward_points
+#                 order.total_amount -= reward_point_used
+#                 user_detail.reward_points += 1
+#                 user_detail.save()
+            
+#             for cart_item in Cartitem:
+#                 product = cart_item.product
+#                 quantity = cart_item.Quantity
+#                 total_amount_product = product.productPrice * quantity
+                
+#                 orderhistory.objects.create(
+#                     order_for = order,
+#                     product = product,
+#                     quantity = quantity,
+#                     total_amount_product =total_amount_product
+#                 )
+#             order.rewardpoint = reward_point_used
+#             order.save()
+#             cart.delete()
+            
+            
+#         else:
+#             pass
+#             # return redirect('error')
+#     else:
+#         pass
+            
+            
+#         #     #calculate total amount including if rewards is incluede
+            
+#         #     total_amount = cart.total_amount()
+            
+#         #     #check if reward us used
+#         #     user_detail = UserDetail.objects.get(User = request.user)
+#         #     if  user_detail.reward_points >= 10:
+#         #         reward_point_used = user_detail.reward_points
+#         #         total_amount -= reward_point_used 
+                
+#         #         user_detail.reward_points += 1
+#         #         user_detail.save()
+                
+#         #     else:
+#         #         reward_point_used = 0
+                
+#         #      # Award 1 reward point for each purchase
+#         #     user_detail.reward_points += 1
+#         #     user_detail.save()
+            
+#         #     #created an object to store about order
+#         #     order = orderHistory.objects.create(user = request.user, total_amount = total_amount, product='\n'.join([f"{item.Quantity} x {item.product.productName} ({item.product.productBrand}): ${item.product.productPrice}" for item in cart_items]),quantity=sum([item.Quantity for item in cart_items]),rewardpoint=reward_point_used, status='Pending')
+
+#         #     print("SUCCESS PAYMENT")
+#         #     return redirect('addtocart')
+#         # else:
+#         #     print("ERRRRRRRRRRRRRRRRRRRRRROR")
+#         #     pass
+#         #     # return redirect('error')
+#     return render(request, 'payment/paymentsuccess.html')
+
+
+# # cart bata Sub total nikalne 
+# # if reward xa sub minus 
+
+# def paymentSuccess(request):
+#     return render(request, 'payment/paymentsuccess.html')
+
+
+
 def initkhalti(request):
     print("YAAAAAAAAAAAAAAAAAAAAAAAAAA AAYO")
     user = request.user.username
@@ -307,7 +511,7 @@ def initkhalti(request):
 
     payload = json.dumps({
         "return_url": return_url,
-        "website_url": "http://127.0.0.1:8000",
+        "website_url": "http://127.0.0.1:9999",
         "amount": amount,
         "purchase_order_id": purchase_order_id,
         "purchase_order_name": "test",
@@ -323,30 +527,28 @@ def initkhalti(request):
         'Authorization': 'key 38f188dd685e4006b1a2015725fa77f5', 
         
     }
-    print("headerrrrrrr", headers)
-    # try:
-    response = requests.request("POST", url, headers=headers, data=payload)
-    print("responseresponse:", response)
-    new_res = json.loads(response.text)
-    print("new_resnew_resnew_res:", new_res)
-    
+    try:
+        
+        response = requests.request("POST", url, headers=headers, data=payload)
+        new_res = json.loads(response.text)
 
-    payment_url = new_res.get('payment_url')
-    print("payment_urlpayment_urlpayment_urlpayment_url:", payment_url)
-    
-    if payment_url:
-        return redirect(payment_url)
-    else:
-        messages.error(request, "Something went wrong.")
-        print("No payment found", new_res)
-        return HttpResponse("Payment URL not found")
-    # except Exception as e:
-    #     print("Error occurred during payment initiation:", e)
-    #     return HttpResponse("An error occurred during payment")
+        if new_res['payment_url']:
+            return redirect(new_res['payment_url'])
+            return redirect("paymentSucessful")
+        
+        else:
+            messages.error(request, "Error while processing.")
+            return redirect("cartview")
+    except KeyError:
+        
+        pass
+        
+        # ERROR PAGE BANAUNE
+        
+        # return redirect("error") 
      
      
-     
-
+# CHANGESMADEBYME
 def verifyKhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/lookup/"
     if request.method == 'GET':
@@ -365,95 +567,66 @@ def verifyKhalti(request):
         
         new_res = json.loads(res.text)
         print("new_res",new_res)
-        
         if new_res['status'] == 'Completed':
             print("SUCCESS PAYMENT")
             Buyeruser = request.user
-            cart = get_object_or_404(cart, user=Buyeruser)
-            print("cartcartcartcartcartcartcartcartcartcartcartcartcartcartcartcart: ", cart)
-            cart_items = Cartitem.objects.filter(cart = cart)
-            # with transaction.atomic():
-            
-            #get the cart items before clearing
-            # cart.items.clear()
-            
-            order = orderplaced.objects.create(
-                Buyeruser = Buyeruser,
-                total_amount = cart.total_amount,
-                order_contact_number = cart.new_number,
-                order_address =cart.new_address,
-                status = 'Pending'
-            )
-            
-            
-            user_detail = UserDetail.objects.get(user = Buyeruser)
-            user_detail.reward_points += 1
-            user_detail.save()
-            
-            reward_point_used = 0
-            if user_detail. reward_points >= 10:
-                reward_point_used = user_detail.reward_points
-                order.total_amount -= reward_point_used
-                user_detail.reward_points += 1
-                user_detail.save()
-            
-            for cart_item in Cartitem:
-                product = cart_item.product
-                quantity = cart_item.Quantity
-                total_amount_product = product.productPrice * quantity
-                
-                orderhistory.objects.create(
-                    order_for = order,
-                    product = product,
-                    quantity = quantity,
-                    total_amount_product =total_amount_product
+            checkout_total_amount = int(new_res['total_amount'])
+            cartInstance = get_object_or_404(cart, user=Buyeruser)
+            print("cartcartcartcartcartcartcartcartcartcartcartcartcartcartcartcart: ", cartInstance)
+            cart_itemsInstance = Cartitem.objects.filter(cart = cartInstance)
+
+            with transaction.atomic():
+                order = orderplaced.objects.create(
+                    Buyeruser = Buyeruser,
+                    total_amount = cartInstance.total_amount,
+                    order_contact_number = cartInstance.new_number,
+                    order_address =cartInstance.new_address,
+                    status = 'Pending'
                 )
-            order.rewardpoint = reward_point_used
-            order.save()
-            cart.delete()
+                
+                rewardPoint = int(Buyeruser.userdetail.reward_points)
+                cartTotalAmount = int(cartInstance.total_amount)
+                1000 == 1000  
+                if checkout_total_amount == cartTotalAmount: # update the rewaed if not used
+                    print("same amount")
+                    user_detail = UserDetail.objects.get(user = Buyeruser)  
+                    user_detail.reward_points += 1
+                    reward_point_used = 0
+                    user_detail.save()
+                else:
+                    print("Different amount")
+                    user_detail = UserDetail.objects.get(user = Buyeruser)  
+                    user_detail.reward_points = 1
+                    user_detail.save()
+
+                    reward_point_used = rewardPoint
+                
+                for cart_item in cart_itemsInstance:
+                    product = cart_item.product
+                    quantity = cart_item.Quantity
+                    total_amount_product = product.productPrice * quantity
+                    
+                    orderhistoryDetails.objects.create(
+                        order_for = order,
+                        product = product,
+                        quantity = quantity,
+                        total_amount_product =total_amount_product
+                    )
             
-            
+                order.rewardpoint = reward_point_used
+                order.save()
+                cart_itemsInstance.delete()
+                cartInstance.delete()
+                return render(request, 'payment/paymentsuccess.html')
         else:
             pass
             # return redirect('error')
     else:
         pass
+        # return redirect('error')
             
-            
-        #     #calculate total amount including if rewards is incluede
-            
-        #     total_amount = cart.total_amount()
-            
-        #     #check if reward us used
-        #     user_detail = UserDetail.objects.get(User = request.user)
-        #     if  user_detail.reward_points >= 10:
-        #         reward_point_used = user_detail.reward_points
-        #         total_amount -= reward_point_used 
-                
-        #         user_detail.reward_points += 1
-        #         user_detail.save()
-                
-        #     else:
-        #         reward_point_used = 0
-                
-        #      # Award 1 reward point for each purchase
-        #     user_detail.reward_points += 1
-        #     user_detail.save()
-            
-        #     #created an object to store about order
-        #     order = orderHistory.objects.create(user = request.user, total_amount = total_amount, product='\n'.join([f"{item.Quantity} x {item.product.productName} ({item.product.productBrand}): ${item.product.productPrice}" for item in cart_items]),quantity=sum([item.Quantity for item in cart_items]),rewardpoint=reward_point_used, status='Pending')
-
-        #     print("SUCCESS PAYMENT")
-        #     return redirect('addtocart')
-        # else:
-        #     print("ERRRRRRRRRRRRRRRRRRRRRROR")
-        #     pass
-        #     # return redirect('error')
     return render(request, 'payment/paymentsuccess.html')
 
-
-# cart bata Sub total nikalne 
-# if reward xa sub minus 
 
 def paymentSuccess(request):
     return render(request, 'payment/paymentsuccess.html')

@@ -17,28 +17,31 @@
 {% block content %}    
 
     <!-- Banner with Salon Image -->
-  <div class="relative h-screen bg-cover bg-center bg-no-repeat flex justify-center items-center"> <!-- Adjusted height and removed bg-repeat -->
+  <div class="relative h-screen bg-cover bg-center bg-no-repeat flex justify-center items-center"> 
     <img src="static/Image/bg-3.jpg" alt="Your Salon Logo" class="absolute inset-0 w-full h-full object-cover z-0">
     <div class="absolute top-1/2 right-0 transform -translate-x-1/2 -translate-y-1/2 text-center">
       <h1 class="text-white text-4xl font-bold mb-6" style="font-family: poppins ">Contact US</h1>
-      <div class="ml-4 md:ml-0"> <!-- Adjusted margin -->
-        <h2 class="text-black text-2xl font-regular mb-6" style="font-family: 'serif', cursive"> Get in touch with us today</h2> <!-- Adjusted margin -->
+      <div class="ml-4 md:ml-0"> 
+        <h2 class="text-black text-2xl font-regular mb-6" style="font-family: 'serif', cursive"> Get in touch with us today</h2> 
         <button class="bg-teal-600 text-white px-6 py-3 primary hover:bg-teal-500">Call Now : 01-554678923</button>
       </div>
     </div>
   </div>
 
-  <div class="container mx-auto mt-10 flex flex-col md:flex-row justify-center items-center"> <!-- Adjusted container class and centered content -->
-    <div class="w-full md:w-1/2 flex-shrink-0"> <!-- Adjusted width -->
+  <div class="container mx-auto mt-10 flex flex-col md:flex-row justify-center items-center"> 
+    <div class="w-full md:w-1/2 flex-shrink-0"> 
         <h2 class="text-4xl font-semibold mb-4"  style="font-family: poppins, serif"> Aura Salon Details</h2>
         <p class="text-2xl font-regular mb-2"><strong>Address : </strong> 123 Salon Street, Cityville</p>
         <p class="text-2xl font-regular mb-2"><strong>Email :</strong> info@salon.com</p>
         <p class="text-2xl font-regular mb-2"><strong>Contact Number :</strong> 01-123456789</p>
       </div>
 
-    <div class="w-full md:w-1/2 max-w-lg mx-auto md:ml-auto"> <!-- Adjusted width and added margin auto for centering -->
+    <div class="w-full md:w-1/2 max-w-lg mx-auto md:ml-auto"> 
       <h2 class="text-4xl font-bold mb-4" style="font-family: poppins, cursive">Contact Us</h2>
-      <form action="submit_contact_form.php" method="POST" class="w-full">
+      <form action="" method="POST" class="w-full">
+        
+          {% csrf_token %}
+          {{ form.as_p }}
         <div class="flex flex-wrap -mx-3 mb-6">
           <div class="w-full px-3 mb-6 md:mb-0">
             <label for="name" class="block uppercase tracking-wide text-gray-700 text-1xl font-bold mb-2" style="font-family: poppins">Your Name</label>
@@ -57,6 +60,13 @@
       </form>
     </div>
   </div>
+  {% if messages %}
+  <ul>
+      {% for message in messages %}
+          <li>{{ message }}</li>
+      {% endfor %}
+  </ul>
+{% endif %}
 {% endblock %}
 </body>
 </html>

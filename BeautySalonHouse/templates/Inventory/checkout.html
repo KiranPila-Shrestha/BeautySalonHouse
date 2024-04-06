@@ -56,7 +56,7 @@
                         <td class="text-right">Rs <span id="totalShow">{{ cartItem.total_amount}}</span></td> 
                     </tr>
                 </table>
-                 <input type="hidden" name="return_url" value="http://127.0.0.1:9000">
+                 <input type="hidden" name="return_url" value="http://127.0.0.1:9999/paymentSucessful">
 
             </td>
         </tr>
@@ -145,7 +145,7 @@ class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
                 <input type="hidden" name="purchase_order_id" id="pid" value="{{request.user}}">
 
                 <input type="hidden" name="return_url"
-                    value="http://127.0.0.1:8000">
+                    value="http://127.0.0.1:9999/paymentSucessful">
             </button>
         </form>
     </div>

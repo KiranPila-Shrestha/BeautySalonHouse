@@ -78,16 +78,13 @@ class orderplaced(models.Model):
     )
     status = models.CharField(max_length=255, default='Pending')
 
-    def __str__(self):
-        return f"Order by {self.user.username} on {self.date_ordered}"
     
     
     
-class orderhistory(models.Model):
+    
+class orderhistoryDetails(models.Model):
     order_for = models.ForeignKey(orderplaced, on_delete=models.CASCADE)
     product = models.ForeignKey('addProduct', on_delete=models.CASCADE, related_name='ordered_products')
     quantity = models.PositiveIntegerField() 
     total_amount_product = models.DecimalField(max_digits=10, decimal_places=2) 
 
-    def __str__(self):
-        return f"Order details for {self.order_for} - {self.id}"

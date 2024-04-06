@@ -182,14 +182,36 @@
         </div>
       </div>
     </div>
-    <!-- Add more services here -->
+    
   </div>
 </div>
-
-
    
   </div>
   <br />
+ 
+  <!-- skin service feedback -->
+{% if skinfeedback|length != 0 %}
+<div class="container mx-auto py-12 px-4">
+  <h2 class="text-3xl font-semibold mb-6">Feedbacks for Skin Services</h2>
+  <div class="max-h-80 overflow-y-auto">
+    <div class="grid grid-cols-1 gap-6">
+      {% for feedback in skinfeedback %}
+      <div class="flex rounded-lg overflow-hidden border-2 shadow-lg px-6 py-4">
+        <div class="flex-grow">
+          <div class="font-bold text-xl mb-2">{{ feedback.user }}</div>
+          <p class="text-gray-700 text-base">{{ feedback.feedback }}</p>
+        </div>
+        <div class="flex-shrink-0 ml-4">
+          <!-- User profile image link -->
+          <a href="#"><img src="{{ request.user.userprofile.image.url }}" alt="User Profile" class="w-20 h-20 rounded-full"></a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
   <br />
   <div
     class="flex flex-col items-center justify-center"

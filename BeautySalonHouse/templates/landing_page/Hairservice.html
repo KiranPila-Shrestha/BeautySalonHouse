@@ -256,7 +256,7 @@
 <!-- hairservice.html -->
 {% if hairfeedback|length != 0 %}
 <div class="container mx-auto py-12 px-4">
-  <h2 class="text-3xl font-bold mb-6">Feedbacks from Users</h2>
+  <h2 class="text-3xl font-semibold mb-6">Feedbacks for Hair Service</h2>
   <div class="max-h-80 overflow-y-auto">
     <div class="grid grid-cols-1 gap-6">
       {% for feedback in hairfeedback %}
@@ -267,7 +267,7 @@
         </div>
         <div class="flex-shrink-0 ml-4">
           <!-- User profile image link -->
-          <a href="#"><img src="static/Image/hair10.jpg" alt="User Profile" class="w-20 h-20 rounded-full"></a>
+          <a href="#"><img src="{{ request.user.userprofile.image.url }}" alt="User Profile" class="w-20 h-20 rounded-full"></a>
         </div>
       </div>
       {% endfor %}
