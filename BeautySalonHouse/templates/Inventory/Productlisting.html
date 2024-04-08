@@ -10,10 +10,11 @@
             <!-- Filter option -->
             <select id="categoryFilter" name="productCategory" class="px-2 py-1 border rounded mr-4" onchange="filterProducts()">
                 <option value="" disabled selected>Select a category</option>
-                {% for category, _ in productCategoryChoice %}
-                    <option value="{{ category }}">{{ category }}</option>
-                {% endfor %}
+                {% for category in productCategoryChoice %}
+        <option value="{{ category }}">{{ category }}</option>
+    {% endfor %}
             </select>
+            
             <!-- Add button -->
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline" onclick="window.location.href='{% url 'addproduct' %}'">
                 Add Product
@@ -36,7 +37,7 @@
             <tbody>
                 
                 {% for product in products %}
-                <tr class="text-center">
+                <tr  class="text-center" id="{{ product.productCategory }}">
                     <td class="border-2  border-gray-800  text-md px-4 py-2">{{ product.productName }}</td>
                     <td class="border-2  border-gray-800   text-md px-4 py-2">{{ product.productCategory }}</td>
                     <td class="border-2  border-gray-800   text-md px-4 py-2">{{ product.productBrand }}</td>
@@ -45,7 +46,7 @@
                     <td class="border-2 border-gray-800  text-md px-4 py-2">
                         <form method="post" action="{% url 'productlist' %}">
                             {% csrf_token %}
-                            <a href="{% url 'addproduct' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 mr-2 rounded focus:outline-none focus:shadow-outline">
+                            <a href="{% url 'edit_product' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 mr-2 rounded focus:outline-none focus:shadow-outline">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button type="submit" name="delete" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">
@@ -62,6 +63,23 @@
         </table>
     </div>
 </div>
+<script>
+    function filterProducts() {
+        var selectedCategory = document.getElementById("categoryFilter").value;
+        var tableRows = document.querySelectorAll("tbody tr");
+    
+        for (var i = 0; i < tableRows.length; i++) {
+            var category = tableRows[i].getAttribute("id");
+            if (category === selectedCategory || selectedCategory === "") {
+                tableRows[i].style.display = "";
+            } else {
+                tableRows[i].style.display = "none";
+            }
+        }
+    }
+    
+</script>
+
+{% endblock %}
 </body>
 </html>
-{% endblock %}

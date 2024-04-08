@@ -51,13 +51,21 @@
       Revitalize Your Look with Expert Haircare: Where Elegance Meets Innovation"
     </h1>
     <br>
-    <a href = "{% url 'booking' %}">
-    <button
-      class="bg-[#009688]  text-lg text-white ml-10 px-8 py-3 primary hover:bg-[#00BCD4]"
-    >
-      Book Now
-    </button>
-  </a>
+    {% if request.user.is_authenticated %}
+    {% if request.user.userdetail.user_type == 'customer' %}
+        <a href="{% url 'booking' %}">
+            <button class="bg-[#009688] text-white px-4 py-2  hover:bg-[#00BCD4]">
+                Book Now
+            </button>
+        </a>
+    {% endif %}
+{% else %}
+    <a href="{% url 'login' %}">
+        <button class="bg-[#009688] text-white px-4 py-2  hover:bg-[#00BCD4]">
+           Book Now
+        </button>
+    </a>
+{% endif %}
   </div>
 </div>
 <br />

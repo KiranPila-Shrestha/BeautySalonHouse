@@ -24,9 +24,9 @@
     {% for cartItem in cartItems %}
     <table class="w-full md:w-1/2 mx-auto table-fixed">
         <tr>
-            <td class="border-2 px-4 py-2 flex justify-between"> <!-- Added flex and justify-between -->
-                <div>Order Summary </div> <!-- Wrapped content in div -->
-                <div class="ml-10"> <!-- Added left margin for space -->
+            <td class="border-2 px-4 py-2 flex justify-between"> 
+                <div>Order Summary </div> 
+                <div class="ml-10"> 
                     <a href="{%url 'cartview'%}" class="text-blue-500 underline">View Details</a>
                 </div>
             </td>
@@ -48,7 +48,9 @@
                     </tr>
                     <tr>
                         <td class="font-semibold">Use Reward:</td>
-                        <td><input type="checkbox" name="useReward" id="useRewardCheckBox" {% if request.user.userdetail.reward_points >= 10 %} {% else %}disabled{% endif %} ></td>
+                        <td  class="text-right"><input type="checkbox" name="useReward" id="useRewardCheckBox" {% if request.user.userdetail.reward_points >= 10 %} {% else %}disabled{% endif %} >
+                       </td>
+                       <h5 class="text-gray-500 " >Reward is used only when it is equal or above 10.</h5>
                     </tr>
                     <tr>
                         <input type="hidden" name="amount2" value="{{cartItem.total_amount}}" id="amt2">
@@ -66,14 +68,6 @@
 
 
 
-<!-- Payment Methods -->
-
-
-<!-- Place Order Button -->
-{% comment %} <div class="mt-8 container mx-auto flex justify-center">
-    <input type="hidden" name="return_url" value="http://127.0.0.1:9000/verify">
-    <button class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">Check Out</button>
-</div> {% endcomment %}
 
 <div class="mt-8 container mx-auto flex justify-center">
 <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" type="button"

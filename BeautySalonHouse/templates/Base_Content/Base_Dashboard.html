@@ -101,26 +101,32 @@
                 <i class="fas fa-plus-circle mr-2"></i>Add Product
               </a>
             </li>
+          
+           
             <li class="mb-4">
               <a href="{% url 'productlist' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-cube mr-2"></i>Product
+                <i class="fas fa-cube mr-2"></i>Product Track
               </a>
             </li>
-            
+            <li class="mb-4">
+              <a href="{% url 'edit_product' %}" class="block text-gray-700 hover:text-cyan-500">
+                <i class="fas fa-edit  mr-2"></i>edit product
+              </a>
+            </li>
             <li class="mb-4">
               <a href="{% url 'adminAppointmenthistory' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-calendar mr-2"></i>Appointment
+                <i class="fas fa-calendar mr-2"></i>Appointment Track
               </a>
             </li>
             
             <li class="mb-4">
               <a href="{% url 'useradmin' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-calendar mr-2"></i>User Track
+                <i class="fas fa-user mr-2"></i>User Track
               </a>
             </li>
             <li class="mb-4">
               <a href="{% url 'paymentHistory' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-calendar mr-2"></i>Payment History
+                <i class="fas fa-money-bill-wave mr-2"></i>Payment History
               </a>
             </li>
           {% elif request.user|has_group:"Hair Technician" or request.user|has_group:"Laser Skin" or request.user|has_group:"Nail Technician" or request.user|has_group:"Makeup Artist"  %}
@@ -131,22 +137,22 @@
             </li>
             <li class="mb-4">
               <a href="{% url 'staffappointmenthistory' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-chart-line mr-2"></i> Booked Appointment
+                <i class="fas fa-calendar-check mr-2"></i> Booked Appointment
               </a>
             </li>
             <li class="mb-4">
               <a href="{% url 'Cancelappointments' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-chart-line mr-2"></i> Rejected Appointment
+                <i class="fas fa-times mr-2"></i> Rejected Appointment
               </a>
             </li>
             <li class="mb-4">
               <a href="{% url 'completeappointments' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-chart-line mr-2"></i> Complete Appointment
+                <i class="fas fa-check-circle mr-2"></i> Complete Appointment
               </a>
             </li>
             <li class="mb-4">
               <a href="{% url 'CancelbookedAppointement' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-chart-line mr-2"></i> Canceled Appointment 
+                <i class="fas fa-times-circle mr-2"></i> Canceled Appointment 
               </a>
             </li>
            
@@ -159,18 +165,23 @@
           {% else %}
           <li class="mb-4">
             <a href="{% url 'appointmenthistory'  %}" class="block text-gray-700 hover:text-cyan-500">
-              <i class="fas fa-box mr-2"></i>My Appointment
+              <i class="fas fa-calendar-check mr-2"></i>My Appointment
             </a>
           </li>
           <li class="mb-4">
             <a href="{% url 'Usercompleteappointments' %}" class="block text-gray-700 hover:text-cyan-500">
-              <i class="fas fa-chart-line mr-2"></i> Completed Appointment
+              <i class="fas fa-check-circle mr-2"></i> Completed Appointment
+            </a>
+          </li>
+          <li class="mb-4">
+            <a href="{% url 'userCancelbookedAppointement' %}" class="block text-gray-700 hover:text-cyan-500">
+              <i class="fas fa-times-circle mr-2"></i> Rejected Appointment
             </a>
           </li>
     
           <li class="mb-4">
             <a href="{% url 'paymentHistory' %}" class="block text-gray-700 hover:text-cyan-500">
-              <i class="fas fa-history mr-2"></i>Payment History
+              <i class="fas fa-money-bill-wave mr-2"></i>Payment History
             </a>
           </li>
             <li class="mb-4">

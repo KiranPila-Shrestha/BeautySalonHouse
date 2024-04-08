@@ -13,6 +13,8 @@ urlpatterns = [
                path('Usercompleteappointments', views.UserCompleteAppointments, name='Usercompleteappointments'),
                path('Cancelappointments', views.CancelAppointments, name='Cancelappointments'),
                path('CancelbookedAppointement', views.CancelbookedAppointement, name='CancelbookedAppointement'),
+                path('userCancelbookedAppointement', views.userCancelbookedAppointement, name='userCancelbookedAppointement'),
+               
          
                
                 ]

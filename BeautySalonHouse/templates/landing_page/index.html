@@ -23,12 +23,14 @@
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
       <h1 class="text-white text-4xl font-bold mb-6" style="font-family: 'Poppins', sans-serif ">DISCOVER THE MORE ATTRACTIVE YOU</h1>
       <h4 class="text-white text-1.5xl font-regular mb-10" style="font-family: poppins ">WITH A WIDE RANGE OF BEAUTY TREATEMENTS, WE WILL HELP YOU TO ACHIEVE YOUR GOALS WHETHER IT BE WAXING OR SIMPLY A RELAXING HAIR MASSAGE</h4>
-      {% if user.is_authenticated %}
-      <a href="{% url 'booking' %}" class="bg-[#009688] text-white px-6 py-3 rounded-full hover:bg-[#00BCD4]">Get Started</a>
-  {% else %}
-      <a href="{% url 'login' %}" class="bg-[#009688] text-white px-6 py-3 rounded-full hover:bg-[#00BCD4]">Get Started</a>
-  {% endif %}
-  
+      {% if request.user.is_authenticated %}
+    {% if request.user.userdetail.user_type == 'customer' %}
+        <a href="{% url 'booking' %}" class="bg-[#009688] text-white px-6 py-3 rounded-full hover:bg-[#00BCD4]">Get Started</a>
+    {% endif %}
+{% else %}
+    <a href="{% url 'login' %}" class="bg-[#009688] text-white px-6 py-3 rounded-full hover:bg-[#00BCD4]">Get Started</a>
+{% endif %}
+
     </div>
   </div>
 

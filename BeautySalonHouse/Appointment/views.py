@@ -17,6 +17,7 @@ from django.contrib.auth.models import User
 # SEND MAIL
 from django.core.mail import send_mail
 from django.conf import settings
+import sweetify
 
 
 # Create your views here.
@@ -43,14 +44,14 @@ def booking(request):
         
             
             if not service or not staff or not booked_date or not booked_time:
-                messages.error(request, 'Please fill out all required fields.')
+                sweetify.error(request, 'Please fill out all required fields.')
                 print("Missing required fields")
                 return render(request, 'landing_page/Booking.html')
                 # Combine the selected date and time
             selected_datetime = timezone.make_aware(timezone.datetime.strptime(booked_date + ' ' + booked_time, '%Y-%m-%d %H:%M'))
 
             if selected_datetime < timezone.now():
-                messages.error(request, 'Please select a time in the future.')
+                sweetify.error(request, 'Please select a time in the future.')
                 print("Selected time is in the past")
                 return render(request, 'landing_page/Booking.html')
             # Show error message if selected datetime is in the past
@@ -68,12 +69,12 @@ def booking(request):
             try:
                 appointment_book.save()
                 #  success message
-                messages.success(request, 'Appointment has been sent for approval. You will be notified about confirmation.', extra_tags='success')
+                sweetify.success(request, 'Appointment has been sent for approval. You will be notified about confirmation.', extra_tags='success')
             
                 return render(request, 'landing_page/Booking.html')
             except:
                 #  error message if appointment fails to book
-                messages.error(request, 'Failed to book appointment. Please try again later.')
+                sweetify.error(request, 'Failed to book appointment. Please try again later.')
          
                 return render(request, 'landing_page/Booking.html')
          
@@ -230,6 +231,17 @@ def CancelbookedAppointement(request):
     
     return render(request, 'Staff/cancel_bookedAppointment.html', context)
 
+
+def userCancelbookedAppointement(request):
+    # Retrieve all canceled appointments
+    user_canceled_booked_appointment = BookAppointment.objects.filter(user=request.user, status='cancel Booking')
+    print("aoooooooooo",user_canceled_booked_appointment)
+    
+    context = {
+        'user_canceled_booked_appointment': user_canceled_booked_appointment
+    }
+    
+    return render(request, 'User_Profile_Management/Rejectedappointment.html', context)
 
 # views for appointment information for user only.
 

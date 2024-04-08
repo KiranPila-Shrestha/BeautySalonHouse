@@ -18,6 +18,7 @@ path('paymentSucessful', views.verifyKhalti, name='paymentSucessful'),
 path('initiate', views.initkhalti, name='initiate'),
 #for payment history
 path('paymentHistory', views.paymentHistory, name='paymentHistory'),
-
+path('product', views.edit_product, name='edit_product'),
+path('error', views.verifyKhalti, name='error'),
 
 ]

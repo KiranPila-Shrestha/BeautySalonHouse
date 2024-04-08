@@ -49,10 +49,10 @@ def AddProduct(request):
                 productImage.objects.create(addProduct=instance, image=image)
                 print('ok')
                 
-            messages.success(request, "Product added successfully")
+            sweetify.success(request, "Product added successfully")
             return redirect('addproduct') # redirect the page after succesfull adding 
         else:
-            print("please add")
+            sweetify.error(request, "Unable to add product, Fill all required feilds.")
             print(form.errors)
     else:
         form = productForm()
@@ -93,6 +93,7 @@ def productdetail(request, product_id):
 
 
 def productlist(request):
+    productCategoryChoice = addProduct.objects.values_list('productCategory', flat=True).distinct()
     if request.method == 'POST':
         product_id = request.POST.get("product_id")  # Retrieve product ID from the form data
         if product_id:
@@ -105,7 +106,8 @@ def productlist(request):
                 return redirect('productlist')
     
     products = addProduct.objects.all()
-    context = {'products': products}
+    context = {'products': products,
+               'productCategoryChoice': productCategoryChoice,}
     return render(request, 'Inventory/Productlisting.html', context)
 
 
@@ -334,45 +336,6 @@ def checkoutpage(request):
     return render(request, 'Inventory/checkout.html', context)
 
 
-#def addtoCart(request):
- #   return render(request, 'Inventory/addToCart.html')
- 
-# def place_order(request):
-#     if request.method == 'POST':
-#         # Retrieve cart details
-#         user_cart = cart.objects.get(user=request.user)
-#         cart_items = user_cart.cartitem_set.all()
-        
-#         # Construct the product details and prices strings
-#         products_details = "\n".join([f"{item.product.productName} - Quantity: {item.Quantity}" for item in cart_items])
-#         prices = "\n".join([f"{item.product.productName}: {item.product.productPrice}" for item in cart_items])
-        
-#         # Calculate total amount
-#         total_amount = sum(item.product.productPrice * item.Quantity for item in cart_items)
-        
-#         # Create order history record
-#         orderHistory.objects.create(
-#             user=request.user,
-#             products=products_details,
-#             prices=prices,
-#             total_amount=total_amount
-#         )
-        
-#         # Clear the cart
-#         user_cart.cartitem_set.all().delete()
-        
-#         messages.success(request, "Your order has been placed successfully!")
-#         return redirect('home')  # Redirect to home page or any other page
-        
-#     # Handle cases where the request method is not POST
-#     return redirect('cartview')  # Redirect back to the cart view if the request method is not POST
-
-
-# @login_required
-# def order_history(request):
-#     orders = OrderHistory.objects.filter(user=request.user).order_by('-date_ordered')
-#     return render(request, 'order_history.html', {'orders': orders})
-
 def checkout(request):        
     return render(request, 'Inventory/checkout.html')
 
@@ -434,7 +397,7 @@ def initkhalti(request):
         # return redirect("error") 
      
      
-# CHANGE for khalti
+#  for khalti
 def verifyKhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/lookup/"
     if request.method == 'GET':
@@ -505,8 +468,7 @@ def verifyKhalti(request):
                 cartInstance.delete()
                 return render(request, 'payment/paymentsuccess.html')
         else:
-            pass
-            # return redirect('error')
+            return redirect('error')
     else:
         pass
         # return redirect('error')
@@ -554,3 +516,82 @@ def paymentHistory(request):
     }
 
     return render(request, 'payment/paymentHistory.html', context)
+
+
+#for admin edit product
+# def edit_product(request, product_id):
+#     # Retrieve the product instance
+#     product_instance = get_object_or_404(addProduct, pk=product_id)
+    
+#     if request.method == 'POST':
+#         # If it's a POST request, process the form data
+#         form = editProductForm(request.POST, instance=product_instance)
+#         if form.is_valid():
+#             form.save()
+            
+#             new_images = request.FILES.getlist('productImage')
+            
+#             # Get the list of existing images
+#             old_images = product_instance.images.all()
+            
+#             # Delete old images not included in the new set
+            
+#             # Handle product images
+#             if new_images:
+#                 for old_image in old_images:
+#                     if old_image.image not in new_images:
+#                         old_image.delete()
+
+#                 for uploaded_file in new_images:
+#                     productImage.objects.create(addProducts=product_instance, image=uploaded_file)
+            
+#             messages.success(request, "Successfully edited product")
+#             return redirect('productDetail', product_id=product_instance.id)
+#     else:
+#         # If it's not a POST request, populate the form with instance data
+#         form = editProductForm(instance=product_instance)
+    
+#     context = {
+#         'form': form,
+#         'product_instance': product_instance,
+        
+#     }
+#     return render(request, 'marketplace/editProduct.html', context)
+
+
+
+def edit_product(request, product_id=None):
+    # If product_id is provided, fetch the instance of the product to edit
+    if product_id:
+        product_instance = get_object_or_404(AddProduct, pk=product_id)
+    else:
+        product_instance = None
+
+    if request.method == 'POST':
+        # If the form is submitted
+        form = productForm(request.POST, instance=product_instance)
+        if form.is_valid():
+            # Save the product details
+            product = form.save()
+
+            # Handle product images
+            new_images = request.FILES.getlist('productImage')
+            old_images = product.images.all()
+
+            # Delete old images not included in the new set
+            for old_image in old_images:
+                if old_image.image not in new_images:
+                    old_image.delete()
+
+            # Add new images to the product
+            for uploaded_file in new_images:
+                productImage.objects.create(product=product, image=uploaded_file)
+
+            messages.success(request, "Product details updated successfully.")
+            return redirect('product_detail', product_id=product.id)  # Redirect to product detail page after saving
+    else:
+        # If it's a GET request or if there's an error in the form submission
+        form = productForm(instance=product_instance)
+
+    # Render the template with the form
+    return render(request, 'Inventory/editproduct.html', {'form': form})
