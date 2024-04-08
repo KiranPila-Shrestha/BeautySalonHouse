@@ -5,8 +5,9 @@
     <br>
     <br>
     <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-semibold">Product List</h2>
-        <div class="flex items-center ml-[700px]">
+        <div class="shadow-md bg-white p-2 w-full">
+        <h2 class="text-2xl font-semibold m-2">Product List</h2>
+        <div class="flex items-center mb-2 justify-between ml-[700px]">
             <!-- Filter option -->
             <select id="categoryFilter" name="productCategory" class="px-2 py-1 border rounded mr-4" onchange="filterProducts()">
                 <option value="" disabled selected>Select a category</option>
@@ -16,13 +17,14 @@
             </select>
             
             <!-- Add button -->
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline" onclick="window.location.href='{% url 'addproduct' %}'">
+            <button class="bg-blue-500 hover:bg-teal-700 text-white font-semibold py-1 px-2 rounded focus:outline-none focus:shadow-outline" onclick="window.location.href='{% url 'addproduct' %}'">
                 Add Product
             </button>
         </div>
     </div>
+    </div>
     <br>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto bg-white">
         <table class="min-w-max w-full text-lg table-auto border-2 border-gray-700">
             <thead>
                 <tr>

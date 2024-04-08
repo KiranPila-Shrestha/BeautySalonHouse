@@ -58,7 +58,7 @@
                                     <!-- Modal body -->
                                     <div class="px-10 py-10">
                                         <ul>
-                                            {% for orderDetail in order.orderhistorydetail_set.all %}
+                                            {% for orderDetail in order.orderhistorydetails_set.all %}
                                                 <li>
                                                     Product: {{ orderDetail.product.productName }}
                                                     Quantity: {{ orderDetail.quantity }}
@@ -148,7 +148,7 @@
                                     <!-- Modal body -->
                                     <div class="px-10 py-10">
                                         <ul>
-                                            {% for orderDetail in order.orderhistorydetail_set.all %}
+                                            {% for orderDetail in order.orderhistorydetails_set.all %}
                                                 <li>
                                                     Product: {{ orderDetail.product.productName }}
                                                     Quantity: {{ orderDetail.quantity }}

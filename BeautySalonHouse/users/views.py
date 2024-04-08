@@ -63,11 +63,11 @@ def registerUser(request):
                 # Saving user default profile
                 user_default_profile_picture = UserProfile(user=user)
                 user_default_profile_picture.save()
-            sweetify.success(request, 'Registration successful. You can now log in.')
+            sweetify.success(request,"Account Created for " + username + " Now you can login.")
             return redirect('login')
         else:
             # Display error message
-            sweetify.error(request, 'Registration failed. Please correct the errors below.')
+            sweetify.error(request, 'Registration failed!')
             
 
                        

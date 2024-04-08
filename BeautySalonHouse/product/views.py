@@ -170,6 +170,7 @@ def cart_view(request):
         for cart_item in Cartitem.objects.filter(cart=user_cart):
             new_quantity = int(request.POST.get(f"quantityInput-{cart_item.product.id}",1))
             
+            
             #ensure the new quantity is within limit that is in stock
             new_quantity = max(1, min(new_quantity,cart_item.product.productStock))
             
@@ -516,7 +517,6 @@ def paymentHistory(request):
     }
 
     return render(request, 'payment/paymentHistory.html', context)
-
 
 #for admin edit product
 # def edit_product(request, product_id):

@@ -18,7 +18,7 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
 import sweetify
-
+from django.db.models import Count
 
 # Create your views here.
 
@@ -196,11 +196,16 @@ def bookedAppointment(request, user_id=None):
     if request.user.is_superuser:
         # For admin
         booking_requests = BookAppointment.objects.filter(confirmed=True)
+        distinct_statuses = booking_requests.values('status').annotate(count=Count('status'))
+        distinct_services = booking_requests.values('service').annotate(count=Count('service'))
+
         template_name = 'Admin_Page/adminAppointment.html'
         
     elif request.user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists():
         # For staff members
         booking_requests = BookAppointment.objects.filter(staff=currentUser, status="confirm")
+        distinct_statuses = []  # Initialize distinct_statuses
+        distinct_services = []  # Initialize distinct_services
         print("booking_requestsbooking_requestsbooking_requests:", booking_requests)
         template_name = 'Staff/technicianAppointmentHistory.html'
     else:
@@ -215,7 +220,9 @@ def bookedAppointment(request, user_id=None):
     context = {
         "booking_requests": booking_requests,
         "user_id": user_id,
-        "current_date": current_date,  # Pass current date to template
+        "current_date": current_date, 
+        'distinct_statuses': distinct_statuses,
+        'distinct_services': distinct_services# Pass current date to template
     }
     return render(request, template_name, context)
 

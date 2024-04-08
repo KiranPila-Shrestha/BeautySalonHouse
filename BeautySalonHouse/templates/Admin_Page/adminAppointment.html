@@ -2,19 +2,41 @@
 {% block content %}
 <body class="bg-gray-100">
     <div class="container mx-auto py-8">
+        <div class="shadow-sm bg-white p-2 flex justify-between ">
         <h1 class="text-3xl font-semibold text-left ml-8 mb-8">  Appointment History </h1>
+        <div class="relative">
+            <select class="appearance-none bg-gray-200 border border-gray-300 text-gray-700 py-2 px-4 pr-8 mr-10 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="status-filter" onchange="filterAppointments()">
+                <option value="" selected disabled>Filter by Status</option>
+                {% for status in distinct_statuses %}
+                    <option value="{{ status.status }}">{{ status.status }}</option>
+                {% endfor %}
+            </select>
+            <select class="appearance-none bg-gray-200 border border-gray-300 text-gray-700 py-2 px-4 p-8 mr-3 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="service-filter" onchange="filterAppointments()">
+                <option value="" selected disabled>Filter by Service</option>
+                {% for service in distinct_services %}
+                    <option value="{{ service.service }}">{{ service.service }}</option>
+                {% endfor %}
+            </select>
+            
+            
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14.293 5.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 9.586l4.293-4.293z"/></svg>
+            </div>
+        </div>
+        </div><br>
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-            <table class="min-w-full divide-y divide-gray-200">
+            <table class="min-w-full divide-y divide-gray-200" id="booking-table">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Date</th>
-                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Time</th>
-                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">User</th>
-                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Stylist</th>
-                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Service</th>
-                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">Time</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">User</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">Stylist</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">Service</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">Status</th>
                     </tr>
-                </thead>
+                </thead>  
+                
                 <tbody class="bg-white divide-y divide-gray-200">
                     {% for booking_request in booking_requests %}
                     <tr>
@@ -35,4 +57,51 @@
             </table>
         </div>
     </div>
+  
+        <script>
+            function filterAppointments() {
+                var selectedStatus = document.getElementById("status-filter").value;
+                var tableRows = document.querySelectorAll("#booking-table tbody tr");
+        
+                for (var i = 0; i < tableRows.length; i++) {
+                    var statusCell = tableRows[i].querySelector("td:nth-child(6)");
+                    var status = statusCell.textContent.trim();
+        
+                    if (status === selectedStatus || selectedStatus === "") {
+                        tableRows[i].style.display = "";
+                    } else {
+                        tableRows[i].style.display = "none";
+                    }
+                }
+            }
+        </script>
+
+        <script>
+            function filterAppointments() {
+                var selectedStatus = document.getElementById("status-filter").value;
+                var selectedService = document.getElementById("service-filter").value;
+                var tableRows = document.querySelectorAll("#booking-table tbody tr");
+        
+                for (var i = 0; i < tableRows.length; i++) {
+                    var statusCell = tableRows[i].querySelector("td:nth-child(6)");
+                    var serviceCell = tableRows[i].querySelector("td:nth-child(5)");
+                    var status = statusCell.textContent.trim();
+                    var service = serviceCell.textContent.trim();
+        
+                    var statusMatch = (selectedStatus === "" || status === selectedStatus);
+                    var serviceMatch = (selectedService === "" || service === selectedService);
+        
+                    if (statusMatch && serviceMatch) {
+                        tableRows[i].style.display = "";
+                    } else {
+                        tableRows[i].style.display = "none";
+                    }
+                }
+            }
+        </script>
+        
+
 {% endblock %}
+</body>
+</html>
+
