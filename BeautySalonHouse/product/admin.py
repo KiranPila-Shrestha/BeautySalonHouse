@@ -8,3 +8,5 @@ admin.site.register(cart)
 admin.site.register(Cartitem)
 admin.site.register(orderplaced)
 admin.site.register(orderhistoryDetails)
+admin.site.register(ProductFeedback)
+

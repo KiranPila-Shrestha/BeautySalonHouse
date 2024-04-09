@@ -96,6 +96,7 @@ def EditProfile(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user_detail = user.userdetail
 
+
     if request.method == 'POST':
         if "user" in request.POST:
             username = request.POST.get('user')
@@ -117,6 +118,7 @@ def EditProfile(request, user_id):
             user_detail.address = request.POST.get('address')
         if 'contact_number' in request.POST:  # Check if contact_number is present in POST data
             user_detail.contact_number = request.POST.get('contact_number')
+            
         user_detail.save()
         
         sweetify.success(request, "User Details has been updated successfully.")

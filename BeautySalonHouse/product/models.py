@@ -25,6 +25,7 @@ class addProduct(models.Model):
     productPrice = models.DecimalField(max_digits=10,decimal_places=2)
     productStock = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    isAvailable = models.BooleanField(default=True)
     
     def __str__(self):
         return self.productName
@@ -79,7 +80,14 @@ class orderplaced(models.Model):
     status = models.CharField(max_length=255, default='Pending')
 
     
-    
+#product feedback
+class ProductFeedback(models.Model):
+    addProduct = models.ForeignKey(addProduct, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feedback = models.TextField(blank=True)
+    feedbackDate = models.DateTimeField(default=timezone.now)
+    rating = models.IntegerField(blank=True, null=True) 
+
     
     
 class orderhistoryDetails(models.Model):

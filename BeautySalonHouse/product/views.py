@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from . models import *
 from .forms import *
 from django.contrib import messages
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Q
 import json
 import requests
 from django.http import HttpResponse
@@ -11,11 +11,29 @@ from users.models import *
 import sweetify 
 # Create your views here.
 def product_add_market(request):
-    productList = addProduct.objects.all()
+    productist = addProduct.objects.all()
+    
+    SearchFor = request.GET.get("searchFor")
+    
+    
+    # if request.method == "POST" and "searchByCategory" in request.POST:
+    #     SearchFor = request.POST.get("searchFor")
+    #     CategoryproductList = productList.filter(Q(productCategory__icontains=SearchFor))
+    #     print("productListproductListproductListproductListproductList", productList)
+        
+         
+    #     print("SearchForSearchForSearchForSearchFor", SearchFor)
+    # elif request.method == "POST" and "searchByName" in request.POST:
+    #     searchForName = request.POST.get("searchForName")
+    #     print("searchForNamesearchForNamesearchForNamesearchForName", searchForName)
+        
+    
+    
     # productImage = productImage.objects.filter(addProduct=productList)
     
     context = {
         'productList' : productList,
+        'CategoryproductList' : CategoryproductList,
          'productCategoryChoice': productCategoryChoice,
         #  'productImage' : productImage,
     }
@@ -456,13 +474,25 @@ def verifyKhalti(request):
                     quantity = cart_item.Quantity
                     total_amount_product = product.productPrice * quantity
                     
-                    orderhistoryDetails.objects.create(
+                    # Decreasing the product stock
+                    product.productStock -= quantity
+                    product.save()
+                    
+                    # If product is 0 which means: all products are sold out remove the product.
+                    if product.productStock == 0:
+                        product.isAvailable = False
+                        product.save()
+                        
+                    
+                    orderHistoryDetaillInstance =  orderhistoryDetails.objects.create(
                         order_for = order,
                         product = product,
                         quantity = quantity,
                         total_amount_product =total_amount_product
                     )
-            
+
+                
+                
                 order.rewardpoint = reward_point_used
                 order.save()
                 cart_itemsInstance.delete()
@@ -475,6 +505,7 @@ def verifyKhalti(request):
         # return redirect('error')
             
     return render(request, 'payment/paymentsuccess.html')
+
 
 
 def paymentSuccess(request):
@@ -499,16 +530,47 @@ def paymentHistory(request):
     if request.method == 'POST':
         if "confirmOrder" in request.POST:
             orderID = request.POST.get("orderID")
-            orderHistory = orderhistoryDetails.objects.get(pk=orderID)
+            print("orderIDorderIDorderIDorderID", orderID)
+            orderHistory = orderplaced.objects.get(pk=orderID)
             orderHistory.status = "Completed"
+            orderHistory.save()
             sweetify.success(request, "Order updated successfully!!")
+            return redirect('paymentHistory')
             
         elif "cancelOrder" in request.POST:
             orderID = request.POST.get("orderID")
-            orderHistory = orderhistoryDetails.objects.get(pk=orderID)
+            orderHistory = orderplaced.objects.get(pk=orderID)
             orderHistory.status = "Rejected"
-            sweetify.success(request, "Order updated successfully!!")
+            sweetify.success(request, "Order Rejected successfully!!")
+            return redirect('paymentHistory')
+        
+        elif 'leaveFeedback' in request.POST:
+            with transaction.atomic():
+                feedback = request.POST.get("feedback")
+                rating = request.POST.get("hs-ratings-readonly")
+                productID = request.POST.get("productID")
+                
+                Product = addProduct.objects.get(id=productID)
+                current_user = request.user
+                
+                print("ProductProductProduct", Product)
+                print("feedback", feedback)
+                print("rating", rating)
+                print("productIDproductIDproductIDproductIDproductIDproductID", productID)
+                
+                if feedback == "" and rating == None:
+                    sweetify.error(request, "Empty Feedback!!")
 
+                elif feedback != "" and rating == None:
+                    Product.productfeedback_set.create(user=current_user,feedback=feedback)
+                    sweetify.success(request, "Thank you for your feedback!")
+                elif feedback == "" and rating != None:
+                    Product.productfeedback_set.create(user=current_user,rating=rating)
+                    sweetify.success(request, "Thank you for your feedback!")
+                elif feedback != "" and rating != None:
+                    Product.productfeedback_set.create(user=current_user,rating=rating, feedback= feedback)
+                    sweetify.success(request, "Thank you for your feedback!")
+        
     context = {
         'orderPaymentHistory' : orderPaymentHistory,
         'orderDetails' : orderDetails,
@@ -566,7 +628,7 @@ def edit_product(request, product_id=None):
         product_instance = get_object_or_404(AddProduct, pk=product_id)
     else:
         product_instance = None
-
+    print("sure", product_id)
     if request.method == 'POST':
         # If the form is submitted
         form = productForm(request.POST, instance=product_instance)
