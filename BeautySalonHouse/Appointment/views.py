@@ -284,6 +284,7 @@ def UserCompleteAppointments(request):
         existing_feedback = AppointmentFeedback.objects.filter(user=request.user, appointment=booking)
         
         if existing_feedback.exists():
+            print("ghs bdc")
             # Update existing feedback
             existing_feedback.update(feedback=feedback_text)
             messages.success(request, 'Feedback has been added successfully to our service page.')

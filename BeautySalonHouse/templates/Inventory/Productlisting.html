@@ -2,27 +2,33 @@
 {% block content%}
 
 <div class="ml-10">
-    <br>
-    <br>
-    <div class="flex justify-between items-center mb-4">
-        <div class="shadow-md bg-white p-2 w-full">
-        <h2 class="text-2xl font-semibold m-2">Product List</h2>
-        <div class="flex items-center mb-2 justify-between ml-[700px]">
+  
+    <div class="shadow-md bg-white p-2 flex justify-between items-center w-full">
+        <!-- Product List Heading -->
+        <h2 class="text-2xl font-semibold ml-4">
+            Product List
+        </h2>
+    
+        <!-- Filter option and Add Button -->
+        <div class="flex justify-end items-center">
             <!-- Filter option -->
-            <select id="categoryFilter" name="productCategory" class="px-2 py-1 border rounded mr-4" onchange="filterProducts()">
+            <select id="categoryFilter" name="productCategory" class="px-2 py-1 border rounded mr-4 rounded-lg" onchange="filterProducts()">
                 <option value="" disabled selected>Select a category</option>
                 {% for category in productCategoryChoice %}
-        <option value="{{ category }}">{{ category }}</option>
-    {% endfor %}
+                <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
             </select>
-            
-            <!-- Add button -->
-            <button class="bg-blue-500 hover:bg-teal-700 text-white font-semibold py-1 px-2 rounded focus:outline-none focus:shadow-outline" onclick="window.location.href='{% url 'addproduct' %}'">
+    
+            <!-- Add Button -->
+            <button class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="window.location.href='{% url 'addproduct' %}'">
                 Add Product
             </button>
         </div>
     </div>
-    </div>
+    
+    
+    
+    
     <br>
     <div class="overflow-x-auto bg-white">
         <table class="min-w-max w-full text-lg table-auto border-2 border-gray-700">

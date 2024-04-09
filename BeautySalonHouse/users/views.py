@@ -118,6 +118,11 @@ def EditProfile(request, user_id):
             user_detail.address = request.POST.get('address')
         if 'contact_number' in request.POST:  # Check if contact_number is present in POST data
             user_detail.contact_number = request.POST.get('contact_number')
+       
+        if not re.match(r'^(98|97)\d{8}$', user_detail.contact_number):
+            sweetify.error(request,"Contact number invalid !!")
+            
+            
             
         user_detail.save()
         
@@ -253,6 +258,12 @@ def userdetail_admin(request):
             userDetail = UserDetail.objects.get(user=user)
             userDetail.hasUserBlocked = True
             userDetail.save()
+            send_mail(
+                'Your Account Has been Blocked.',
+                'Please! Contact the administratiors.',
+                settings.EMAIL_HOST_USER,
+                [userDetail.user.email],
+                fail_silently=False,)
             sweetify.success(request, 'User Blocked successfully')
         
         elif "unblock" in request.POST:
@@ -261,6 +272,12 @@ def userdetail_admin(request):
             userDetail = UserDetail.objects.get(user=user)
             userDetail.hasUserBlocked = False
             userDetail.save()
+            send_mail(
+                'Your Account Has been unblocked.',
+                'Now, You can Login.',
+                settings.EMAIL_HOST_USER,
+                [userDetail.user.email],
+                fail_silently=False,)
             sweetify.success(request, 'User Unblocked successfully')
             
             
@@ -277,7 +294,7 @@ def userdetail_admin(request):
     total_nailtechnician = User.objects.filter(groups__name='Nail Technician').exclude(is_superuser=True).count()
     total_makeuptechnician = User.objects.filter(groups__name='Makeup Artist').exclude(is_superuser=True).count()
     print("sakjgdhsagdjhsdghg",total_makeuptechnician)
-    
+    user_types = UserDetail.objects.values_list('user_type', flat=True).distinct()
   
 
     context = {
@@ -288,6 +305,7 @@ def userdetail_admin(request):
         'total_makeuptechnician':  total_makeuptechnician,
         'allUserlogin':allUserlogin,
         'requested_users':requested_users,
+        'user_types': user_types,
     }
 
     return render(request, 'Admin_Page/Userdetails.html', context)
@@ -366,11 +384,11 @@ def adminchart(request):
     
     
    # Prepare data for visualization
-    order_statuses = ['Pending', 'Completed', 'Cancelled']
+    order_statuses = ['Pending', 'Completed', 'Rejected']
     order_counts = [
     orderplaced.objects.filter(status='Pending').count(),
     orderplaced.objects.filter(status='Completed').count(),
-    orderplaced.objects.filter(status='Cancelled').count()
+    orderplaced.objects.filter(status='Rejected').count()
 ]
 
 # Create order_data list of dictionaries
@@ -387,8 +405,7 @@ def adminchart(request):
         'all_user_login': all_user_login,
         'service_data': service_data,
         'product_names': product_names,
-        'product_stock': product_stock,
-        
+        'product_stock': product_stock, 
         'order_statuses': order_statuses,
         'order_counts': order_counts,
         'order_data': order_data ,

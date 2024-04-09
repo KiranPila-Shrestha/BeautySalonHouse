@@ -9,9 +9,10 @@ from django.http import HttpResponse
 from django.db import transaction
 from users.models import *
 import sweetify 
+from django.db.models import Count
 # Create your views here.
 def product_add_market(request):
-    productist = addProduct.objects.all()
+    productList = addProduct.objects.all()
     
     SearchFor = request.GET.get("searchFor")
     
@@ -206,85 +207,7 @@ def cart_view(request):
     }
 
     return render(request, 'Inventory/addToCart.html', context)
-    
-# for update the cart
-# def update_cart(request):
-#     if request.method == 'POST':
-#         #print the post data request
-#         print("POST data:", request.POST)
 
-#         #Get or create the user's cart
-#         user_cart, created = cart.objects.get_or_create(user=request.user)
-        
-#         print(user_cart)
-#             # Initialize success messages list
-#         removal_success_messages = []
-#         update_success_messages = []
-        
-#         #initialize total
-#         total_amount =0
-        
-#         if "delete" in request.POST:
-#             pId = request.POST.get('delete')
-#             item_delete = Cartitem.objects.filter(product_id = pId).first()
-#             print(item_delete)
-            
-            
-#             if item_delete:
-#                 item_price = item_delete.product.productPrice
-#                 print('item_price', item_price)
-                
-#                 #remove item from cart
-#                 item_delete.delete()
-                
-#                 #for recalculation of total
-#                 user_cart.total_amount -= item_price * item_delete.Quantity
-#                 if user_cart.total_amount < 0:
-#                     user_cart.total_amount = 0
-#                     print( user_cart.total_amount)
-                    
-#                 #save cart
-#                 print('donee')
-#                 user_cart.save()
-#             # Add success message
-#                 removal_success_messages.append("Cart item has been removed successfully.")
-        
-#         #iterate through product in cart and update quantites
-#         for cart_item in user_cart.cartitem_set.all():
-#             print('cart items:', cart_item.Quantity)
-#             #using product id to modify cart items
-#             cartID= str(cart_item.product.id)
-#             new_quantity = request.POST.get('Inputquantity-'+ cartID)
-#             print('Inputquantity-'+cartID)
-            
-#             if new_quantity == None:
-#                 old_quantity = cart_item.Quantity
-#                 #update the cat item quantiy
-#                 cart_item.Quantity = old_quantity
-#                 cart_item.save()
-#             else:
-#                 cart_item.Quantity = new_quantity
-#                 cart_item.save()
-                
-           
-    
-#             user_cart.update_total_amount()
-#             print("Total amount before saving:", user_cart.total_amount)
-#             user_cart.save()
-#             print("Total amount after saving:", user_cart.total_amount)
-            
-#                   # Add success message
-#             update_success_messages.append.append("Cart item has been updated successfully.")
-#             print("Success messages:", update_success_messages)
-    
-#          # Add success messages to Django messages framework
-#         for message in removal_success_messages:
-#             sweetify.success(request, message + " (Removal)")
-        
-#         for message in update_success_messages:
-#             sweetify.success(request, message + " (Update)")
-    
-#     return redirect('cartview')
     
 def update_cart(request):
     if request.method == 'POST':
@@ -518,6 +441,7 @@ def paymentHistory(request):
     
     
     orderPaymentHistory = orderplaced.objects.filter(Buyeruser=request.user)
+    orderStatusesBuyUser = orderPaymentHistory.values_list('status', flat=True).distinct()
     allOrderPaymentHistory = orderplaced.objects.all()
     for order in allOrderPaymentHistory:
         orderDetail = orderhistoryDetails.objects.filter(order_for=order)
@@ -541,6 +465,7 @@ def paymentHistory(request):
             orderID = request.POST.get("orderID")
             orderHistory = orderplaced.objects.get(pk=orderID)
             orderHistory.status = "Rejected"
+            orderHistory.save()
             sweetify.success(request, "Order Rejected successfully!!")
             return redirect('paymentHistory')
         
@@ -570,12 +495,16 @@ def paymentHistory(request):
                 elif feedback != "" and rating != None:
                     Product.productfeedback_set.create(user=current_user,rating=rating, feedback= feedback)
                     sweetify.success(request, "Thank you for your feedback!")
-        
+    #for filterdropdown in dashboard             
+    orderStatusCounts = orderplaced.objects.values('status').annotate(count=Count('status'))
+       
     context = {
         'orderPaymentHistory' : orderPaymentHistory,
         'orderDetails' : orderDetails,
         'allOrderDetails' : allOrderDetails,
-        'allOrderPaymentHistory' : allOrderPaymentHistory
+        'allOrderPaymentHistory' : allOrderPaymentHistory,
+        'orderStatusCounts': orderStatusCounts,
+        'orderStatusesBuyUser': orderStatusesBuyUser,
     }
 
     return render(request, 'payment/paymentHistory.html', context)

@@ -1,5 +1,6 @@
 {% extends 'Base_content/Base_Dashboard.html'%}
 {% block content%}
+
 <div class="container mx-auto">
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ml-3rem mb-10 gap-6">
     <div class="bg-white h-[6rem] lg:mr-3 bg-white grid grid-cols-2 rounded-l shadow-md">
@@ -53,27 +54,40 @@
 
 
   <!-- tbale section -->
-<h1 class="ml-5 text-3xl font-bold">Users</h1>
+
+<div class="shadow-md bg-white p-2 flex justify-between items-center w-full ">
+  <h1 class="text-3xl font-semibold text-left ml-8 mt-5 mb-8">  User Track</h1>
+  <div  class="flex border-color-black justify-center items-center ml-auto pr-8">
+    <select id="userTypeFilter"  class="rounded-lg">
+      <option value="">All User Types</option>
+      {% for user_type in user_types %}
+          <option value="{{ user_type }}">{{ user_type }}</option>
+      {% endfor %}
+    </select>
+   
+  </div>
+  </div><br>
 <div class="mt-5">
   <div class="overflow-x-auto">
-    <table class="w-full table border border-gray-200" id="myTable">
-        <thead class="bg-gray-300 border-2 border-gray-200">
+
+    <table class="w-full table border border-black-200" id="myTable">
+        <thead class="bg-white border-2 border-black-200">
             <tr>
-              <th scope="col" class="px-4 py-3.5 text-center text-lg font-semibold text-gray-700 border-2">
+              <th scope="col" class="px-4 py-3.5 text-center text-lg font-semibold text-black border-2">
                 User_ID
               </th>
-              <th scope="col" class="px-4 py-3.5 text-left text-lg font-semibold text-gray-700 border-r-2">
+              <th scope="col" class="px-4 py-3.5 text-left text-lg font-semibold text-black border-r-2">
                 Email
               </th>
-              <th scope="col" class="px-4 py-3.5 text-left text-lg font-semibold text-gray-700 border-r-2">
+              <th scope="col" class="px-4 py-3.5 text-left text-lg font-semibold text-black border-r-2">
                 Username
               </th>
-              <th scope="col" class="px-8 py-3.5 text-left text-lg font-semibold text-gray-700 border-r-2">
+              <th scope="col" class="px-8 py-3.5 text-left text-lg font-semibold text-center text-black border-r-2">
                 User Type
               </th>
-              <th scope="col" class="px-4 py-3.5 text-right text-lg font-semibold text-gray-700 border-r-2">
+              <th scope="col" class="px-4 py-3.5 text-lg font-semibold text-center text-black border-r-2">
                 View
-              </th>
+            </th>
             
             </tr>
           </thead>
@@ -81,20 +95,20 @@
       <tbody class="divide-y divide-gray-300 bg-white">
         {% for user_detail in allUserlogin %}
         <tr>
-          <td class="whitespace-nowrap px-4 py-4 text-center">{{user_detail.id}}</td>
-          <td class="whitespace-nowrap px-4 py-4">{{user_detail.email}}</td>
-          <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">{{user_detail}}</td>
-          <td class="whitespace-nowrap px-12 py-4">
-            <div class="text-sm text-gray-900">
+          <td class="whitespace-nowrap px-4 py-4 text-center text-lg">{{ user_detail.id }}</td>
+          <td class="whitespace-nowrap px-4 py-4 text-lg">{{ user_detail.email }}</td>
+          <td class="whitespace-nowrap px-4 py-4 text-lg text-gray-900">{{ user_detail }}</td>
+          <td class="whitespace-nowrap px-12 py-4 text-lg text-center">
+            <div class="text-lg text-gray-900">
               {% if user_detail.userdetail.user_type == "customer" or user_detail.groups.first.name == "" %}
-              Customer
+              customer
               {% else %}
               {{user_detail.groups.first.name}}</div>
               {% endif %}
               
           </td>
           
-          <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+          <td class="whitespace-nowrap px-4 py-4 text-lg font-medium text-center">
             <div class="pl-10">
               {% if user.is_authenticated and user.is_superuser %}
               <form action="" method="post">
@@ -102,28 +116,23 @@
                 <input type="hidden" name="user" value="{{user_detail.id}}">
               
                 {% if user_detail.userdetail.hasUserBlocked %}
-                <button class="border border-[#2FDD92] rounded mr-7" name="unblock">
-                  Unblock
-                </button>
+                <button class="unblock-btn rounded mr-7" name="unblock" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: box-shadow 0.3s ease;">
+                  <i class="fas fa-unlock" style="color: green;"></i> Unblock
+              </button>
+              
                 {% else %}
-                <button class="border border-[#FF3131] rounded mr-7" name="block">
-                  Block
-                </button>
+                <button class="rounded mr-7 block-btn" name="block" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: box-shadow 0.3s ease;">
+                  <i class="fas fa-lock" style="color: red;"></i> Block
+              </button>
+              
+              
+              
                 {% endif %}
               </form>
               {% endif %}
           </div>
           
-          {% comment %} <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-              {% if user.is_authenticated and user.is_superuser %}
-              <form method="post" action="">
-                  {% csrf_token %}
-                  <input type="hidden" name="username" value="{{ user_detail.user }}">
-                  <button type="submit" name="userdelete" class="text-red-600"><i class="fas fa-trash-alt"></i></button>
-              </form>
-              {% endif %}
-          </td> {% endcomment %}
-          
+       
           </td>
         </tr>
         {% endfor %}
@@ -133,6 +142,28 @@
 </div>
 
 
+<script>
+  // Get the select element for user type filtering
+  var userTypeFilter = document.getElementById("userTypeFilter");
 
+  // Add event listener to the select element
+  userTypeFilter.addEventListener("change", function() {
+    var selectedUserType = userTypeFilter.value; // Get the selected user type
+    var rows = document.querySelectorAll("#myTable tbody tr"); // Get all table rows
+
+    // Loop through all table rows
+    rows.forEach(function(row) {
+      var userTypeCell = row.querySelector("td:nth-child(4)"); // Get the cell containing user type
+      var userType = userTypeCell.textContent.trim(); // Get the user type text
+
+      // Check if the selected user type matches the row's user type or if it's "All User Types" or "Customer"
+      if (selectedUserType === "" || selectedUserType === userType || (selectedUserType === "customer" && (userType === "customer" || userType === ""))) {
+        row.style.display = ""; // Show the row
+      } else {
+        row.style.display = "none"; // Hide the row
+      }
+    });
+  });
+</script>
 
 {% endblock %}

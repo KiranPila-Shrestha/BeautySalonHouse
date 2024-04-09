@@ -3,9 +3,9 @@
 <body class="bg-gray-100">
     <div class="container mx-auto py-8">
         <div class="shadow-sm bg-white p-2 flex justify-between ">
-        <h1 class="text-3xl font-semibold text-left ml-8 mb-8">  Appointment History </h1>
+        <h1 class="text-3xl font-semibold text-left ml-8 mb-8 mt-4">  Appointment History </h1>
         <div class="relative">
-            <select class="appearance-none bg-gray-200 border border-gray-300 text-gray-700 py-2 px-4 pr-8 mr-10 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="status-filter" onchange="filterAppointments()">
+            <select class="appearance-none bg-gray-200 border border-gray-300 text-gray-700 py-2 px-4 pr-8 mr-10 mt-4 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="status-filter" onchange="filterAppointments()">
                 <option value="" selected disabled>Filter by Status</option>
                 {% for status in distinct_statuses %}
                     <option value="{{ status.status }}">{{ status.status }}</option>
@@ -17,18 +17,14 @@
                     <option value="{{ service.service }}">{{ service.service }}</option>
                 {% endfor %}
             </select>
-            
-            
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14.293 5.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 9.586l4.293-4.293z"/></svg>
-            </div>
+           
         </div>
         </div><br>
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-200" id="booking-table">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-lg md:text-lg font-medium font-semibold text-black tracking-wider">Date</th>
                         <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">Time</th>
                         <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">User</th>
                         <th scope="col" class="px-6 py-3 text-left text-xl md:text-lg font-medium font-semibold text-black tracking-wider">Stylist</th>
@@ -40,12 +36,12 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     {% for booking_request in booking_requests %}
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.bookDate }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.bookTime }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.user }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.staff }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ booking_request.service }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ booking_request.bookDate }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ booking_request.bookTime }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ booking_request.user }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ booking_request.staff }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">{{ booking_request.service }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-lg md:text-lg">
                             <span class="font-medium
                             {% if booking_request.status == 'Pending' %}text-yellow-500{% elif booking_request.status == 'completed' %}text-green-500{% elif booking_request.status == 'Confirm' %}text-blue-600{% elif booking_request.status == 'cancel' %}text-red-600{% else %}text-red-700{% endif %}">
                    {{ booking_request.status }}
