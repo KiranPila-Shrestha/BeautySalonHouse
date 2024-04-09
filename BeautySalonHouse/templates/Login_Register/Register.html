@@ -35,7 +35,7 @@
             >
               {% csrf_token %}
               <div class="firstname w-full">
-                <input
+                <input required
                   type="text"
                   placeholder="First name..."
                   class="bg-[#EDEDED] w-full py-2 pl-2"
@@ -44,7 +44,7 @@
               </div>
               <!--  -->
               <div class="lastname w-full">
-                <input
+                <input required
                   type="text"
                   placeholder="Last name..."
                   class="bg-[#EDEDED] w-full py-2 pl-2"
@@ -53,7 +53,7 @@
               </div>
               <!--  -->
               <div class="username w-full">
-                <input
+                <input required
                   type="text"
                   name="username"
                   placeholder="Username..."
@@ -62,7 +62,7 @@
               </div>
               <!--  -->
               <div class="address w-full">
-                <input
+                <input required
                   type="text"
                   name="address"
                   placeholder="Address..."
@@ -71,7 +71,7 @@
               </div>
               <!--  -->
               <div class="contact w-full">
-                <input
+                <input required
                   type="text"
                   name="contact"
                   placeholder="Contact..."
@@ -80,7 +80,7 @@
               </div>
               <!--  -->
               <div class="email w-full">
-                <input
+                <input required
                   type="email"
                   name="email"
                   placeholder="Email..."
@@ -89,7 +89,7 @@
               </div>
               <!--  -->
               <div class="password-one w-full">
-                <input
+                <input required
                   type="password"
                   name="password1"
                   placeholder="Password..."
@@ -98,7 +98,7 @@
               </div>
               <!--  -->
               <div class="password-two w-full">
-                <input
+                <input required
                   type="password"
                   name="password2"
                   placeholder="Reenter your password..."
@@ -134,5 +134,8 @@
     </div>
     
   </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
   
 </html>
+{% load sweetify %}
+{% sweetify %}

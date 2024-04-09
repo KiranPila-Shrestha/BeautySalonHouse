@@ -74,9 +74,7 @@
               <th scope="col" class="px-4 py-3.5 text-right text-lg font-semibold text-gray-700 border-r-2">
                 View
               </th>
-              <th scope="col" class="px-4 py-3.5 text-right text-lg font-semibold text-gray-700">
-                Delete
-              </th>
+            
             </tr>
           </thead>
           
@@ -103,7 +101,7 @@
                   {% csrf_token %}
                 <input type="hidden" name="user" value="{{user_detail.id}}">
               
-                {% if user_detail.hasUserBlocked %}
+                {% if user_detail.userdetail.hasUserBlocked %}
                 <button class="border border-[#2FDD92] rounded mr-7" name="unblock">
                   Unblock
                 </button>
@@ -116,7 +114,7 @@
               {% endif %}
           </div>
           
-          <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+          {% comment %} <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
               {% if user.is_authenticated and user.is_superuser %}
               <form method="post" action="">
                   {% csrf_token %}
@@ -124,7 +122,7 @@
                   <button type="submit" name="userdelete" class="text-red-600"><i class="fas fa-trash-alt"></i></button>
               </form>
               {% endif %}
-          </td>
+          </td> {% endcomment %}
           
           </td>
         </tr>

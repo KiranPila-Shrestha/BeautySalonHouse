@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> Dashboard</title>
+    <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -36,16 +36,15 @@
          font-family: "Poppins", sans-serif;
          font-semibold;
        }
-     </style> 
+    </style>
   </head>
-  <body class="bg-gray-100 "style="font-family: 'Poppins'">
+  <body class="bg-gray-100" style="font-family: 'Poppins'">
     <!-- Navigation -->
     <header class="bg-white shadow-sm p-4 flex justify-between items-center">
       <!-- Logo -->
       <div class="flex items-center relative">
         <!-- Logo -->
         <img src="/static/Image/logo/logo.svg" alt="" class="mr-10" />
-       
       </div>
 
       <!-- User part -->
@@ -53,16 +52,18 @@
         <div class="flex items-center cursor-pointer" id="userDropdownToggle">
           <span class="text-gray-600 mr-10">
             {% if request.user.userprofile.image %}
-            <img class="h-12 w-12 rounded-full mr-2" src="{{ request.user.userprofile.image.url }}" alt="Profile Image">
+            <img
+              class="h-12 w-12 rounded-full mr-2"
+              src="{{ request.user.userprofile.image.url }}"
+              alt="Profile Image"
+            />
             {% else %}
             <i class="fas fa-user-circle text-2xl mr-2"></i>
-            {% endif %}
-            {{ request.user.username }}
+            {% endif %} {{ request.user.username }}
           </span>
         </div>
         <div
-          class="absolute hidden bg-white rounded shadow-md mt-2 py-2 w-48 hidden"
-          style="font-family: poppins"
+          class="absolute hidden bg-white rounded shadow-md mt-2 py-2 w-48" style="font-family: poppins; right: 0;" 
           id="userDropdown"
         >
           <a
@@ -82,132 +83,182 @@
     </header>
     <!-- Sidebar -->
     <div class="flex flex-col md:flex-row">
-      <div class=" md:w-1/4 bg-gray-200 p-4">
-        <h2 class="text-3xl font-semibold mb-4">Dashboard</h2>
-        <ul class="text-lg space-y-4">
+      <div class="p-12 bg-white h-[100vh] sticky left-0 top-0">
+        <h2 class="text-3xl font-semibold mb-8">Dashboard</h2>
+        <ul class="text-lg space-y-7">
           {% if request.user.is_superuser %}
           <li class="mb-4">
-            <a href="{% url 'adminchart'%}" class="block text-gray-700 hover:text-cyan-500">
+            <a
+              href="{% url 'adminchart'%}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
               <i class="fas fa-chart-line mr-2"></i>Data Visualize Report
             </a>
           </li>
-            <li class="mb-4">
-              <a href="{% url 'AdminDashBoard'%}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-user-plus mr-2"></i>Add Staff
-              </a>
-            </li>
-            <li class="mb-4">
-              <a href="{% url 'addproduct'%}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-plus-circle mr-2"></i>Add Product
-              </a>
-            </li>
-          
-           
-            <li class="mb-4">
-              <a href="{% url 'productlist' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-cube mr-2"></i>Product Track
-              </a>
-            </li>
-            <li class="mb-4">
-              <a href="{% url 'edit_product'  %}"class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-edit  mr-2"></i>edit product
-              </a>
-            </li>
-            <li class="mb-4">
-              <a href="{% url 'adminAppointmenthistory' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-calendar mr-2"></i>Appointment Track
-              </a>
-            </li>
-            
-            <li class="mb-4">
-              <a href="{% url 'useradmin' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-user mr-2"></i>User Track
-              </a>
-            </li>
-            <li class="mb-4">
-              <a href="{% url 'paymentHistory' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-money-bill-wave mr-2"></i>Payment History
-              </a>
-            </li>
-          {% elif request.user|has_group:"Hair Technician" or request.user|has_group:"Laser Skin" or request.user|has_group:"Nail Technician" or request.user|has_group:"Makeup Artist"  %}
-            <li class="mb-4">
-              <a href="{% url 'appointments'%}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-user-plus mr-2"></i>Daily appointment
-              </a>
-            </li>
-            <li class="mb-4">
-              <a href="{% url 'staffappointmenthistory' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-calendar-check mr-2"></i> Booked Appointment
-              </a>
-            </li>
-            <li class="mb-4">
-              <a href="{% url 'Cancelappointments' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-times mr-2"></i> Rejected Appointment
-              </a>
-            </li>
-            <li class="mb-4">
-              <a href="{% url 'completeappointments' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-check-circle mr-2"></i> Complete Appointment
-              </a>
-            </li>
-            <li class="mb-4">
-              <a href="{% url 'CancelbookedAppointement' %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-times-circle mr-2"></i> Canceled Appointment 
-              </a>
-            </li>
-           
-           
-            <li class="mb-4">
-              <a href="{% url 'EditProfile' user_id=request.user.id %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-user mr-2"></i>Edit Profile
-              </a>
-            </li>
+          <li class="mb-4">
+            <a
+              href="{% url 'AdminDashBoard'%}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-user-plus mr-2"></i>Add Staff
+            </a>
+          </li>
+          <li class="mb-4">
+            <a
+              href="{% url 'addproduct'%}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-plus-circle mr-2"></i>Add Product
+            </a>
+          </li>
+
+          <li class="mb-4">
+            <a
+              href="{% url 'productlist' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-cube mr-2"></i>Product Track
+            </a>
+          </li>
+          <li class="mb-4">
+            <a
+              href="{% url 'edit_product'  %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-edit mr-2"></i>edit product
+            </a>
+          </li>
+          <li class="mb-4">
+            <a
+              href="{% url 'adminAppointmenthistory' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-calendar mr-2"></i>Appointment Track
+            </a>
+          </li>
+
+          <li class="mb-4">
+            <a
+              href="{% url 'useradmin' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-user mr-2"></i>User Track
+            </a>
+          </li>
+          <li class="mb-4">
+            <a
+              href="{% url 'paymentHistory' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-money-bill-wave mr-2"></i>Payment History
+            </a>
+          </li>
+          {% elif request.user|has_group:"Hair Technician" or request.user|has_group:"Laser Skin" or request.user|has_group:"Nail Technician" or request.user|has_group:"Makeup Artist" %}
+          <li class="mb-4">
+            <a
+              href="{% url 'appointments'%}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-user-plus mr-2"></i>Daily appointment
+            </a>
+          </li>
+          <li class="mb-4">
+            <a
+              href="{% url 'staffappointmenthistory' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-calendar-check mr-2"></i> Booked Appointment
+            </a>
+          </li>
+          <li class="mb-4">
+            <a
+              href="{% url 'Cancelappointments' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-times mr-2"></i> Rejected Appointment
+            </a>
+          </li>
+          <li class="mb-4">
+            <a
+              href="{% url 'completeappointments' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-check-circle mr-2"></i> Complete Appointment
+            </a>
+          </li>
+          <li class="mb-4">
+            <a
+              href="{% url 'CancelbookedAppointement' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-times-circle mr-2"></i> Canceled Appointment
+            </a>
+          </li>
+
+          <li class="mb-4">
+            <a
+              href="{% url 'EditProfile' user_id=request.user.id %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-user mr-2"></i>Edit Profile
+            </a>
+          </li>
           {% else %}
           <li class="mb-4">
-            <a href="{% url 'appointmenthistory'  %}" class="block text-gray-700 hover:text-cyan-500">
+            <a
+              href="{% url 'appointmenthistory'  %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
               <i class="fas fa-calendar-check mr-2"></i>My Appointment
             </a>
           </li>
           <li class="mb-4">
-            <a href="{% url 'Usercompleteappointments' %}" class="block text-gray-700 hover:text-cyan-500">
+            <a
+              href="{% url 'Usercompleteappointments' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
               <i class="fas fa-check-circle mr-2"></i> Completed Appointment
             </a>
           </li>
           <li class="mb-4">
-            <a href="{% url 'userCancelbookedAppointement' %}" class="block text-gray-700 hover:text-cyan-500">
+            <a
+              href="{% url 'userCancelbookedAppointement' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
               <i class="fas fa-times-circle mr-2"></i> Rejected Appointment
             </a>
           </li>
-    
+
           <li class="mb-4">
-            <a href="{% url 'paymentHistory' %}" class="block text-gray-700 hover:text-cyan-500">
+            <a
+              href="{% url 'paymentHistory' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
               <i class="fas fa-money-bill-wave mr-2"></i>Payment History
             </a>
           </li>
-            <li class="mb-4">
-              <a href="{% url 'EditProfile' user_id=request.user.id %}" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-user-edit mr-2"></i>Edit Information
-              </a>
-            </li>
-           
-            <li class="mb-4">
-              <a href="#" class="block text-gray-700 hover:text-cyan-500">
-                <i class="fas fa-gift mr-2"></i>Rewards
-              </a>
-            </li>
-          
+          <li class="mb-4">
+            <a
+              href="{% url 'EditProfile' user_id=request.user.id %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-user-edit mr-2"></i>Edit Information
+            </a>
+          </li>
+
+          <li class="mb-4">
+            <a href="#" class="block text-gray-700 hover:text-cyan-500">
+              <i class="fas fa-gift mr-2"></i>Rewards
+            </a>
+          </li>
+
           {% endif %}
         </ul>
       </div>
-    
-      <div class="flex-grow p-4">
-        {% block content %}
-        {% endblock %}
-      </div>
+
+      <div class="flex-grow p-4">{% block content %} {% endblock %}</div>
     </div>
-    
   </body>
 </html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
-{% load sweetify %}
-{% sweetify %}
+{% load sweetify %} {% sweetify %}

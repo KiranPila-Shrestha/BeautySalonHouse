@@ -20,7 +20,7 @@ import sweetify
 from Appointment.models import *
 ##product modeks
 from product.models import *
-from django.db.models import Sum
+import re
 
 # LOGIN
 def loginUser(request):
@@ -50,6 +50,14 @@ def registerUser(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST, request.FILES)
         if form.is_valid():
+            if User.objects.filter(email=request.POST.get('email')).exists():
+                sweetify.error(request, "Email already exist")
+                return redirect('register')
+            if 'contact' in request.POST:
+                contact_number = request.POST.get('contact')
+            if not re.match(r'^(98|97)\d{8}$', contact_number):
+                sweetify.error(request,"Contact number invalid !!")
+                return redirect('register')
             # Get the username
             username = form.cleaned_data.get('username')
             # If any operation fails, the entire transaction is rolled back, undoing all changes made within the block.
@@ -65,13 +73,13 @@ def registerUser(request):
                 user_default_profile_picture.save()
             sweetify.success(request,"Account Created for " + username + " Now you can login.")
             return redirect('login')
+        elif not form.is_valid():
+            errorMessage = next(iter(form.errors.values()))[0]     
+            sweetify.error(request, errorMessage)
+            return redirect('register')
         else:
-            # Display error message
-            sweetify.error(request, 'Registration failed!')
-            
-
-                       
-            return redirect('login')
+            sweetify.error(request, 'Something went wrong. Registration failed!')
+            return redirect('register')
             
     context = {'form': form,}
     return render(request, 'login_register/register.html', context)
@@ -235,22 +243,21 @@ def is_superuser(user):
 
 @login_required(login_url='login')
 @user_passes_test(is_superuser)
-
 def userdetail_admin(request):
     if request.method == 'POST':
         if "block" in request.POST:
             username = request.POST.get("user")
-            user = User.objects.get(username=username)
+            user = User.objects.get(pk=username)
             userDetail = UserDetail.objects.get(user=user)
-            userDetail.has_blocked = True
+            userDetail.hasUserBlocked = True
             userDetail.save()
             sweetify.success(request, 'User Blocked successfully')
         
         elif "unblock" in request.POST:
             username = request.POST.get("user")
-            user = User.objects.get(username=username)
+            user = User.objects.get(pk=username)
             userDetail = UserDetail.objects.get(user=user)
-            userDetail.has_blocked = False
+            userDetail.hasUserBlocked = False
             userDetail.save()
             sweetify.success(request, 'User Unblocked successfully')
             
@@ -276,7 +283,6 @@ def userdetail_admin(request):
         'total_hairtechnician':total_hairtechnician,
         'total_skintechnician': total_skintechnician,
         'total_nailtechnician': total_nailtechnician,
-        
         'total_makeuptechnician':  total_makeuptechnician,
         'allUserlogin':allUserlogin,
         'requested_users':requested_users,

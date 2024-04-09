@@ -86,7 +86,7 @@
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  padding: 12px 16px;
+  padding: 8px;
   z-index: 1;
   transition: opacity 0.3s ease-in-out;
   opacity: 0;
@@ -109,7 +109,7 @@
 
 .dropdown-content a {
   color: black;
-  padding: 6px 0;
+  padding: 6px 5px;
   text-decoration: none;
   display: block;
 }
@@ -145,14 +145,14 @@
         <div class="text-2xl font-bold mr-10"><img src="static/Image/logo/logo.svg" class="w-[80%] h-" alt="logo" /></div>
         
         <!-- Navigation Links -->
-        <div class="flex gap-5 space-x-8 ">
+        <div class="flex gap-5 space-x-8">
           <a href="{% url 'home' %}" class="nav-link"  >Home</a>
           <a href="{% url 'productpage' %}" class="nav-link">Products</a>
           <div class="dropdown">
             <a href="{% url 'service'%}" class="services"
               >Services<span class="icon">&#9660;</span></a
             >
-            <div class="dropdown-content">
+            <div class="dropdown-content ">
               <a href="{%url 'hairservice'%}">Hair Service</a>
               <a href="{%url 'makeupservice'%}">Makeup Service</a>
               <a href="{%url 'nailservice'%}">Nail Service</a>
@@ -205,16 +205,20 @@
   </div>
 
   <div class="absolute hidden bg-white rounded shadow-md mt-2 py-2 w-48" style="font-family: poppins; right: 0;" id="userDropdown">
-    <span id="profileToggle" class="cursor-pointer profile">
-      <a href="{% if request.user.userdetail.user_type == 'customer' %}{% url 'appointmenthistory' %}{% elif request.user.is_superuser %}{% url 'adminchart' %}{% else %}{% url 'appointments' %}{% endif %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white">
+    <div id="profileToggle" class="cursor-pointer profile">
+      <a href="{% if request.user.userdetail.user_type == 'customer' %}{% url 'appointmenthistory' %}{% elif request.user.is_superuser %}{% url 'adminchart' %}{% else %}{% url 'appointments' %}{% endif %}" class="flex block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white">
         {% if request.user.userprofile.image %}
         <img class="h-6 w-6 rounded-full mr-2" src="{{ request.user.userprofile.image.url }}" alt="profile">Account
-    {% else %}
+        {% else %}
         <i class="fas fa-user-circle text-white-500 text-lg mr-2"></i>Account
-    {% endif %}
-    </span>
-    <a href="{% url 'logout' %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white"> <i class="fas fa-sign-out-alt text-1xl text-regular mr-2"></i>Logout</a>
+        {% endif %}
+      </a>
+    </div>
+    <a href="{% url 'logout' %}" class="block px-6 py-2 text-gray-800 hover:bg-cyan-600 hover:text-white">
+      <i class="fas fa-sign-out-alt text-1xl text-regular mr-2"></i>Logout
+    </a>
   </div>
+  
 
 </div>
 {% endif %}
