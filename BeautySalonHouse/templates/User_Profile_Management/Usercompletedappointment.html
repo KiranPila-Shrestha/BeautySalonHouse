@@ -28,18 +28,21 @@
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ appointment.status }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">
                         {% if appointment.status == "completed" %}
-                        {% for feedback in appointment.user.appointmentfeedback_set.all %}
+                        {% comment %} {% for feedback in appointment.user.appointmentfeedback_set.all %}
                         <p>{{ feedback }}</p>
-                    {% endfor %}
-                            {% if not appointment.user.appointmentfeedback_set.filter(service=appointment.service)%}
+                    {% endfor %} {% endcomment %}
+                                    {% if appointment.appointmentfeedback_set.all %}
+
+                                        <p class="text-green-600">You have given Feedback</p>
+                                 
+                                        {% else %}
                                 <!-- Display the button to give feedback -->
+                                
                                 <button data-modal-target="feedback-modal-{{ appointment.id }}" data-modal-toggle="feedback-modal-{{ appointment.id }}" class="block text-white bg-blue-700 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium font-semibold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                                     Give Feedback
                                 </button>
-                            {% else %}
                                 <!-- Show message indicating feedback has already been given -->
-                                <p class="text-green-600">You have given Feedback</p>
-                            {% endif %}
+                                {% endif %}
                         {% endif %}
                         {% if appointment.status == "completed" %}
                                 <!-- Feedback modal -->

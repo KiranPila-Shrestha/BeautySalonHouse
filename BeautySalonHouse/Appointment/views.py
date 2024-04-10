@@ -281,19 +281,20 @@ def UserCompleteAppointments(request):
         booking = get_object_or_404(BookAppointment, id=bookingID)
         
         # Check if user has already given feedback for this booking
-        existing_feedback = AppointmentFeedback.objects.filter(user=request.user, appointment=booking)
-        
-        if existing_feedback.exists():
-            print("ghs bdc")
-            # Update existing feedback
-            existing_feedback.update(feedback=feedback_text)
-            messages.success(request, 'Feedback has been added successfully to our service page.')
-        else:
-            # Add new feedback
-            feedback = AppointmentFeedback(appointment=booking, user=request.user, feedback=feedback_text)
-            feedback.save()
-            messages.success(request, 'Feedback has been submitted successfully.')
+        AppointmentFeedback.objects.create(user=request.user, appointment=booking, feedback=feedback_text)
+        sweetify.success(request, 'Feedback has been submitted successfully.')
         return redirect('Usercompleteappointments') 
+        # if existing_feedback.exists():
+        #     print("ghs bdc")
+        #     # Update existing feedback
+        #     existing_feedback.update(feedback=feedback_text)
+        #     messages.success(request, 'Feedback has been added successfully to our service page.')
+        # else:
+        #     # Add new feedback
+        #     feedback = AppointmentFeedback(appointment=booking, user=request.user, feedback=feedback_text)
+        #     feedback.save()
+        #     messages.success(request, 'Feedback has been submitted successfully.')
+        # return redirect('Usercompleteappointments') 
     
     booking_complete = BookAppointment.objects.filter(user=request.user)
     

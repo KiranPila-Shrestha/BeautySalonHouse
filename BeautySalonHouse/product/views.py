@@ -10,6 +10,9 @@ from django.db import transaction
 from users.models import *
 import sweetify 
 from django.db.models import Count
+from django.core.mail import send_mail
+from django.conf import settings
+import re
 # Create your views here.
 def product_add_market(request):
     productList = addProduct.objects.all()
@@ -34,7 +37,7 @@ def product_add_market(request):
     
     context = {
         'productList' : productList,
-        'CategoryproductList' : CategoryproductList,
+        # 'CategoryproductList' : CategoryproductList,
          'productCategoryChoice': productCategoryChoice,
         #  'productImage' : productImage,
     }
@@ -150,7 +153,8 @@ def addtoCart(request, product_id):
     
     
     product = get_object_or_404(addProduct, id=product_id)
-    
+    new_address = request.user.userdetail.address
+    new_number = request.user.userdetail.contact_number 
 
     #get or create the user cart
     user_cart,created = cart.objects.get_or_create(user=request.user)
@@ -175,6 +179,9 @@ def addtoCart(request, product_id):
         cart_item.save()
         
     user_cart.total_amount = Cartitem.objects.filter(cart=user_cart).aggregate(total=Sum(F('product__productPrice') * F('Quantity')))['total']
+   
+    user_cart.new_address = new_address
+    user_cart.new_number = new_number
     user_cart.save()
     
     messages.success(request, "Product has been added to the cart successfully.")
@@ -261,12 +268,21 @@ def update_cart(request):
     
 def checkoutpage(request):
     if request.method == "POST":
+        user_cart, created = cart.objects.get_or_create(user=request.user)
+
         if "saveDetails" in request.POST:
             new_address = request.POST.get('address')
             new_number = request.POST.get('phone_number')
-            user_cart, created = cart.objects.get_or_create(user=request.user)
-            user_cart.new_address = new_address
-            user_cart.new_number = new_number
+          # Validate new phone number
+            if not re.match(r'^(98|97)\d{8}$', new_number):
+                sweetify.error(request, "New phone number invalid !!")
+            else:
+                user_cart.new_address = new_address
+                user_cart.new_number = new_number
+                user_cart.save()
+                sweetify.success(request, "New details saved successfully.")
+            
+           
             user_cart.save()
     cartItems = cart.objects.filter(user=request.user)
     user_detail = UserDetail.objects.get(user=request.user)  # or UserDetail.objects.get(user_id=user_id)
@@ -290,7 +306,7 @@ def initkhalti(request):
     userinformation = request.user
     contact = userinformation.userdetail.contact_number
     email = userinformation.email
-
+    
     url = "https://a.khalti.com/api/v2/epayment/initiate/"
      
     
@@ -345,7 +361,7 @@ def verifyKhalti(request):
     if request.method == 'GET':
         headers = {
              'accept': 'application/json',
-            'Authorization': 'key 38f188dd685e4006b1a2015725fa77f5', #10e9db6041cf49bc91884313102e3173
+            'Authorization': 'key 38f188dd685e4006b1a2015725fa77f5', 
             'Content-Type': 'application/json',
         }
         pidx = request.GET.get('pidx')
@@ -458,6 +474,12 @@ def paymentHistory(request):
             orderHistory = orderplaced.objects.get(pk=orderID)
             orderHistory.status = "Completed"
             orderHistory.save()
+            send_mail(
+                'Your Order has been Completed.',
+                'Thank you for choosing us.',
+                settings.EMAIL_HOST_USER,
+                [orderHistory.user.email],
+                fail_silently=False,)
             sweetify.success(request, "Order updated successfully!!")
             return redirect('paymentHistory')
             
@@ -466,6 +488,12 @@ def paymentHistory(request):
             orderHistory = orderplaced.objects.get(pk=orderID)
             orderHistory.status = "Rejected"
             orderHistory.save()
+            send_mail(
+                'Your order has been rejected.',
+                'Please! Contact the administratiors.',
+                settings.EMAIL_HOST_USER,
+                [orderHistory.user.email],
+                fail_silently=False,)
             sweetify.success(request, "Order Rejected successfully!!")
             return redirect('paymentHistory')
         
@@ -551,24 +579,23 @@ def paymentHistory(request):
 
 
 
-def edit_product(request, product_id=None):
+def edit_product(request, product_id):
     # If product_id is provided, fetch the instance of the product to edit
-    if product_id:
-        product_instance = get_object_or_404(AddProduct, pk=product_id)
-    else:
-        product_instance = None
-    print("sure", product_id)
+    product_instance = get_object_or_404(addProduct, pk=product_id)
+    
     if request.method == 'POST':
         # If the form is submitted
-        form = productForm(request.POST, instance=product_instance)
+        form = editproductForm(request.POST, instance=product_instance)
+        
+        print('form', form)
         if form.is_valid():
             # Save the product details
             product = form.save()
-
+            
             # Handle product images
             new_images = request.FILES.getlist('productImage')
             old_images = product.images.all()
-
+            print('new image',new_images)
             # Delete old images not included in the new set
             for old_image in old_images:
                 if old_image.image not in new_images:
@@ -576,13 +603,18 @@ def edit_product(request, product_id=None):
 
             # Add new images to the product
             for uploaded_file in new_images:
-                productImage.objects.create(product=product, image=uploaded_file)
+                productImage.objects.create(addProduct=product_instance, image=uploaded_file)
 
             messages.success(request, "Product details updated successfully.")
-            return redirect('product_detail', product_id=product.id)  # Redirect to product detail page after saving
+            return redirect('productdetail', product_id=product.id)  # Redirect to product detail page after saving
     else:
         # If it's a GET request or if there's an error in the form submission
         form = productForm(instance=product_instance)
+        
+    context = {
+        'form': form,
+        'product_instance': product_instance
+    }
 
     # Render the template with the form
-    return render(request, 'Inventory/editproduct.html', {'form': form})
+    return render(request, 'Inventory/editproduct.html', context)

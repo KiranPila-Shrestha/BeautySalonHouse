@@ -114,19 +114,16 @@ def EditProfile(request, user_id):
            
         #updating additional details
         
+            contact = request.POST.get('contact_number')
+            print('Contact:', contact)  # Debugging print
+            if not re.match(r'^(98|97)\d{8}$', contact):
+                sweetify.error(request, "Contact number invalid !!")
+            else:
+                user_detail.contact_number = contact
+                user_detail.save()
+                sweetify.success(request, "User Details has been updated successfully.")
         if 'address' in request.POST:  # Check if address is present in POST data
             user_detail.address = request.POST.get('address')
-        if 'contact_number' in request.POST:  # Check if contact_number is present in POST data
-            user_detail.contact_number = request.POST.get('contact_number')
-       
-        if not re.match(r'^(98|97)\d{8}$', user_detail.contact_number):
-            sweetify.error(request,"Contact number invalid !!")
-            
-            
-            
-        user_detail.save()
-        
-        sweetify.success(request, "User Details has been updated successfully.")
         
         
         

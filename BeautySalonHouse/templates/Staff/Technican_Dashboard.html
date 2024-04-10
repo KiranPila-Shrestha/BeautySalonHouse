@@ -1,92 +1,140 @@
-
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Staff Daily Appointment</title>
+    <style>
+      * {
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    {% extends 'Base_content/Base_Dashboard.html'%} {% block content %}
+    <div class="p-8">
+      <h2 id="Daily_Appointment" class="text-2xl font-semibold mb-4">
+        Daily Appointments
+      </h2>
+      <div class="overflow-scroll w-[90%] ">
+        <table class="overflow-scroll w-full bg-gray-500">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Client Name
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Username
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Address
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Phone Number
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Service
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Staff Selected
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Date
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Time
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Approve
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider"
+              >
+                Delete
+              </th>
+            </tr>
+          </thead>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staff Daily Appointment</title>
-  <style>
-    * {
-       font-family: "Poppins", sans-serif;
-     }
-   </style> 
-</head>
-<body>
-{% extends 'Base_content/Base_Dashboard.html'%} 
-{% block content %}
-<div class="flex-1 p-4 overflow-x-auto max-w-full">
-  <h2 id="Daily_Appointment" class="text-2xl font-semibold mb-4">
-      Daily Appointments
-  </h2>
-  <div class=" overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Client Name
-              </th>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Username
-              </th>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Address
-              </th>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Phone Number
-              </th>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Service
-              </th>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Staff Selected
-              </th>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Date
-              </th>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Time
-              </th>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Approve
-              </th>
-              <th class="px-6 py-3 text-left text-xl md:text-base font-semibold text-gray-700 tracking-wider">
-                  Delete
-              </th>
-          </tr>
-      </thead>
-      
           <tbody class="bg-white divide-y divide-gray-200">
-              <form method='post' action="">
-                  {% csrf_token %}
-                  {% for booking_request in booking_requests %}
-                  <tr>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">{{ booking_request.user.get_full_name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">{{ booking_request.user.username }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">{{ booking_request.user.userdetail.address }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">{{ booking_request.user.userdetail.contact_number }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">{{ booking_request.service}}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">{{ booking_request.staff}}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">{{ booking_request.bookDate }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">{{ booking_request.bookTime }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                          <button name="approve" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                              Approve
-                          </button>
-                      </td>
-                      <input type="hidden" name="bookingApprove" value="{{booking_request.id}}" />
-                      <td class="px-6 py-4 whitespace-nowrap">
-                          <button name="cancel" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                             Reject
-                          </button>
-                      </td>
-                      <input type="hidden" name="bookingId" value="{{booking_request.id}}" />
-                  </tr>
-                  {% endfor %}
-              </form>
+            <form method="post" action="">
+              {% csrf_token %} {% for booking_request in booking_requests %}
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">
+                  {{ booking_request.user.get_full_name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">
+                  {{ booking_request.user.username }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">
+                  {{ booking_request.user.userdetail.address }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">
+                  {{ booking_request.user.userdetail.contact_number }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">
+                  {{ booking_request.service}}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">
+                  {{ booking_request.staff}}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">
+                  {{ booking_request.bookDate }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">
+                  {{ booking_request.bookTime }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <button
+                    name="approve"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Approve
+                  </button>
+                </td>
+                <input
+                  type="hidden"
+                  name="bookingApprove"
+                  value="{{booking_request.id}}"
+                />
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <button
+                    name="cancel"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Reject
+                  </button>
+                </td>
+                <input
+                  type="hidden"
+                  name="bookingId"
+                  value="{{booking_request.id}}"
+                />
+              </tr>
+              {% endfor %}
+            </form>
           </tbody>
-      </table>
-  </div>
-</div>
+        </table>
+      </div>
+    </div>
 
-{%endblock%}
+    {%endblock%}
+  </body>
+</html>

@@ -1,128 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Edit Product</title>
-</head>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var imageInput = document.getElementById("product-image") || [];
 
-<body class="bg-gray-100">
-    {% extends 'Base_content/Base_Dashboard.html' %}
-    {% block content %}
+        // Get the URLs of existing images
+        var existingImages = document.querySelectorAll(".product-image");
+
+        console.log(existingImages.length);
+        // Function to handle change in the image input
+        imageInput.addEventListener("change", function (event) {
+          var files = event.target.files;
+          var container = document.getElementById("image-container");
+          document.getElementById("product-img-heading").style.display = "none";
+
+          // Clear existing images
+          container.innerHTML = "";
+
+          // Display uploaded images
+          for (let i = 0; i < Math.min(files.length, 3); i++) {
+            const file = files[i];
+            const fileURL = URL.createObjectURL(file);
+
+            const imgDiv = document.createElement("div");
+            imgDiv.classList.add("w-[10rem]", "h-[10rem]", "rounded-xl");
+            imgDiv.innerHTML = `<img src="${fileURL}" class="w-full h-full rounded-xl object-cover" alt="" />`;
+
+            container.appendChild(imgDiv);
+          }
+        });
+      });
+      function buttondisabledimage() {
+        Swal.fire({
+          title: "Error",
+          text: "Please upload exactly 3 images.",
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var submitButton = document.querySelector('button[type="submit"]');
+        var imageInput = document.getElementById("product-image");
+        var existingImages = document.querySelectorAll(".product-image");
+
+        // Function to handle submit button click
+        submitButton.addEventListener("click", function (event) {
+          var files = imageInput.files;
+          if (existingImages.length === 3) return;
+
+          if (files.length !== 3) {
+            event.preventDefault(); // Prevent form submission if the number of images is not 3
+            buttondisabledimage(); // Call the error function
+          }
+        });
+
+        // Function to handle change in the image input
+        imageInput.addEventListener("change", function (event) {
+          var files = event.target.files;
+          if (files.length === 3) {
+            submitButton.disabled = false; // Enable submit button if exactly 3 images are uploaded
+          } else {
+            buttondisabledimage(); // Disable submit button if the number of images is not 3
+          }
+        });
+      });
+    </script>
+  </head>
+
+  <body class="bg-gray-100">
+    {% extends 'Base_content/Base_Dashboard.html' %} {% block content %}
     <div class="container bg-gray-100">
-        <form action="" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="shadow-sm bg-white p-2 flex justify-between ">
-                <div class="p-4">
-                    <h1 class="text-3xl font-semibold">Edit Product</h1>
-                    {% if form.errors and form.is_bound %}
-                    <div class="alert alert-danger">
-                        <strong>Error!</strong> Please correct the following errors:
-                        <ul>
-                            {% for field, error in form.errors.items %}
-                            <li>{{ field|title }}: {{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endif %}
+      <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="shadow-sm bg-white p-2 flex justify-between">
+          <div class="p-4">
+            <h1 class="text-3xl font-semibold">Edit Product</h1>
+          </div>
+        </div>
+
+        <div class="bg-gray-100"><br /></div>
+
+        <div class="">
+          <!-- General Information -->
+          <div class="container2 shadow-sm bg-white mb-5">
+            <div class="p-5">
+              <h1 class="text-2xl mb-5 font-bold">Product Detail</h1>
+              <div class="flex items-center gap-5 w-full">
+                <div>
+                  <p class="text-xl">Product Name</p>
+                  <br />
+                  {{ form.productName }}<br />
                 </div>
+
+                <div>
+                  <p class="text-xl">Product Brand</p>
+                  <br />
+                  {{ form.productBrand }}<br />
+                </div>
+              </div>
+
+              <div class="flex items-center gap-5 w-full">
+                <div>
+                  <p for="categories" class="text-xl">Product Category</p>
+                  <br />
+                  {{ form.productCategory }}<br />
+                </div>
+                <div>
+                  <p class="text-xl">Product Price</p>
+                  <br />
+                  {{ form.productPrice }}<br />
+                </div>
+              </div>
+
+              <div class="flex gap-6">
+                <div>
+                  <p class="text-xl">Product Description</p>
+                  <br />
+                  {{ form.productDescription }}
+                </div>
+                <div>
+                  <p class="text-xl">Product Stock</p>
+                  <br />
+                  {{ form.productStock }}<br />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image Upload Section -->
+          <div>
+            <h1 class="text-2xl font-bold text">Edit Product Image</h1>
+            <div class="">
+              <!-- Container for displaying uploaded product images -->
+
+              <h1
+                class="text-xl font-medium mt-4 mb-3"
+                id="product-img-heading"
+              >
+                Please add images
+              </h1>
+
+              <div id="image-container" class="grid grid-cols-3 gap-3 ml-3">
+                {% for image in product_instance.images.all %}
+
+                <div class="w-[10rem] h-[10rem] rounded-xl">
+                  <img
+                    src="{{ image.image.url }}"
+                    class="product-image w-full h-full rounded-xl object-cover"
+                    alt="sure"
+                  />
+                </div>
+                {% endfor %}
+              </div>
+
+              <!-- File input field to add new images -->
+              <div class="mt-5 flex gap-5">
+                <label
+                  required
+                  for="product-image-input"
+                  class="py-2 px-4 bg-teal-700 text-white rounded"
+                >
+                  <span>Add image</span>
+                  <input
+                    id="product-image"
+                    name="productImage"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    class="absolute block opacity-0 w-full h-full cursor-pointer"
+                  />
+                </label>
+                <div class="">
+                    <button
+                      type="submit"
+                      class="py-2 px-3 bg-teal-700 text-white rounded"
+                    >
+                      <span class="text-white">Edit Product</span>
+                    </button>
+                  </div>
+              </div>
               
             </div>
-    
-            <div class="bg-gray-100"><br></div>
-    
-            <div class="flex justify-between">
-                <!-- General Information -->
-                <div class="container2 shadow-sm bg-white w-[54%] mb-5">
-                    <div class="p-5">
-                        <h1 class="text-2xl mb-5 font-bold">Product Detail</h1>
-                        <label class="text-xl">Product Name</label><br>
-                        {{ form.productName }}<br>
-    
-                        <label class="text-xl">Product Brand</label><br>
-                        {{ form.productBrand }}<br>
-    
-                        <label class="text-xl">Product Description</label><br>
-                        {{ form.productDescription }} <br>
-                        <label for="categories" class="text-xl">Product Category</label><br>
-                        {{ form.productCategory }}<br>
-                        <label class="text-xl">Product Price</label><br>
-                        {{ form.productPrice }}<br>
-                        <label class="text-xl">Product Stock</label><br>
-                        {{ form.productStock }}<br>
-                    </div>
-                </div>
-
-    
-                <!-- Image Upload Section -->
-                <div class="w-[45.1%]">
-                    <div class="shadow-sm bg-white h-[64.5vh] w-[100%]">
-                        <div class="p-4 mb-5">
-                            <h1 class="text-2xl font-bold ">Edit Product Image</h1>
-                            {% comment %} <p>(All existing images will be replaced upon editing the product.)</p> {% endcomment %}
-                        </div>
-    
-                        <h1 class="text-center px-5" id="product-img-heading">Images add up to 3 will be uploaded.</h1>
-    
-                        <div id="image-container" class="grid grid-cols-3 gap-3 ml-3">
-                            <!-- Display existing images -->
-                            {% for image in product_instance.images.all %}
-                            <div class="w-[10rem] h-[10rem]">
-                                <img src="{{ image.url }}" class="w-full h-full  object-cover" alt="sure" />
-                            </div>
-                            {% endfor %}
-                        </div>
-    
-                        <div class="flex justify-center mt-[5rem]">
-                            <label required for="product-image-input" class="bg-teal-600 cursor-pointer text-white  relative inline-flex justify-center w-[15rem] px-7 py-2 border border-transparent text-base leading-6 font-medium rounded-md transition duration-150 ease-in-out">
-                                <span>Add image</span>
-                                <input id="product-image" name="productImage" type="file" accept="image/png, image/jpeg" multiple class="absolute block opacity-0 w-full h-full cursor-pointer"/>
-                            </label>
-                        </div>
-                        <br><br><br><br><br><br>
-                        <div class="flex justify-between  p-10">
-                            <button type="submit" class="w-[10rem] h-10 bg-teal-700 text-white">
-                                <span class="text-white">Edit Product</span>
-                            </button>
-
-                            <button type="button" onclick="discardChanges()" class="border-2 border-red-600  w-[10rem] h-10 mr-10">
-                                <span class="text-red-600">Discard Changes</span>
-                            </button>
-            
-                          
-                        </div>
-    
-                        <script>
-                            document.getElementById("product-image").addEventListener('change', function (event) {
-                                const container = document.getElementById("image-container");
-                                const files = event.target.files;
-                                document.getElementById('product-img-heading').style.display = "none";
-    
-                                // Clear existing images
-                                container.innerHTML = '';
-    
-                                // Display uploaded images
-                                for (let i = 0; i < Math.min(files.length, 3); i++) {
-                                    const file = files[i];
-                                    const fileURL = URL.createObjectURL(file);
-    
-                                    const imgDiv = document.createElement("div");
-                                    imgDiv.classList.add("w-[10rem]", "h-[10rem]", );
-                                    imgDiv.innerHTML = '<img src="' + fileURL + '" class="w-full h-full object-cover" alt="" />';
-    
-                                    container.appendChild(imgDiv);
-                                }
-                            });
-                        </script>
-                    </div>
-                </div>
-            </div>
-    
-           
-        </form>
+          </div>
+        </div>
+      </form>
     </div>
-    
+
     {% endblock %}
-</body>
+  </body>
 </html>

@@ -54,7 +54,7 @@
                     <td class="border-2 border-gray-800  text-md px-4 py-2">
                         <form method="post" action="{% url 'productlist' %}">
                             {% csrf_token %}
-                            <a href="{% url 'edit_product' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 mr-2 rounded focus:outline-none focus:shadow-outline">
+                            <a href="{% url 'edit_product' product.id %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 mr-2 rounded focus:outline-none focus:shadow-outline">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button type="submit" name="delete" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">
