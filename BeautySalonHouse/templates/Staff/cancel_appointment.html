@@ -2,9 +2,10 @@
 
 {% block content %}
 <body class="bg-gray-100">
-    <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-semibold text-left ml-8 mb-8"> Rejected Appointments </h1>
+    <div class="container mx-auto py-8">\
         {% if canceled_appointments %}
+        <h1 class="text-3xl font-semibold text-left ml-8 mb-8"> Rejected Appointments </h1>
+        
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -34,10 +35,8 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        {% else %}
-            <p class="text-center text-lg font-semibold mt-4">No Rejected appointments</p>
-        {% endif %}
+     
+                
     </div>
 </body>
 {% endblock %}

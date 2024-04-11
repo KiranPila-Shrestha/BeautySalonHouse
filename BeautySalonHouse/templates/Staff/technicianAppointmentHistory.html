@@ -17,6 +17,7 @@
 {% block content %}
 <body class="bg-gray-100">
     <div class="container mx-auto py-8">
+        {% if booking_requests  %}
         <h1 class="text-3xl font-semibold text-left ml-8 mb-8"> My Appointments </h1>
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-200">
@@ -55,6 +56,11 @@
                             <input type="hidden" name="appointmentID" value="{{booking_request.id}}">
                         </tr>
                         {% endfor %}
+                        {% else %}
+                        <p class="text-center text-3xl font-semibold mt-4">No Booked appointment yet.</p> <br>
+                        <img src="/static/Image/booked.svg" alt="No Appointments Image" style="width: 600px; display: block; margin: 0 auto;">
+                                    
+                    {% endif %}
                     </form>
                 </tbody>
                 

@@ -13,12 +13,29 @@ from django.db.models import Count
 from django.core.mail import send_mail
 from django.conf import settings
 import re
+from django.http import Http404 
 # Create your views here.
 def product_add_market(request):
     productList = addProduct.objects.all()
     
     SearchFor = request.GET.get("searchFor")
+    searchForName = request.GET.get("searchForName")
+    print("SearchFor", SearchFor)
+    print("searchForName", searchForName)
     
+    if SearchFor != "Select category" and SearchFor is not None and searchForName == "": #Search by category only
+        # if searchForName != ""
+        productList = productList.filter(Q(productCategory__icontains=SearchFor))
+
+    elif SearchFor != "Select category" and SearchFor is not None and searchForName != "":
+        productList = productList.filter(Q(productName__icontains=searchForName) | Q(productCategory__icontains=SearchFor))
+        
+    elif (SearchFor == "Select category" or SearchFor is None) and searchForName != "" and searchForName is not None: #search by name only
+        productList = productList.filter(Q(productName__icontains=searchForName))
+        
+        
+    else:
+        productList =  addProduct.objects.all()
     
     # if request.method == "POST" and "searchByCategory" in request.POST:
     #     SearchFor = request.POST.get("searchFor")
@@ -40,6 +57,8 @@ def product_add_market(request):
         # 'CategoryproductList' : CategoryproductList,
          'productCategoryChoice': productCategoryChoice,
         #  'productImage' : productImage,
+        'SearchFor' : SearchFor,
+        'searchForName' : searchForName,
     }
 
     return render(request, 'Inventory/product.html', context)
@@ -49,6 +68,7 @@ def product_add_market(request):
 # for adding product admin
 
 def AddProduct(request):
+   
     #getting data from form.py
     if request.method == 'POST':
         form = productForm(request.POST, request.FILES)
@@ -93,6 +113,14 @@ def productdetail(request, product_id):
     
     # to get details
     productdetail = get_object_or_404(addProduct, id=product_id)
+
+    # Check if the room is approved by the admin
+    if not productdetail:
+
+        if not (request.user.is_superuser or request.user == productdetail.user):
+            raise Http404("Product not found")
+
+    productdetail = get_object_or_404(addProduct, pk=product_id)
     
     
     #to get image of product

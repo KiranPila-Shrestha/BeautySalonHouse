@@ -2,9 +2,10 @@
 
 {% block content %}
 <body class="bg-gray-100">
+    {% if canceled_booked_appointment %}
     <div class="container mx-auto py-8">
         <h1 class="text-3xl font-semibold text-left ml-8 mb-8"> Canceled Booked Appointment </h1>
-        {% if canceled_booked_appointment %}
+      
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -36,7 +37,8 @@
                 </div>
             </div>
         {% else %}
-            <p class="text-center text-lg font-semibold mt-4">No canceled appointments</p>
+            <p class="text-center text-3xl font-semibold mt-8">No canceled appointment yet.</p>
+            <img src="static/Image/Reject.svg" alt="No Appointments Image" style="width: 600px; display: block; margin: 0 auto;">
         {% endif %}
     </div>
 </body>

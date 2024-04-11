@@ -22,6 +22,7 @@ from Appointment.models import *
 from product.models import *
 import re
 
+
 # LOGIN
 def loginUser(request):
     if request.method == 'POST':
@@ -223,12 +224,22 @@ def AdminDashBoard(request):
                 user_default_profile_picture = UserProfile(user=user)
                 user_default_profile_picture.save()
                 
-                #send mail
                 user_email = user.email
                 user_type = request.POST.get('user_type')
-                send_mail("Welcome to our salon","You have been assigned as {user_type}","pilashrestha366@gmail.com",[user_email],fail_silently=False)
-                
-                sweetify.success(request, " Staff has been added Successfully")
+                user_name = request.POST.get('username')
+                password = request.POST.get('password2')
+            
+                message = f"""
+                    Welcome to our salon","You have been assigned as {user_type}, Username as {user_name} and password as {password}"""
+
+                send_mail(
+                "Welcome to our salon",
+                message,
+                "pilashrestha366@gmail.com",
+                [user_email],
+                fail_silently=False,
+                )
+                sweetify.success(request, "Staff has been added successfully.")
         else:
             sweetify.error(request, "Error occur while staff adding.")
                 

@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-*hm6)lu7yq94%9qiu2(46+wi5rqni_(23w&+c=58-8#+kr(!qe
 DEBUG = True
 
 ALLOWED_HOSTS = []
+#'*' false for 404 not found
 
 
 # Application definition

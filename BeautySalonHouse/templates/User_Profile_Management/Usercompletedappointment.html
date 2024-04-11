@@ -28,9 +28,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ appointment.status }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">
                         {% if appointment.status == "completed" %}
-                        {% comment %} {% for feedback in appointment.user.appointmentfeedback_set.all %}
-                        <p>{{ feedback }}</p>
-                    {% endfor %} {% endcomment %}
+                     
                                     {% if appointment.appointmentfeedback_set.all %}
 
                                         <p class="text-green-600">You have given Feedback</p>
@@ -69,7 +67,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            {% comment %} {% endif %} {% endcomment %}
+                                {% else %}
+                                <p class="text-center text-3xl font-semibold mt-8">No Complete appointment yet.</p>
+                                <img src="static/Image/Complete.svg" alt="No Appointments Image" style="width: 600px; display: block; margin: 0 auto;">
                         {% endif %}
                     </td>
                 </tr>

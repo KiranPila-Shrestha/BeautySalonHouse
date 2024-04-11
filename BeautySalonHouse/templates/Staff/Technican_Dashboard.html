@@ -11,7 +11,9 @@
     </style>
   </head>
   <body>
-    {% extends 'Base_content/Base_Dashboard.html'%} {% block content %}
+    {% extends 'Base_content/Base_Dashboard.html'%} 
+    {% block content %}
+    {% if booking_requests%}
     <div class="p-8">
       <h2 id="Daily_Appointment" class="text-2xl font-semibold mb-4">
         Daily Appointments
@@ -75,7 +77,8 @@
 
           <tbody class="bg-white divide-y divide-gray-200">
             <form method="post" action="">
-              {% csrf_token %} {% for booking_request in booking_requests %}
+              {% csrf_token %} 
+              {% for booking_request in booking_requests %}
               <tr>
                 <td class="px-6 py-4 whitespace-nowrap text-sm md:text-base">
                   {{ booking_request.user.get_full_name }}
@@ -128,7 +131,12 @@
                   value="{{booking_request.id}}"
                 />
               </tr>
+              
               {% endfor %}
+            {% else %}
+              <p class="text-center text-3xl font-bold  mt-8">No Appointment has booked yet.</p><br>
+              <img src="static/Image/booking.svg" alt="No Appointments Image" style="width: 700px; display: block; margin: 0 auto;">
+            {% endif %}
             </form>
           </tbody>
         </table>
