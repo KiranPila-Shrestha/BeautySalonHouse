@@ -21,8 +21,29 @@ import sweetify
 from django.db.models import Count
 
 # Create your views here.
+def is_customer_or_staff(user):
+    # Check if the user is authenticated and belongs to any of the specified groups,
+    # or if the user's user_type is 'customer'
+    return user.is_authenticated and \
+           (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer')
+       
+def is_customer(user):
+    return user.is_authenticated and user.userdetail.user_type == 'customer'
+    # Check if the user is a customer.
+      
+def is_staff(user):
+    return user.is_authenticated and \
+           user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists()
+# Check if the user belongs to any of the specified groups.
+         
+    
+def is_superuser(user):
+    return user.is_superuser
 
 # booking by customer views.
+@login_required
+@user_passes_test(is_customer)
 def booking(request): 
     username = request.POST.get('username')
     user = request.user 
@@ -89,7 +110,8 @@ def booking(request):
     return render(request, 'landing_page/Booking.html', context)
 
 #appointment cancel and approve handling vies by stafff.
-
+@login_required
+@user_passes_test(is_staff)
 def Appointments(request):
  
     booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=False, status="Pending")
@@ -145,7 +167,8 @@ def Appointments(request):
 
 
 #display all the cancel appointment
-
+@login_required
+@user_passes_test(is_staff)
 def CancelAppointments(request):
     # Retrieve all canceled appointments
     canceled_appointments = BookAppointment.objects.filter(staff=request.user, status='Canceled')
@@ -157,6 +180,8 @@ def CancelAppointments(request):
     return render(request, 'Staff/cancel_appointment.html', context)
 
 # Complete Appointments view
+@login_required
+@user_passes_test(is_staff)
 def CompleteAppointments(request):
     currentUser = str(request.user)
 
@@ -227,6 +252,8 @@ def bookedAppointment(request, user_id=None):
     return render(request, template_name, context)
 
 # views after showing the appointment cancels after approve data showing
+@login_required
+@user_passes_test(is_staff)
 def CancelbookedAppointement(request):
     # Retrieve all canceled appointments
     canceled_booked_appointment = BookAppointment.objects.filter(staff=request.user, status='cancel Booking')
@@ -238,7 +265,8 @@ def CancelbookedAppointement(request):
     
     return render(request, 'Staff/cancel_bookedAppointment.html', context)
 
-
+@login_required
+@user_passes_test(is_customer)
 def userCancelbookedAppointement(request):
     # Retrieve all canceled appointments
     user_canceled_booked_appointment = BookAppointment.objects.filter(user=request.user, status='cancel Booking')
@@ -251,7 +279,8 @@ def userCancelbookedAppointement(request):
     return render(request, 'User_Profile_Management/Rejectedappointment.html', context)
 
 # views for appointment information for user only.
-
+@login_required
+@user_passes_test(is_customer)
 def appointmentHistory(request):
     #filter appoint of current user
     booking_requests = BookAppointment.objects.filter(user= request.user)
@@ -268,8 +297,8 @@ def appointmentHistory(request):
     
 
 #user history of complete appointment.
-
-
+@login_required
+@user_passes_test(is_customer)
 def UserCompleteAppointments(request):
     userFeedBack = None
     feedback = None
@@ -284,17 +313,7 @@ def UserCompleteAppointments(request):
         AppointmentFeedback.objects.create(user=request.user, appointment=booking, feedback=feedback_text)
         sweetify.success(request, 'Feedback has been submitted successfully.')
         return redirect('Usercompleteappointments') 
-        # if existing_feedback.exists():
-        #     print("ghs bdc")
-        #     # Update existing feedback
-        #     existing_feedback.update(feedback=feedback_text)
-        #     messages.success(request, 'Feedback has been added successfully to our service page.')
-        # else:
-        #     # Add new feedback
-        #     feedback = AppointmentFeedback(appointment=booking, user=request.user, feedback=feedback_text)
-        #     feedback.save()
-        #     messages.success(request, 'Feedback has been submitted successfully.')
-        # return redirect('Usercompleteappointments') 
+       
     
     booking_complete = BookAppointment.objects.filter(user=request.user)
     

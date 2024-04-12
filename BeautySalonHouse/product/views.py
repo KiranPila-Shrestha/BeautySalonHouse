@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
 from . models import *
 from .forms import *
 from django.contrib import messages
@@ -14,7 +15,36 @@ from django.core.mail import send_mail
 from django.conf import settings
 import re
 from django.http import Http404 
+from django.core.exceptions import ObjectDoesNotExist
+
 # Create your views here.
+def is_customer_or_staff(user):
+    # Check if the user is authenticated and belongs to any of the specified groups,
+    # or if the user's user_type is 'customer'
+    return user.is_authenticated and \
+           (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer')
+       
+def is_customer(user):
+    return user.is_authenticated and user.userdetail.user_type == 'customer'
+    # Check if the user is a customer.
+      
+def is_staff(user):
+    return user.is_authenticated and \
+           user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists()
+# Check if the user belongs to any of the specified groups.
+         
+ #for payment history 
+def is_customer_or_superuser(user):
+    try:
+        return user.is_authenticated and user.userdetail.user_type == 'customer' or user.is_superuser
+    except ObjectDoesNotExist:
+        return user.is_superuser
+    
+    
+def is_superuser(user):
+    return user.is_superuser
+
 def product_add_market(request):
     productList = addProduct.objects.all()
     
@@ -37,20 +67,6 @@ def product_add_market(request):
     else:
         productList =  addProduct.objects.all()
     
-    # if request.method == "POST" and "searchByCategory" in request.POST:
-    #     SearchFor = request.POST.get("searchFor")
-    #     CategoryproductList = productList.filter(Q(productCategory__icontains=SearchFor))
-    #     print("productListproductListproductListproductListproductList", productList)
-        
-         
-    #     print("SearchForSearchForSearchForSearchFor", SearchFor)
-    # elif request.method == "POST" and "searchByName" in request.POST:
-    #     searchForName = request.POST.get("searchForName")
-    #     print("searchForNamesearchForNamesearchForNamesearchForName", searchForName)
-        
-    
-    
-    # productImage = productImage.objects.filter(addProduct=productList)
     
     context = {
         'productList' : productList,
@@ -67,6 +83,8 @@ def product_add_market(request):
 
 # for adding product admin
 
+@login_required(login_url='login')
+@user_passes_test(is_superuser)
 def AddProduct(request):
    
     #getting data from form.py
@@ -127,21 +145,22 @@ def productdetail(request, product_id):
     productdetailImage = get_object_or_404(addProduct, id=product_id)
     
     product_image = productImage.objects.filter(addProduct=productdetailImage)
-
+    feedbacks = ProductFeedback.objects.filter(addProduct= product_id)
     
     context ={
         'productlist': productlist,
         'productdetail': productdetail,
         'productdetailImage': productdetailImage,
         'product_image':product_image,
+        'feedbacks' : feedbacks,
     }
     
     return render(request, 'Inventory/productdetail.html', context)
 
 
 
-
-
+@login_required
+@user_passes_test(is_superuser)
 def productlist(request):
     productCategoryChoice = addProduct.objects.values_list('productCategory', flat=True).distinct()
     if request.method == 'POST':
@@ -163,7 +182,7 @@ def productlist(request):
 
 #for add to cart
 
-
+@user_passes_test(is_customer)
 def addtoCart(request, product_id):
   # Check if the user is authenticated and is of type 'customer'
     if request.user.is_authenticated:
@@ -212,10 +231,11 @@ def addtoCart(request, product_id):
     user_cart.new_number = new_number
     user_cart.save()
     
-    messages.success(request, "Product has been added to the cart successfully.")
+    sweetify.success(request, "Product has been added to the cart successfully.")
     return redirect ('productpage')
-    
-    
+
+@login_required    
+@user_passes_test(is_customer)  
 def cart_view(request):
     if request.method == 'POST': # create and get user cart
         user_cart, created = cart.objects.get_or_create(user= request.user)
@@ -243,7 +263,8 @@ def cart_view(request):
 
     return render(request, 'Inventory/addToCart.html', context)
 
-    
+@login_required
+@user_passes_test(is_customer)     
 def update_cart(request):
     if request.method == 'POST':
         # Get or create the user's cart
@@ -292,8 +313,8 @@ def update_cart(request):
     
     return redirect('cartview')
 
-
-    
+@login_required
+@user_passes_test(is_customer)    
 def checkoutpage(request):
     if request.method == "POST":
         user_cart, created = cart.objects.get_or_create(user=request.user)
@@ -321,13 +342,15 @@ def checkoutpage(request):
     }
     return render(request, 'Inventory/checkout.html', context)
 
-
+@login_required
+@user_passes_test(is_customer) 
 def checkout(request):        
     return render(request, 'Inventory/checkout.html')
 
 
 # #paymenttt
-
+@login_required
+@user_passes_test(is_customer)
 def initkhalti(request):
     print("YAAAAAAAAAAAAAAAAAAAAAAAAAA AAYO")
     user = request.user.username
@@ -359,7 +382,7 @@ def initkhalti(request):
     headers = {
          'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'key 38f188dd685e4006b1a2015725fa77f5', 
+        'Authorization': 'key 533fd0199bc04312a0ea3b2dc5edf61b', 
         
     }
     try:
@@ -384,12 +407,14 @@ def initkhalti(request):
      
      
 #  for khalti
+@login_required
+@user_passes_test(is_customer)
 def verifyKhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/lookup/"
     if request.method == 'GET':
         headers = {
              'accept': 'application/json',
-            'Authorization': 'key 38f188dd685e4006b1a2015725fa77f5', 
+            'Authorization': 'key 533fd0199bc04312a0ea3b2dc5edf61b', 
             'Content-Type': 'application/json',
         }
         pidx = request.GET.get('pidx')
@@ -474,11 +499,14 @@ def verifyKhalti(request):
     return render(request, 'payment/paymentsuccess.html')
 
 
-
+@login_required
+@user_passes_test(is_customer)
 def paymentSuccess(request):
     return render(request, 'payment/paymentsuccess.html')
 
-#for payment history 
+
+@login_required
+@user_passes_test(is_customer_or_superuser) 
 def paymentHistory(request):
     orderDetails = []
     allOrderDetails = []
@@ -566,8 +594,8 @@ def paymentHistory(request):
     return render(request, 'payment/paymentHistory.html', context)
 
 #for admin edit product
-
-
+@login_required
+@user_passes_test(is_superuser)
 def edit_product(request, product_id):
     # If product_id is provided, fetch the instance of the product to edit
     product_instance = get_object_or_404(addProduct, pk=product_id)
@@ -607,3 +635,4 @@ def edit_product(request, product_id):
 
     # Render the template with the form
     return render(request, 'Inventory/editproduct.html', context)
+

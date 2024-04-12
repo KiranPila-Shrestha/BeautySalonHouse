@@ -20,5 +20,6 @@ urlpatterns = [path('productpage', views.product_add_market, name='productpage')
     path('product/<int:product_id>/', views.edit_product, name='edit_product'),
 
     path('error', views.verifyKhalti, name='error'),
+  
 
 ]

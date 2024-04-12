@@ -22,6 +22,8 @@ from Appointment.models import *
 from product.models import *
 import re
 
+def is_superuser(user):
+    return user.is_superuser
 
 # LOGIN
 def loginUser(request):
@@ -31,13 +33,20 @@ def loginUser(request):
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            # if user.userdetail.has_blocked == True:
-            #     sweetify.error(request, 'Your account has been blocked. Please contact to admin.')
-            # else:
             login(request, user)
-            sweetify.success(request, "Successfully Login. Welcome to our site.")
-            return redirect('/')
-        
+            
+            # Check if the user is an admin
+            if user.username == "admin":
+                sweetify.success(request, f"Successfully logged in as admin")
+                return redirect('adminchart')
+            if user.userdetail.hasUserBlocked == True:
+                sweetify.error(request, 'Your account has been blocked. Please contact to admin.')
+            else:
+                login(request, user)
+                user_type = user.userdetail.user_type if hasattr(user, 'userdetail') else 'Customer'
+                sweetify.success(request, f"Successfully logged in as {user_type}. Welcome to our site.")
+                return redirect('/')
+            
         else:
             sweetify.info(request, 'Username or Password is invalid.')
         
@@ -92,7 +101,15 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+def is_customer_or_staff(user):
+    # Check if the user is authenticated and belongs to any of the specified groups,
+    # or if the user's user_type is 'customer'
+    return (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or user.userdetail.user_type == 'customer')
+
+
 ##EditProfile user
+@login_required(login_url='login')
+@user_passes_test(is_customer_or_staff)
 def EditProfile(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user_detail = user.userdetail
@@ -141,9 +158,7 @@ def EditProfile(request, user_id):
             # return redirect('EditProfile', user_id=user_id)  
             else:
                  sweetify.error(request, 'No image uploaded.')
-
-    
-       
+   
         
         if "deleteImage" in request.POST:
             users_profile = UserProfile.objects.get(user=user)
@@ -159,6 +174,8 @@ def EditProfile(request, user_id):
     return render(request, 'User_Profile_Management/EditProfile.html', {'user': user, 'user_detail': user_detail})
 
 #  Change-password function part start
+@login_required
+@user_passes_test(is_customer_or_staff)
 def ChangePassword(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user_detail = user.userdetail
@@ -194,6 +211,8 @@ def send_email():
     
 #Admin DashBoard Part start  
 
+@login_required(login_url='login')
+@user_passes_test(is_superuser)
 def AdminDashBoard(request):
     form = CreateUserForm()
     if request.method == 'POST' and "addStaff" in request.POST:
@@ -252,11 +271,10 @@ def AdminDashBoard(request):
 
 ###for user details view by admin
 
-def is_superuser(user):
-    return user.is_superuser
 
 
-@login_required(login_url='login')
+
+@login_required
 @user_passes_test(is_superuser)
 def userdetail_admin(request):
     if request.method == 'POST':
@@ -320,7 +338,8 @@ def userdetail_admin(request):
 
 
 ###Data visualization admin part
-
+@login_required
+@user_passes_test(is_superuser)
 def adminchart(request):
     staff_data = {}
     user_types = UserDetail.objects.values_list('user_type', flat=True)

@@ -27,8 +27,7 @@ urlpatterns = [
   path('', include('users.urls')),
  path('', include('core.urls')),
   path('', include('Appointment.urls')),
-    path('', include('product.urls'),
-       )
+    path('', include('product.urls'),)
  
  ]
 

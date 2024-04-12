@@ -174,3 +174,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'pilashrestha366@gmail.com' 
 EMAIL_HOST_PASSWORD = 'kwrq ceyp wuse luwu' 
 
+
+LOGIN_URL = 'login'

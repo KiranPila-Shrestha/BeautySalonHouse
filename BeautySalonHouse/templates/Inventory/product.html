@@ -97,7 +97,7 @@
 <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-32">
   {% for product in productList %}
    <!-- {% if product.productCategory == category %}-->
-      <div class="flex flex-col items-center">
+      <div class="flex flex-col items-center md:mb-16">
         <!-- displaying product picture -->
         <div id="gallery" class="relative w-full" data-carousel="slide">
           <!-- Carousel wrapper -->
@@ -119,8 +119,6 @@
         <p class="mt-2 text-sm">{{ product.productBrand }}</p>
         <p class="mt-2 text-sm">Stock ({{ product.productStock }})</p>
         <p class="mt-2 text-sm"> Rs {{ product.productPrice }}</p>
-        <p class="rating-stars"></p>
-        <p id="rating-message" class="mt-2 text-gray-600"></p>
 
         <!-- Add to Cart button -->
         <button class="bg-teal-600 text-white px-4 py-2 rounded-md mt-2"> <a href = "{% url 'addtocart' product.id%}">Add to Cart</a></button>
@@ -133,60 +131,7 @@
 
 
 
-<!-- Script for generating stars -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-      // Select all elements with class'
-      const starsContainers = document.querySelectorAll('.rating-stars');
-  
-      // Iterate through each  container
-      starsContainers.forEach(starsContainer => {
-          
-          for (let i = 1; i <= 5; i++) { //5star
-              const star = document.createElement('span');
-              star.classList.add(
-                  'cursor-pointer',
-                  'text-2xl',
-                  'mr-1',
-                  'pr-1',
-                  'hover:text-yellow-500',
-                  'transition',
-                  'transform',
-                  'duration-200',
-                  'ease-in-out'
-              );
-              star.innerHTML = '★';
-  
-             
-              star.addEventListener('click', function () {  // click event to each star
-                  const rating = i;
-                  updateRating(starsContainer, rating);
-              });
-  
-              starsContainer.appendChild(star);
-          }
-      });
-  
-      
-      function updateRating(container, rating) { // Function to update stars for  container
-          
-          highlightStars(container, rating);
-      }
-  
-      // Function to give color to star
-      function highlightStars(container, rating) {
-          const stars = container.children;
-  
-          for (let i = 0; i < stars.length; i++) {
-              if (i < rating) {
-                  stars[i].classList.add('text-yellow-500');
-              } else {
-                  stars[i].classList.remove('text-yellow-500');
-              }
-          }
-      }
-  });
-</script>
+
 {% endblock %}
 </body>
 </html>
