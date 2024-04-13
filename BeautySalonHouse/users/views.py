@@ -25,6 +25,23 @@ import re
 def is_superuser(user):
     return user.is_superuser
 
+
+def is_customer_or_is_staff_block(user):
+    if user.userdetail.hasUserBlocked == True:
+        return user.is_authenticated and user.userdetail.hasUserBlocked == False and (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer')
+    elif user.is_authenticated and user.userdetail.hasUserBlocked == False and (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer'):
+        return user.is_authenticated and user.userdetail.hasUserBlocked == False and (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer')
+        
+def is_customer_or_staff(user):
+    # Check if the user is authenticated and belongs to any of the specified groups,
+    # or if the user's user_type is 'customer'
+    return (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or user.userdetail.user_type == 'customer')
+
+
+
 # LOGIN
 def loginUser(request):
     if request.method == 'POST':
@@ -48,7 +65,7 @@ def loginUser(request):
                 return redirect('/')
             
         else:
-            sweetify.info(request, 'Username or Password is invalid.')
+            sweetify.error(request, 'Username or Password is invalid. Please provide valid password and username.')
         
 
     return render(request, 'login_register/login.html')
@@ -81,6 +98,16 @@ def registerUser(request):
                 # Saving user default profile
                 user_default_profile_picture = UserProfile(user=user)
                 user_default_profile_picture.save()
+                recipient_email = [user.email]  # Make sure user.email is a valid email address
+
+                send_mail(
+                    'Welcome to our salon',  # Make sure the subject is a string
+                    'Your account has been created for Customer, Username as ' + username + '. Now, You can Login.',  # Make sure the message is a string
+                    settings.EMAIL_HOST_USER,  # Make sure EMAIL_HOST_USER is defined in your Django settings
+                    recipient_email,  # Make sure recipient_email is a list of valid email addresses
+                    fail_silently=False,
+)
+            
             sweetify.success(request,"Account Created for " + username + " Now you can login.")
             return redirect('login')
         elif not form.is_valid():
@@ -101,15 +128,11 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
-def is_customer_or_staff(user):
-    # Check if the user is authenticated and belongs to any of the specified groups,
-    # or if the user's user_type is 'customer'
-    return (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or user.userdetail.user_type == 'customer')
-
 
 ##EditProfile user
 @login_required(login_url='login')
 @user_passes_test(is_customer_or_staff)
+@user_passes_test(is_customer_or_is_staff_block)
 def EditProfile(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user_detail = user.userdetail
@@ -176,6 +199,7 @@ def EditProfile(request, user_id):
 #  Change-password function part start
 @login_required
 @user_passes_test(is_customer_or_staff)
+@user_passes_test(is_customer_or_is_staff_block)
 def ChangePassword(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user_detail = user.userdetail

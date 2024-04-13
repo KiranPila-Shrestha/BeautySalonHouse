@@ -22,6 +22,11 @@ from core.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 
+#Custom 404 error view
+handler404 = 'core.views.error_404' 
+#Custom 500 error view
+handler500 = 'core.views.error_500'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
   path('', include('users.urls')),

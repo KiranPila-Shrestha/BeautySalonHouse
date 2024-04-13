@@ -133,7 +133,7 @@
       </div>
       
       <!-- Social Icons -->
-      <div class="flex mr-10">
+      <div class="flex">
         <a href="#" class="mr-4"><i class="fab fa-instagram hover:text-red-400"></i></a>
         <a href="#"><i class="fab fa-facebook hover:text-blue-400"></i></a>
       </div>
@@ -146,7 +146,7 @@
         <div class="text-2xl font-bold mr-10"><img src="{% static 'Image/logo/logo.svg' %}"   class="w-[80%] h-" alt="logo" /></div>
         
         <!-- Navigation Links -->
-        <div class="flex gap-5 space-x-8">
+        <div class="flex gap-12 items-center">
           <a href="{% url 'home' %}" class="nav-link"  >Home</a>
           <a href="{% url 'productpage' %}" class="nav-link">Products</a>
           <div class="dropdown">
@@ -177,21 +177,20 @@
 
     {% else %}
     
-    <a href="{% url 'booking' %}">
-      <button class="primary bg-[#009688] hover:bg-cyan-600 text-white px-8 py-2 ml-[480px]">Book Now</button>
-  </a>
-  <div class="flex items-center">
-    <!-- Online Shopping Cart Icon from Font Awesome -->
-    <a href="{% url 'cartview' %}">
-        <i class="fas fa-shopping-cart text-red-700 hover:text-teal-600 text-xl mr-2"></i>
-    </a>
-  </div>
+   <div class="flex  gap-12 items-center">
+    <div class="flex items-center gap-4">
+      <a href="{% url 'booking' %}">
+        <button class="primary bg-[#009688] hover:bg-cyan-600 text-white px-8 py-2">Book Now</button>
+      </a>
+      <div class="flex items-center">
+        <!-- Online Shopping Cart Icon from Font Awesome -->
+        <a href="{% url 'cartview' %}">
+            <i class="fas fa-shopping-cart text-red-700 hover:text-teal-600 text-xl mr-2"></i>
+        </a>
+      </div>
+    </div>
 
 {% endif %}
-    
-  
-  
-
 {% if request.user.is_authenticated %}
 <div class="relative">
   <div class="flex items-center cursor-pointer" id="userDropdownToggle">
@@ -223,6 +222,12 @@
 
 </div>
 {% endif %}
+   </div>
+    
+  
+  
+
+
 
 
 

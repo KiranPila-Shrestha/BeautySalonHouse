@@ -124,3 +124,13 @@ def skinservice(request):
     }    
     
     return render(request, 'landing_page/skinservice.html', context)
+
+def errorpage(request):
+    return render(request, '404page.html')
+
+
+def error_404(request, exception):
+    return render(request, '404page.html', status=404)
+ 
+def error_500(request):
+    return render (request, '404page.html', status=500)

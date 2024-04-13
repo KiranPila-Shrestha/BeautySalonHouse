@@ -1,321 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hair Service</title>
+    <style>
+      * {
+        font-family: "Poppins", sans-serif;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hair Service</title>
-  <style>
-    * {
-       font-family: "Poppins", sans-serif;
-     }
-   
-     /* Custom CSS for feedback section */
-     .overflow-y-auto::-webkit-scrollbar {
-      width: 8px;
-    }
+      /* Custom CSS for feedback section */
+      .overflow-y-auto::-webkit-scrollbar {
+        width: 8px;
+      }
 
-    .overflow-y-auto::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
+      .overflow-y-auto::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
 
-    .overflow-y-auto::-webkit-scrollbar-thumb {
-      background-color: #888;
-      border-radius: 4px;
-    }
+      .overflow-y-auto::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 4px;
+      }
 
-    .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
-  </style>
-</head>
+      .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+    </style>
+  </head>
 
-<body>
-{% extends 'Base_Content/base.html'%}   
-{% block content %} 
-<!-- Banner with Salon Image -->
+  <body>
+    {% extends 'Base_Content/base.html'%} {% block content %}
+    <!-- Banner with Salon Image -->
 
- 
-<div class="relative ">
-  <img
-    src="static/Image/hair image/Hair-bg.png"
-    alt="Your Salon Logo"
-    class=""
-  />
-  <div class="absolute inset-0 bg-[rgba(0,0,0,0.5)]"></div>
-  <div class="absolute top-0 left-0 mt-24 ml-4 p-6 text-white w-1/2">
-    <h6 class="text-2xl font-bold mb-6" style="font-family: poppins">
-      Hair Transformation
-    </h6>
-    <h1 class="text-6xl font-bold mb-2 ml-4 " style="font-family: poppins">
-      Revitalize Your Look with Expert Haircare: Where Elegance Meets Innovation"
-    </h1>
-    <br>
-    {% if request.user.is_authenticated %}
-    {% if request.user.userdetail.user_type == 'customer' %}
+    <div class="relative">
+      <img
+        src="static/Image/hair image/Hair-bg.png"
+        alt="Your Salon Logo"
+        class=""
+      />
+      <div class="absolute inset-0 bg-[rgba(0,0,0,0.5)]"></div>
+      <div class="absolute top-0 left-0 mt-24 ml-4 p-6 text-white w-1/2">
+        <h6 class="text-2xl font-bold mb-6" style="font-family: poppins">
+          Hair Transformation
+        </h6>
+        <h1 class="text-6xl font-bold mb-2 ml-4" style="font-family: poppins">
+          Revitalize Your Look with Expert Haircare: Where Elegance Meets
+          Innovation"
+        </h1>
+        <br />
+        {% if request.user.is_authenticated %} 
+        {% if request.user.userdetail.user_type == 'customer' %}
         <a href="{% url 'booking' %}">
-            <button class="bg-[#009688] text-white px-4 py-2  hover:bg-[#00BCD4]">
-                Book Now
-            </button>
+          <button class="bg-[#009688] text-white px-4 py-2 hover:bg-[#00BCD4]">
+            Book Now
+          </button>
         </a>
-    {% endif %}
-{% else %}
-    <a href="{% url 'login' %}">
-        <button class="bg-[#009688] text-white px-4 py-2  hover:bg-[#00BCD4]">
-           Book Now
-        </button>
-    </a>
-{% endif %}
-  </div>
-</div>
-<br />
-<br />
-<br />
-
-<div class="flex mb-4 bg-[#F9EFED]">
-  <!-- Left side -->
-  <div class="w-1/2 pl-10 pr-10 text-center">
-    <h3
-      class="text-black text-4xl font-semibold mt-10"
-      style="font-family: poppins"
-    >
-      Discover What We Offer
-    </h3>
+        {% endif %} 
+        {% else %}
+        <a href="{% url 'login' %}">
+          <button class="bg-[#009688] text-white px-4 py-2 hover:bg-[#00BCD4]">
+            Book Now
+          </button>
+        </a>
+        {% endif %}
+      </div>
+    </div>
     <br />
-    <p
-      class="text-lg text-left text-gray-600"
-      style="font-family: poppins, serif"
-    >
-      There's nothing quite like the luxurious sensation of having your hair
-      pampered at the basin, complete with an indulgent head massage and a fresh
-      burst of color that screams confidence.
-      <br />
-      <br />
-      At Aura Salon, we're dedicated to making your hair dreams a reality. Our
-      team of passionate professionals will guide you through every step of your
-      hair journey, ensuring that you achieve your desired look with the highest
-      quality products and unparalleled expertise.
-      <br />
-      <br />
-      When it comes to color, we believe in empowering our clients with the
-      knowledge they need to maintain their salon-fresh look effortlessly. Our
-      commitment to education ensures that every client leaves our salon feeling
-      confident and empowered to embrace their new style.
-      <br />
-      <br />
-      Experience the joy of transformation with Aura Salon. Step into our salon
-      and discover the art of beauty redefined.<br />
-    </p>
-  </div>
-  <!-- Right side -->
-  <div class="w-1/2 pl-12">
-    <img
-      src="static/Image/hair image/hair9.jpg"
-      alt="Left Image"
-      class="w-17 h-auto pt-10 pb-10"
-    />
-  </div>
-</div>
-<!-- Service Section -->
-<div class="container mx-auto py-12 px-4">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-    <!-- Hair Service -->
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <div class="flex flex-col md:flex-row">
-        <!-- Image -->
+    <br />
+    <br />
+
+    <div class="flex mb-4 bg-[#F9EFED]">
+      <!-- Left side -->
+      <div class="w-1/2 pl-10 pr-10 text-center">
+        <h3
+          class="text-black text-4xl font-semibold mt-10"
+          style="font-family: poppins"
+        >
+          Discover What We Offer
+        </h3>
+        <br />
+        <p
+          class="text-lg text-left text-gray-600"
+          style="font-family: poppins, serif"
+        >
+          There's nothing quite like the luxurious sensation of having your hair
+          pampered at the basin, complete with an indulgent head massage and a
+          fresh burst of color that screams confidence.
+          <br />
+          <br />
+          At Aura Salon, we're dedicated to making your hair dreams a reality.
+          Our team of passionate professionals will guide you through every step
+          of your hair journey, ensuring that you achieve your desired look with
+          the highest quality products and unparalleled expertise.
+          <br />
+          <br />
+          When it comes to color, we believe in empowering our clients with the
+          knowledge they need to maintain their salon-fresh look effortlessly.
+          Our commitment to education ensures that every client leaves our salon
+          feeling confident and empowered to embrace their new style.
+          <br />
+          <br />
+          Experience the joy of transformation with Aura Salon. Step into our
+          salon and discover the art of beauty redefined.<br />
+        </p>
+      </div>
+      <!-- Right side -->
+      <div class="w-1/2 pl-12">
         <img
-          src="static/Image/hair image/hair7.jpg"
-          alt="Hair Service"
-          class="w-full h-auto md:w-1/2 h-96 object-cover"
+          src="static/Image/hair image/hair9.jpg"
+          alt="Left Image"
+          class="w-17 h-auto pt-10 pb-10"
         />
-        <!-- Details -->
-        <div class="p-6 md:w-1/2">
-          <h3 class="text-xl font-bold mb-2">Keratin Treatment</h3>
-          <p class="text-lg text-gray-600 mb-4">
-            Keratin is a protective protein that is found in hair, nails, and
-            skin. It isn’t vulnerable to tearing and is used as a smoothing
-            ingredient for hair. As your hair loses its natural source of
-            keratin due to age or health reasons, getting a keratin treatment
-            injects protein back into your hair.
-          </p>
+      </div>
+    </div>
+    <!-- Service Section -->
+    <div class="container mx-auto py-12 px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Hair Service -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="flex flex-col md:flex-row">
+            <!-- Image -->
+            <img
+              src="static/Image/hair image/hair7.jpg"
+              alt="Hair Service"
+              class="w-full h-auto md:w-1/2 h-96 object-cover"
+            />
+            <!-- Details -->
+            <div class="p-6 md:w-1/2">
+              <h3 class="text-xl font-bold mb-2">Keratin Treatment</h3>
+              <p class="text-lg text-gray-600 mb-4">
+                Keratin is a protective protein that is found in hair, nails,
+                and skin. It isn’t vulnerable to tearing and is used as a
+                smoothing ingredient for hair. As your hair loses its natural
+                source of keratin due to age or health reasons, getting a
+                keratin treatment injects protein back into your hair.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Makeup Service -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="flex flex-col md:flex-row">
+            <!-- Image -->
+            <img
+              src="static/Image/hair image/service-4.jpg"
+              alt="Makeup Service"
+              class="w-full h-64 md:w-1/2 md:h-auto object-cover"
+            />
+            <!-- Details -->
+            <div class="p-6 md:w-1/2">
+              <h3 class="text-xl font-bold mb-2">Permanent Waves</h3>
+              <p class="text-lg text-gray-600 mb-4">
+                "A permanent wave treatment adds natural curls to the hair
+                permanently. These waves last for several months, instilling our
+                clients with a newfound sense of confidence."
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <!-- Makeup Service -->
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <div class="flex flex-col md:flex-row">
-        <!-- Image -->
-        <img
-          src="static/Image/hair image/service-4.jpg"
-          alt="Makeup Service"
-          class="w-full h-64 md:w-1/2 md:h-auto object-cover"
-        />
-        <!-- Details -->
-        <div class="p-6 md:w-1/2">
-          <h3 class="text-xl font-bold mb-2">Permanent Waves</h3>
-          <p class="text-lg text-gray-600 mb-4">
-            "A permanent wave treatment adds natural curls to the hair
-            permanently. These waves last for several months, instilling our
-            clients with a newfound sense of confidence."
-          </p>
+
+    <!-- Service Section -->
+    <div class="container mx-auto py-12 px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Hair Service -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="flex flex-col md:flex-row">
+            <!-- Image -->
+            <img
+              src="static/Image/hair image/hair3.jpg"
+              alt="Hair Service"
+              class="w-full h-64 md:w-1/2 md:h-auto object-cover"
+            />
+            <!-- Details -->
+            <div class="p-6 md:w-1/2">
+              <h3 class="text-xl font-bold mb-2">Hair Cut</h3>
+              <p class="text-lg text-gray-600 mb-4">
+                "Think of a haircut as shedding unwanted energy and embracing
+                new beginnings. Step into our salon and experience the ultimate
+                haircut that'll have you strutting down Fifth Avenue, channeling
+                your inner Carrie Bradshaw."
+              </p>
+            </div>
+          </div>
         </div>
+        <!-- Makeup Service -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="flex flex-col md:flex-row">
+            <!-- Image -->
+            <img
+              src="static/Image/hair image/hair4.jpg"
+              alt="Makeup Service"
+              class="w-full h-64 md:w-1/2 md:h-auto object-cover"
+            />
+            <!-- Details -->
+            <div class="p-6 md:w-1/2">
+              <h3 class="text-xl font-bold mb-2">Hair Coloring</h3>
+              <p class="text-lg text-gray-600 mb-4">
+                "Our dedicated colorists strive to curate a serene space where
+                guests can unwind, relax, and draw inspiration from the
+                transformative power of change. From stunning highlights to the
+                artistry of Balayage, we offer a myriad of options to fulfill
+                your hair color dreams."
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Add more services here -->
       </div>
     </div>
-   
-  </div>
-</div>
 
-<!-- Service Section -->
-<div class="container mx-auto py-12 px-4">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-    <!-- Hair Service -->
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <div class="flex flex-col md:flex-row">
-        <!-- Image -->
-        <img
-          src="static/Image/hair image/hair3.jpg"
-          alt="Hair Service"
-          class="w-full h-64 md:w-1/2 md:h-auto object-cover"
-        />
-        <!-- Details -->
-        <div class="p-6 md:w-1/2">
-          <h3 class="text-xl font-bold mb-2">Hair Cut</h3>
-          <p class="text-lg text-gray-600 mb-4">
-            "Think of a haircut as shedding unwanted energy and embracing new
-            beginnings. Step into our salon and experience the ultimate haircut
-            that'll have you strutting down Fifth Avenue, channeling your inner
-            Carrie Bradshaw."
-          </p>
+    <!-- Service Section -->
+    <div class="container mx-auto py-12 px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Hair Service -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="flex flex-col md:flex-row">
+            <!-- Image -->
+            <img
+              src="static/Image/hair image/hair5.jpg"
+              alt="Hair Service"
+              class="w-full h-64 md:w-1/2 md:h-auto object-cover"
+            />
+            <!-- Details -->
+            <div class="p-6 md:w-1/2">
+              <h3 class="text-xl font-bold mb-2">Hair Straightning</h3>
+              <p class="text-lg text-gray-600 mb-4">
+                "Ever dreamed of silky, straight hair like Naomi Campbell's? Our
+                salon offers a distinctive Japanese straightening technique that
+                chemically straightens your hair for months, giving you the
+                sleek look you desire."
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Makeup Service -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="flex flex-col md:flex-row">
+            <!-- Image -->
+            <img
+              src="static/Image/hair image/hair6.webp"
+              alt="Makeup Service"
+              class="w-full h-64 md:w-1/2 md:h-auto object-cover"
+            />
+            <!-- Details -->
+            <div class="p-6 md:w-1/2">
+              <h3 class="text-xl font-bold mb-2">Shampoo and Styling</h3>
+              <p class="text-lg text-gray-600 mb-4">
+                "Need a quick boost before a big night out? Swing by Aura Salon
+                for a refreshing shampoo and blowout, complete with a
+                rejuvenating Head Shiatsu massage. It's the perfect way to relax
+                and recharge before hitting the town."
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Makeup Service -->
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <div class="flex flex-col md:flex-row">
-        <!-- Image -->
-        <img
-          src="static/Image/hair image/hair4.jpg"
-          alt="Makeup Service"
-          class="w-full h-64 md:w-1/2 md:h-auto object-cover"
-        />
-        <!-- Details -->
-        <div class="p-6 md:w-1/2">
-          <h3 class="text-xl font-bold mb-2">Hair Coloring</h3>
-          <p class="text-lg text-gray-600 mb-4">
-            "Our dedicated colorists strive to curate a serene space where
-            guests can unwind, relax, and draw inspiration from the
-            transformative power of change. From stunning highlights to the
-            artistry of Balayage, we offer a myriad of options to fulfill your
-            hair color dreams."
-          </p>
+      <br />
+
+      <!-- hairservice.html -->
+      {% if hairfeedback|length != 0 %}
+      <div class="container mx-auto py-12 px-4">
+        <h2 class="text-3xl font-semibold mb-6">Feedbacks for Hair Service</h2>
+        <div class="max-h-80 overflow-y-auto">
+          <div class="grid grid-cols-1 gap-6">
+            {% for feedback in hairfeedback %}
+            <div
+              class="flex rounded-lg overflow-hidden border-2 shadow-lg px-6 py-4"
+            >
+              <div class="flex-grow">
+                <div class="font-bold text-xl mb-2">{{ feedback.user }}</div>
+                <p class="text-gray-700 text-base">{{ feedback.feedback }}</p>
+                <p class="text-sm font-bold">{{feedback.feedbackDate|date}}</p>
+                <p class="text-sm">Staff: {{ feedback.appointment.staff }}</p>
+              </div>
+              <div class="flex-shrink-0 ml-4">
+                <!-- User profile image link -->
+                <a href="#"
+                  ><img
+                    src="{{ request.user.userprofile.image.url }}"
+                    alt="User Profile"
+                    class="w-20 h-20 rounded-full"
+                /></a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Add more services here -->
-  </div>
-</div>
+      {% endif %}
 
-<!-- Service Section -->
-<div class="container mx-auto py-12 px-4">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-    <!-- Hair Service -->
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <div class="flex flex-col md:flex-row">
-        <!-- Image -->
-        <img
-          src="static/Image/hair image/hair5.jpg"
-          alt="Hair Service"
-          class="w-full h-64 md:w-1/2 md:h-auto object-cover"
-        />
-        <!-- Details -->
-        <div class="p-6 md:w-1/2">
-          <h3 class="text-xl font-bold mb-2">Hair Straightning</h3>
-          <p class="text-lg text-gray-600 mb-4">
-            "Ever dreamed of silky, straight hair like Naomi Campbell's? Our
-            salon offers a distinctive Japanese straightening technique that
-            chemically straightens your hair for months, giving you the sleek
-            look you desire."
-          </p>
-        </div>
+      <br />
+      <div
+        class="flex flex-col items-center justify-center"
+        style="
+          background-image: url('static/Image/hair10.jpg');
+          background-size: cover;
+          background-position: center;
+          height: 400px;
+        "
+      >
+        <h1
+          class="text-4xl font-bold mb-2 text-white"
+          style="font-family: poppins"
+        >
+          Contact Us for Booking
+        </h1>
+        <button class="text-[#009688] text-2xl font-bold mt-2">
+          Call Us: +1234567890</button
+        ><br />
+        <a href="{% url 'booking' %}">
+          <button
+            class="bg-[#009688] text-2xl text-white px-8 py-2 primary hover:bg-[#00BCD4]"
+          >
+            Online Booking
+          </button>
+        </a>
       </div>
     </div>
-    <!-- Makeup Service -->
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-      <div class="flex flex-col md:flex-row">
-        <!-- Image -->
-        <img
-          src="static/Image/hair image/hair6.webp"
-          alt="Makeup Service"
-          class="w-full h-64 md:w-1/2 md:h-auto object-cover"
-        />
-        <!-- Details -->
-        <div class="p-6 md:w-1/2">
-          <h3 class="text-xl font-bold mb-2">Shampoo and Styling</h3>
-          <p class="text-lg text-gray-600 mb-4">
-            "Need a quick boost before a big night out? Swing by Aura Salon for
-            a refreshing shampoo and blowout, complete with a rejuvenating Head
-            Shiatsu massage. It's the perfect way to relax and recharge before
-            hitting the town."
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <br />
 
-<!-- hairservice.html -->
-{% if hairfeedback|length != 0 %}
-<div class="container mx-auto py-12 px-4">
-  <h2 class="text-3xl font-semibold mb-6">Feedbacks for Hair Service</h2>
-  <div class="max-h-80 overflow-y-auto">
-    <div class="grid grid-cols-1 gap-6">
-      {% for feedback in hairfeedback %}
-      <div class="flex rounded-lg overflow-hidden border-2 shadow-lg px-6 py-4">
-        <div class="flex-grow">
-          <div class="font-bold text-xl mb-2">{{ feedback.user }}</div>
-          <p class="text-gray-700 text-base">{{ feedback.feedback }}</p>
-          <p class="text-sm font-bold">{{feedback.feedbackDate|date}}</p>
-          <p class="text-sm">Staff: {{ feedback.appointment.staff }}</p>
-        </div>
-        <div class="flex-shrink-0 ml-4">
-          <!-- User profile image link -->
-          <a href="#"><img src="{{ request.user.userprofile.image.url }}" alt="User Profile" class="w-20 h-20 rounded-full"></a>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</div>
-{% endif %}
-
-  <br />
-  <div
-    class="flex flex-col items-center justify-center"
-    style="
-      background-image: url('static/Image/hair10.jpg');
-      background-size: cover;
-      background-position: center;
-      height: 400px;
-    "
-  >
-    <h1 class="text-4xl font-bold mb-2 text-white" style="font-family: poppins">
-      Contact Us for Booking
-    </h1>
-    <button class="text-[#009688] text-2xl font-bold mt-2">
-      Call Us: +1234567890</button
-    ><br />
-    <a href= "{% url 'booking' %}">
-    <button
-      class="bg-[#009688] text-2xl text-white px-8 py-2 primary hover:bg-[#00BCD4]"
-    >
-      Online Booking
-    </button>
-  </a>
-  </div>
-</div>
-
-
-
-{% endblock %}
-</body>
+    {% endblock %}
+  </body>
 </html>

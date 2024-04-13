@@ -20,30 +20,48 @@ from django.conf import settings
 import sweetify
 from django.db.models import Count
 
-# Create your views here.
-def is_customer_or_staff(user):
-    # Check if the user is authenticated and belongs to any of the specified groups,
-    # or if the user's user_type is 'customer'
-    return user.is_authenticated and \
-           (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
-            user.userdetail.user_type == 'customer')
-       
+
 def is_customer(user):
-    return user.is_authenticated and user.userdetail.user_type == 'customer'
-    # Check if the user is a customer.
-      
+    if not user.is_superuser and user.is_authenticated:
+        if user.userdetail.hasUserBlocked == True and user.userdetail.user_type == 'customer':
+            return False
+        elif user.userdetail.user_type == 'customer' and user.userdetail.hasUserBlocked == False:
+            return True
+            # Check if the user is a customer.
+        
 def is_staff(user):
-    return user.is_authenticated and \
-           user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists()
-# Check if the user belongs to any of the specified groups.
-         
-    
-def is_superuser(user):
-    return user.is_superuser
+    if not user.is_superuser and user.is_authenticated:
+        if user.userdetail.hasUserBlocked == True and user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists():
+            return False
+        elif user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() and user.userdetail.hasUserBlocked == False:
+            return True
+
+def is_customer_or_is_staff_block(user):
+    if user.userdetail.hasUserBlocked == True:
+        return user.is_authenticated and user.userdetail.hasUserBlocked == False and (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer').exists()
+    elif user.is_authenticated and user.userdetail.hasUserBlocked == False and (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer'):
+        return user.is_authenticated and user.userdetail.hasUserBlocked == False and (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer')
+     
+ #for payment history 
+def is_customer_or_superuser(user):
+    if user.is_superuser:
+        return True
+    elif user.userdetail.hasUserBlocked == True and not user.is_superuser:
+        return False
+        # Check if the user is either a customer or a superuser and is not unauthorized or belongs to specific groups.
+        # return user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists()
+    elif user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists():
+        return False
+    elif not user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists():
+        return True
 
 # booking by customer views.
 @login_required
 @user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
 def booking(request): 
     username = request.POST.get('username')
     user = request.user 
@@ -112,6 +130,7 @@ def booking(request):
 #appointment cancel and approve handling vies by stafff.
 @login_required
 @user_passes_test(is_staff)
+@user_passes_test(is_customer_or_is_staff_block)
 def Appointments(request):
  
     booking_requests = BookAppointment.objects.filter(staff=request.user, confirmed=False, status="Pending")
@@ -137,7 +156,7 @@ def Appointments(request):
             
             send_mail(
                 'Appointment is Rejected',
-                'Your appointment has been rejected by the staff member',
+                f'Dear {booking.user.username},\n\nWe regret to inform you that your appointment with {booking.staff} on {booking.bookDate} at {booking.bookTime} has been rejected.\n\nPlease feel free to contact us at +017773322 for any queries or assistance.\n\nRegards,\nThe Aura Salon Team',
                 settings.EMAIL_HOST_USER,
                 [booking.user.email],
                 fail_silently=False,
@@ -149,7 +168,7 @@ def Appointments(request):
             booking.save()
             send_mail(
                 'Appointment has been Approved',
-                'Your appointment has been approved by the staff member on the date and time you have chosen',
+                f'Dear {booking.user.username},\n\nWe are pleased to inform you that your appointment with {booking.staff} on {booking.bookDate} at {booking.bookTime} has been approved.\n\nPlease feel free to contact us at +017773322 for any queries or assistance.\n\nWe look forward to seeing you.\n\nRegards,\nThe Aura Salon Team',
                 settings.EMAIL_HOST_USER,
                 [booking.user.email],
                 fail_silently=False,
@@ -169,6 +188,7 @@ def Appointments(request):
 #display all the cancel appointment
 @login_required
 @user_passes_test(is_staff)
+@user_passes_test(is_customer_or_is_staff_block)
 def CancelAppointments(request):
     # Retrieve all canceled appointments
     canceled_appointments = BookAppointment.objects.filter(staff=request.user, status='Canceled')
@@ -182,6 +202,7 @@ def CancelAppointments(request):
 # Complete Appointments view
 @login_required
 @user_passes_test(is_staff)
+@user_passes_test(is_customer_or_is_staff_block)
 def CompleteAppointments(request):
     currentUser = str(request.user)
 
@@ -196,6 +217,10 @@ def CompleteAppointments(request):
 # See all the confirm appointment dashboard logic for staff and admin and customer.
 
 @login_required
+# @user_passes_test(is_customer)
+# @user_passes_test(is_staff)
+# @user_passes_test(is_superuser)
+# @user_passes_test(is_customer_or_is_staff_block)
 def bookedAppointment(request, user_id=None):
     currentUser = str(request.user)
     print(currentUser)
@@ -254,6 +279,7 @@ def bookedAppointment(request, user_id=None):
 # views after showing the appointment cancels after approve data showing
 @login_required
 @user_passes_test(is_staff)
+@user_passes_test(is_customer_or_is_staff_block)
 def CancelbookedAppointement(request):
     # Retrieve all canceled appointments
     canceled_booked_appointment = BookAppointment.objects.filter(staff=request.user, status='cancel Booking')
@@ -267,6 +293,7 @@ def CancelbookedAppointement(request):
 
 @login_required
 @user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
 def userCancelbookedAppointement(request):
     # Retrieve all canceled appointments
     user_canceled_booked_appointment = BookAppointment.objects.filter(user=request.user, status='cancel Booking')
@@ -281,6 +308,7 @@ def userCancelbookedAppointement(request):
 # views for appointment information for user only.
 @login_required
 @user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
 def appointmentHistory(request):
     #filter appoint of current user
     booking_requests = BookAppointment.objects.filter(user= request.user)
@@ -299,6 +327,7 @@ def appointmentHistory(request):
 #user history of complete appointment.
 @login_required
 @user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
 def UserCompleteAppointments(request):
     userFeedBack = None
     feedback = None

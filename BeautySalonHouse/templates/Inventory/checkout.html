@@ -145,12 +145,19 @@ class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
             </button>
         </form>
         <br>
-        <form action="#" method="POST">
+        <form action="{% url 'CashonDelivery' %}" method="POST">
             {% csrf_token %}
-            <button type="submit" name="cashOnDelivery" class="mb-2 text-white inline-flex items-center ml-[1rem] justify-center bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500 ">
+            <button type="submit" name="cashOnDelivery" class="mb-2 text-white inline-flex items-center ml-[1rem] justify-center bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
                 Cash on Delivery
             </button>
+            {% for cartItem in cartItems %}
+                <input type="hidden" name="amount" id="amt" value="{{ cartItem.total_amount }}">
+                {% endfor %}
+                <input type="hidden" name="purchase_order_id" id="pid" value="{{request.user}}">
+                <input type="hidden" name="return_url"
+                value="http://127.0.0.1:9999/paymentSucessful">
         </form>
+        
     </div>
 </div>
 </div>

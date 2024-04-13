@@ -17,29 +17,44 @@ import re
 from django.http import Http404 
 from django.core.exceptions import ObjectDoesNotExist
 
-# Create your views here.
-def is_customer_or_staff(user):
-    # Check if the user is authenticated and belongs to any of the specified groups,
-    # or if the user's user_type is 'customer'
-    return user.is_authenticated and \
-           (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
-            user.userdetail.user_type == 'customer')
-       
+ 
 def is_customer(user):
-    return user.is_authenticated and user.userdetail.user_type == 'customer'
-    # Check if the user is a customer.
-      
+    if not user.is_superuser and user.is_authenticated:
+        if user.userdetail.hasUserBlocked == True and user.userdetail.user_type == 'customer':
+            return False
+        elif user.userdetail.user_type == 'customer' and user.userdetail.hasUserBlocked == False:
+            return True
+            # Check if the user is a customer.
+        
 def is_staff(user):
-    return user.is_authenticated and \
-           user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists()
-# Check if the user belongs to any of the specified groups.
-         
+    if not user.is_superuser and user.is_authenticated:
+        if user.userdetail.hasUserBlocked == True and user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists():
+            return False
+        elif user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() and user.userdetail.hasUserBlocked == False:
+            return True
+
+def is_customer_or_is_staff_block(user):
+    if user.userdetail.hasUserBlocked == True:
+        return user.is_authenticated and user.userdetail.hasUserBlocked == False and (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer').exists()
+    elif user.is_authenticated and user.userdetail.hasUserBlocked == False and (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer'):
+        return user.is_authenticated and user.userdetail.hasUserBlocked == False and (user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists() or \
+            user.userdetail.user_type == 'customer')
+     
  #for payment history 
 def is_customer_or_superuser(user):
-    try:
-        return user.is_authenticated and user.userdetail.user_type == 'customer' or user.is_superuser
-    except ObjectDoesNotExist:
-        return user.is_superuser
+    if user.is_superuser:
+        return True
+    elif user.userdetail.hasUserBlocked == True and not user.is_superuser:
+        return False
+        # Check if the user is either a customer or a superuser and is not unauthorized or belongs to specific groups.
+        # return user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists()
+    elif user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists():
+        return False
+    elif not user.groups.filter(name__in=["Hair Technician", "Laser Skin", "Nail Technician", "Makeup Artist"]).exists():
+        return True
+            
     
     
 def is_superuser(user):
@@ -125,7 +140,7 @@ def AddProduct(request):
     print('done')
 
 # Product description form
-
+@user_passes_test(is_customer_or_is_staff_block)
 def productdetail(request, product_id):
     productlist = addProduct.objects.all()
     
@@ -183,6 +198,7 @@ def productlist(request):
 #for add to cart
 
 @user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
 def addtoCart(request, product_id):
   # Check if the user is authenticated and is of type 'customer'
     if request.user.is_authenticated:
@@ -235,7 +251,8 @@ def addtoCart(request, product_id):
     return redirect ('productpage')
 
 @login_required    
-@user_passes_test(is_customer)  
+@user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
 def cart_view(request):
     if request.method == 'POST': # create and get user cart
         user_cart, created = cart.objects.get_or_create(user= request.user)
@@ -264,7 +281,8 @@ def cart_view(request):
     return render(request, 'Inventory/addToCart.html', context)
 
 @login_required
-@user_passes_test(is_customer)     
+@user_passes_test(is_customer)    
+@user_passes_test(is_customer_or_is_staff_block) 
 def update_cart(request):
     if request.method == 'POST':
         # Get or create the user's cart
@@ -314,7 +332,8 @@ def update_cart(request):
     return redirect('cartview')
 
 @login_required
-@user_passes_test(is_customer)    
+@user_passes_test(is_customer) 
+@user_passes_test(is_customer_or_is_staff_block)   
 def checkoutpage(request):
     if request.method == "POST":
         user_cart, created = cart.objects.get_or_create(user=request.user)
@@ -344,6 +363,7 @@ def checkoutpage(request):
 
 @login_required
 @user_passes_test(is_customer) 
+@user_passes_test(is_customer_or_is_staff_block)
 def checkout(request):        
     return render(request, 'Inventory/checkout.html')
 
@@ -351,6 +371,7 @@ def checkout(request):
 # #paymenttt
 @login_required
 @user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
 def initkhalti(request):
     print("YAAAAAAAAAAAAAAAAAAAAAAAAAA AAYO")
     user = request.user.username
@@ -409,6 +430,7 @@ def initkhalti(request):
 #  for khalti
 @login_required
 @user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
 def verifyKhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/lookup/"
     if request.method == 'GET':
@@ -499,10 +521,135 @@ def verifyKhalti(request):
     return render(request, 'payment/paymentsuccess.html')
 
 
+
 @login_required
 @user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
 def paymentSuccess(request):
     return render(request, 'payment/paymentsuccess.html')
+
+
+@login_required
+@user_passes_test(is_customer)
+
+# def delivery_on_cash(request):
+#     url  = request.META.get('HTTP_REFERER')
+#     try:
+#         # Get user's cart
+#         Buyeruser = request.user
+#         print('bn', Buyeruser)
+#         cart = cart.objects.get(user=buyer)
+#         cartItems = Cartitem.objects.filter(cart=cart) # Assuming you want the first cart item
+        
+
+#         if request.method == 'POST':
+#             with transaction.atomic():
+#                 print("Transaction started")  # Add this line for debugging
+#                 new_order = orderplaced.objects.create(
+#                     Buyeruser = Buyeruser, 
+#                     total_amount=cart.total_amount,
+#                     ordered_phone_number = cart.new_number,
+#                     ordered_address = cart.new_address,
+#                 )
+                
+#                 # Loop through each cart item and create orderDetail instances
+#                 for cart_item in cartItems:
+#                     product = cart_item.product
+#                     quantity = cart_item.quantity
+#                     seller = cart_item.seller
+#                     total_each_product = product.productPrice * quantity
+#                     is_completed ='Delivery Pending'
+                    
+                    
+#                     #decrease quantity
+#                     product.productStock -= quantity
+#                     product.save()
+                    
+#                     print("Seller:", seller.username)
+#                     orderhistoryDetails.objects.create(
+#                         order_for = new_order,
+#                         seller = seller,
+#                         product = product,
+#                         quantity= quantity,
+#                         total_each_product=total_each_product,
+#                         is_completed = is_completed
+#                     )           
+            
+#                 # Create orders directly from cart items
+#                 new_order.save()
+#                 # Clear the cart
+#                 cart.delete()
+#                 return redirect('paymentHistory')
+#     except:
+#         sweetify.error(request, "Something went wrong. Please try again")
+#         return redirect(url)
+
+
+
+@login_required
+def delivery_on_cash(request):
+    if request.method == 'POST':
+        Buyeruser = request.user
+
+        # Retrieve the user's cart
+        cart_instance = get_object_or_404(cart, user=Buyeruser)
+        cart_items_instance = Cartitem.objects.filter(cart=cart_instance)
+        
+        with transaction.atomic():
+            # Create order
+            order = orderplaced.objects.create(
+                Buyeruser=Buyeruser,
+                total_amount=cart_instance.total_amount,
+                order_contact_number=cart_instance.new_number,
+                order_address=cart_instance.new_address,
+                status=' Delivery Pending'
+            )
+
+            # Reward points logic
+            reward_point_used = 0
+
+            user_detail = UserDetail.objects.get(user=Buyeruser)
+            user_detail.reward_points = 1
+            user_detail.save()
+            reward_point_used = user_detail.reward_points
+
+            # Process each cart item
+            for cart_item in cart_items_instance:
+                product = cart_item.product
+                quantity = cart_item.Quantity
+                total_amount_product = product.productPrice * quantity
+                
+                # Decrease product stock
+                product.productStock -= quantity
+                product.save()
+                
+                # If product is out of stock, update availability
+                if product.productStock == 0:
+                    product.isAvailable = False
+                    product.save()
+
+                # Create order history detail
+                order_history_detail_instance = orderhistoryDetails.objects.create(
+                    order_for=order,
+                    product=product,
+                    quantity=quantity,
+                    total_amount_product=total_amount_product
+                )
+
+            # Update order with reward points used
+            order.rewardpoint = reward_point_used
+            order.save()
+
+            # Clear cart and cart items
+            cart_items_instance.delete()
+            cart_instance.delete()
+
+            # Redirect to payment success page
+            return render(request, 'payment/paymentsuccess.html')
+    else:
+        # Redirect to error page if method is not POST
+        return redirect('error')
+
 
 
 @login_required
@@ -524,32 +671,148 @@ def paymentHistory(request):
         orderDetails.append(orderDetail)
         
     if request.method == 'POST':
-        if "confirmOrder" in request.POST:
+        if "confirmOrder" in request.POST: #confirm order
             orderID = request.POST.get("orderID")
             print("orderIDorderIDorderIDorderID", orderID)
             orderHistory = orderplaced.objects.get(pk=orderID)
             orderHistory.status = "Completed"
             orderHistory.save()
+            # Get order details
+            order_details = ""
+            for orderDetail in orderHistory.orderhistorydetails_set.all():
+                order_details += f"Product: {orderDetail.product.productName}\n"
+                order_details += f"Quantity: {orderDetail.quantity}\n"
+                order_details += f"Amount: {orderDetail.total_amount_product}\n"
+            
+            # Get total amount, reward points used, and payment date
+            total_amount = orderHistory.total_amount
+            reward_points_used = orderHistory.rewardpoint
+            payment_date = orderHistory.date_ordered
+            
+            # Construct the message
+            message = f"""
+                Your order has been completed successfully.
+
+                Details:
+                {order_details}
+                Total Amount: {total_amount}
+                Reward Points Used: {reward_points_used}
+                Payment Date: {payment_date}
+                
+                Thank you for choosing us!
+                Contact: +01-555778899
+                Aura Salon, Baneshwor
+            """
+            
+            # Send email
             send_mail(
-                'Your Order has been Completed.',
-                'Thank you for choosing us.',
+                "Your Order has been Completed.",
+                message,
                 settings.EMAIL_HOST_USER,
                 [orderHistory.Buyeruser.email],
-                fail_silently=False,)
+                fail_silently=False,
+            )
+            
+            # Success message
             sweetify.success(request, "Order updated successfully!!")
             return redirect('paymentHistory')
-            
-        elif "cancelOrder" in request.POST:
+                    
+        elif "cancelOrder" in request.POST: #reject order
             orderID = request.POST.get("orderID")
             orderHistory = orderplaced.objects.get(pk=orderID)
             orderHistory.status = "Rejected"
             orderHistory.save()
+            message = f"""
+                We regret to inform you that your order has been cancelled.
+
+                Please feel free to contact us for further assistance.
+
+                Thank you.
+                Contact: +01-555778899
+                Aura Salon, Baneshwor
+            """
+            
             send_mail(
-                'Your order has been rejected.',
-                'Please! Contact the administratiors.',
+                'Your order has been cancelled.',
+                message,
                 settings.EMAIL_HOST_USER,
                 [orderHistory.Buyeruser.email],
-                fail_silently=False,)
+                fail_silently=False,
+            )
+            
+            # Success message
+            sweetify.success(request, "Order Rejected successfully!!")
+            return redirect('paymentHistory')
+        
+        elif "CompleteOrder" in request.POST: #complete deliverd 
+            orderID = request.POST.get("orderID")
+            orderHistory = orderplaced.objects.get(pk=orderID)
+            orderHistory.status = "Delievery Completed"
+            orderHistory.save()
+            # Get order details
+            order_details = ""
+            for orderDetail in orderHistory.orderhistorydetails_set.all():
+                order_details += f"Product: {orderDetail.product.productName}\n"
+                order_details += f"Quantity: {orderDetail.quantity}\n"
+                order_details += f"Amount: {orderDetail.total_amount_product}\n"
+            
+            # Get total amount, reward points used, and payment date
+            total_amount = orderHistory.total_amount
+            reward_points_used = orderHistory.rewardpoint
+            payment_date = orderHistory.date_ordered
+            
+            # Construct the message
+            message = f"""
+                Your order has been completed successfully.
+
+                Details:
+                {order_details}
+                Total Amount: {total_amount}
+                Reward Points Used: {reward_points_used}
+                Payment Date: {payment_date}
+                
+                Thank you for choosing us!
+                Contact: +01-555778899
+                Aura Salon, Baneshwor
+            """
+            
+            # Send email
+            send_mail(
+                "Your Order has been Completed.",
+                message,
+                settings.EMAIL_HOST_USER,
+                [orderHistory.Buyeruser.email],
+                fail_silently=False,
+            )
+            
+            # Success message
+            sweetify.success(request, "Order delivered successfully!!")
+            return redirect('paymentHistory')
+        
+        elif "DeliveryCancel" in request.POST: #delivery cancel
+            orderID = request.POST.get("orderID")
+            orderHistory = orderplaced.objects.get(pk=orderID)
+            orderHistory.status = "Delivery Canceled"
+            orderHistory.save()
+            message = f"""
+                We regret to inform you that your order has been cancelled.
+
+                Please feel free to contact us for further assistance.
+
+                Thank you.
+                Contact: +01-555778899
+                Aura Salon, Baneshwor
+            """
+            
+            send_mail(
+                'Your order has been cancelled.',
+                message,
+                settings.EMAIL_HOST_USER,
+                [orderHistory.Buyeruser.email],
+                fail_silently=False,
+            )
+            
+            # Success message
             sweetify.success(request, "Order Rejected successfully!!")
             return redirect('paymentHistory')
         
