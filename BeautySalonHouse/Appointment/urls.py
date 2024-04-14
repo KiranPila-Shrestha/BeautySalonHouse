@@ -10,10 +10,13 @@ urlpatterns = [
                path('adminappointmenthistory/', views.bookedAppointment, name='adminAppointmenthistory'),
                path('appointments', views.Appointments, name='appointments'),
                path('completeappointments', views.CompleteAppointments, name='completeappointments'),
-               path('Usercompleteappointments', views.UserCompleteAppointments, name='Usercompleteappointments'),
                path('Cancelappointments', views.CancelAppointments, name='Cancelappointments'),
                path('CancelbookedAppointement', views.CancelbookedAppointement, name='CancelbookedAppointement'),
+               #userr...
+                path('Usercompleteappointments', views.UserCompleteAppointments, name='Usercompleteappointments'),
                 path('userCancelbookedAppointement', views.userCancelbookedAppointement, name='userCancelbookedAppointement'),
+                path('userRejectAppointement', views.RejectAppointment, name='userRejectAppointement'),
+                
                
          
                

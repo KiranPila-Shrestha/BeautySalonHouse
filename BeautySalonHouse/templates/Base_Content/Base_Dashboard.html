@@ -207,18 +207,27 @@
           </li>
           <li class="mb-4">
             <a
+              href="{% url 'userRejectAppointement' %}"
+              class="block text-gray-700 hover:text-cyan-500"
+            >
+              <i class="fas fa-times-circle mr-2"></i> Rejected Appointment
+            </a>
+          </li>
+          <li class="mb-4">
+            <a
               href="{% url 'Usercompleteappointments' %}"
               class="block text-gray-700 hover:text-cyan-500"
             >
               <i class="fas fa-check-circle mr-2"></i> Completed Appointment
             </a>
           </li>
+      
           <li class="mb-4">
             <a
               href="{% url 'userCancelbookedAppointement' %}"
               class="block text-gray-700 hover:text-cyan-500"
             >
-              <i class="fas fa-times-circle mr-2"></i> Rejected Appointment
+              <i class="fas fa-times-circle mr-2"></i> Canceled Appointment
             </a>
           </li>
 

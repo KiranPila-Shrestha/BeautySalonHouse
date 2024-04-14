@@ -66,7 +66,9 @@ def loginUser(request):
             
         else:
             sweetify.error(request, 'Username or Password is invalid. Please provide valid password and username.')
-        
+            
+    if not request.user.is_authenticated:
+        sweetify.error(request, 'Please log in to access this page.')
 
     return render(request, 'login_register/login.html')
 
@@ -154,7 +156,9 @@ def EditProfile(request, user_id):
             print(user)
            
         #updating additional details
-        
+        if 'address' in request.POST:  # Check if address is present in POST data
+            user_detail.address = request.POST.get('address')
+            
             contact = request.POST.get('contact_number')
             print('Contact:', contact)  # Debugging print
             if not re.match(r'^(98|97)\d{8}$', contact):
@@ -163,8 +167,7 @@ def EditProfile(request, user_id):
                 user_detail.contact_number = contact
                 user_detail.save()
                 sweetify.success(request, "User Details has been updated successfully.")
-        if 'address' in request.POST:  # Check if address is present in POST data
-            user_detail.address = request.POST.get('address')
+        
         
         
         

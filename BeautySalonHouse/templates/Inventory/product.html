@@ -55,30 +55,20 @@
       </select>
   </div>
 
-  {% comment %} <div>
-      <!-- Using utilities: -->
-    <button name="searchByCategory" type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      Search by category
-    </button>
-  </div> {% endcomment %}
-
+ 
 
   <div class="w-96">
     <input name="searchForName" placeholder="Search product..." class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="">
   </div>
 
   <div>
-    <!-- Using utilities: -->
-  <button name="searchProduct" type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-    Search by name
+    <!-- search button: -->
+  <button name="searchProduct" type="submit" class="bg-teal-600 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded">
+    Search by Product Name and category
   </button>
 </div>
 </div>
 </form>
-{% comment %} 
-<form method="" action="post">
-  
-</form> {% endcomment %}
 
 <div class="text-center">
   {% if SearchFor and SearchFor != 'Select category' and not searchForName  %}
@@ -121,7 +111,7 @@
         <p class="mt-2 text-sm"> Rs {{ product.productPrice }}</p>
 
         <!-- Add to Cart button -->
-        <button class="bg-teal-600 text-white px-4 py-2 rounded-md mt-2"> <a href = "{% url 'addtocart' product.id%}">Add to Cart</a></button>
+        <button class="bg-teal-600 hover:bg-cyan-600 text-white px-4 py-2 rounded-md mt-2"> <a href = "{% url 'addtocart' product.id%}">Add to Cart</a></button>
       </div>
     <!--{% endif %}-->
   {% endfor %}

@@ -140,7 +140,7 @@ def AddProduct(request):
     print('done')
 
 # Product description form
-@user_passes_test(is_customer_or_is_staff_block)
+
 def productdetail(request, product_id):
     productlist = addProduct.objects.all()
     

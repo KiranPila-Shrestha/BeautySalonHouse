@@ -24,6 +24,7 @@
 <!-- Main Content -->
 <div class="shadow-lg rounded-lg p-6">
   <h1 class="text-2xl font-bold mb-4">Edit Profile</h1>
+  <h2 class="text-1xl font-bold mb-4">User Type: {{ user_detail.user_type }}</h2>
   <!-- Profile Form -->
   <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token%}
@@ -46,7 +47,7 @@
         <div class="flex pl-8 items-center gap-4">
           <button
             type="submit"
-            class="flex items-center p-2 bg-teal-700 w-[2.4rem] rounded-full"
+            class="flex items-center p-2 bg-teal-700 hover:bg-cyan-600 w-[2.4rem] rounded-full"
             value="saveImage"
             name="saveImage"
           >
@@ -55,7 +56,7 @@
           <button
             type="submit"
             value="deleteImage"
-            class="flex items-center p-2 bg-red-700 w-[2.4rem] rounded-full"
+            class="flex items-center p-2 bg-red-700 hover:bg-red-500 w-[2.4rem] rounded-full"
             name="deleteImage"
           >
             <img src="/static/Image/delete.svg" class="" />
@@ -143,25 +144,19 @@
     <div class="flex justify-between items-center">
       <button
         type="submit"
-        class="px-4 py-2 bg-[#009688] text-white rounded-lg"
+        class="px-4 py-2 bg-[#009688] hover:bg-cyan-600 text-white rounded-lg"
         name="Update"
       >
         Update
       </button>
       <button
-        class="bg-[#009688] hover:bg-cyan-700 text-white py-2 px-4 rounded-full ml-4"
+        class="bg-[#009688] hover:bg-cyan-600 text-white py-2 px-4 rounded-full ml-4"
       >
         <a href="{% url 'ChangePassword' user.id%}" class="flex items-center">
           <i class="fas fa-key"></i> Change Password
         </a>
       </button>
 
-      <button
-        type="button"
-        class="px-4 py-2 bg-gray-500 hover:bg-red-600 text-white rounded-lg ml-4"
-      >
-        Cancel
-      </button>
     </div>
 
     {% if messages %}

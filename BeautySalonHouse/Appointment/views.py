@@ -108,7 +108,7 @@ def booking(request):
             try:
                 appointment_book.save()
                 #  success message
-                sweetify.success(request, 'Appointment has been sent for approval. You will be notified about confirmation.', extra_tags='success')
+                sweetify.success(request, 'Appointment has been sent for approval. You will be notified about confirmation through email or you can check your dashboard.', extra_tags='success')
             
                 return render(request, 'landing_page/Booking.html')
             except:
@@ -153,6 +153,7 @@ def Appointments(request):
                 canceledDate=timezone.now()
             )
             canceled_booking.save()
+            sweetify.success(request, 'Appointment has been Rejected.')
             
             send_mail(
                 'Appointment is Rejected',
@@ -166,6 +167,7 @@ def Appointments(request):
             booking.confirmed = True
             booking.status = 'confirm'
             booking.save()
+            sweetify.success(request, 'Appointment has been Approved.')
             send_mail(
                 'Appointment has been Approved',
                 f'Dear {booking.user.username},\n\nWe are pleased to inform you that your appointment with {booking.staff} on {booking.bookDate} at {booking.bookTime} has been approved.\n\nPlease feel free to contact us at +017773322 for any queries or assistance.\n\nWe look forward to seeing you.\n\nRegards,\nThe Aura Salon Team',
@@ -231,6 +233,15 @@ def bookedAppointment(request, user_id=None):
         booking_requests = BookAppointment.objects.get(pk=appID)
         booking_requests.status = "completed"
         booking_requests.save()
+        sweetify.success(request, 'Appointment has been Completed.')
+        send_mail(
+                'Appointment has been Completed',
+                f'Dear {booking_requests.user.username},\n\nWe are pleased to inform you that your appointment with {booking_requests.staff} on {booking_requests.bookDate} at {booking_requests.bookTime} has been completed.\n\nPlease feel free to contact us at +017773322 for any queries or assistance.\n\nWe look forward to seeing you.\n\nRegards,\nThe Aura Salon Team',
+                settings.EMAIL_HOST_USER,
+                [booking_requests.user.email],
+                fail_silently=False,
+                
+            )
         print("booking_requests", booking_requests)
     #views after showing the appointment cancels after approve
     if request.method == "POST" and "cancel" in request.POST:
@@ -239,6 +250,14 @@ def bookedAppointment(request, user_id=None):
         booking_requests = BookAppointment.objects.get(pk=book_id)
         booking_requests.status = "cancel Booking"
         booking_requests.save()
+        sweetify.success(request, 'Appointment has been Canceled after booking.')
+        send_mail(
+            'Appointment Canceled',
+            f'Dear {booking_requests.user.username},\n\nWe regret to inform you that your appointment with {booking_requests.staff} on {booking_requests.bookDate} at {booking_requests.bookTime} has been canceled.\n\nPlease feel free to reschedule or contact us at +017773322 for any queries or assistance.\n\nRegards,\nThe Aura Salon Team',
+            settings.EMAIL_HOST_USER,
+            [booking_requests.user.email],
+            fail_silently=False,
+        )
         print("canelkooooo",booking_requests)
         
     
@@ -291,6 +310,21 @@ def CancelbookedAppointement(request):
     
     return render(request, 'Staff/cancel_bookedAppointment.html', context)
 
+#reject appointment for user
+@login_required
+@user_passes_test(is_customer)
+@user_passes_test(is_customer_or_is_staff_block)
+def RejectAppointment(request):
+    # Retrieve all canceled appointments
+    RejectAppointment = BookAppointment.objects.filter(user=request.user, status='Canceled')
+    print("aoooooooooo",RejectAppointment)
+    
+    context = {
+        'RejectAppointment': RejectAppointment
+    }
+    
+    return render(request, 'User_Profile_Management/Rejectedappointment.html', context)
+
 @login_required
 @user_passes_test(is_customer)
 @user_passes_test(is_customer_or_is_staff_block)
@@ -303,7 +337,7 @@ def userCancelbookedAppointement(request):
         'user_canceled_booked_appointment': user_canceled_booked_appointment
     }
     
-    return render(request, 'User_Profile_Management/Rejectedappointment.html', context)
+    return render(request, 'User_Profile_Management/Cancelappointment.html', context)
 
 # views for appointment information for user only.
 @login_required
