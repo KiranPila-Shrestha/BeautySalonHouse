@@ -48,7 +48,8 @@
                     </tr>
                     <tr>
                         <td class="font-semibold">Use Reward:</td>
-                        <td  class="text-right"><input type="checkbox" name="useReward" id="useRewardCheckBox" {% if request.user.userdetail.reward_points >= 10 %} {% else %}disabled{% endif %} >
+                        <td  class="text-right">
+                            <input onchange="updateHiddenField()" type="checkbox"  name="useReward" id="useRewardCheckBox"  {% if request.user.userdetail.reward_points >= 10 %} {% else %}disabled{% endif %} >
                        </td>
                        <h5 class="text-gray-500 " >Reward is used only when it is equal or above 10.</h5>
                     </tr>
@@ -156,6 +157,8 @@ class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
                 <input type="hidden" name="purchase_order_id" id="pid" value="{{request.user}}">
                 <input type="hidden" name="return_url"
                 value="http://127.0.0.1:9999/paymentSucessful">
+                <input type="hidden" name="hasUsedReward" id="hasUsedReward" value="">
+
         </form>
         
     </div>
@@ -202,6 +205,21 @@ class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-500">
             console.log("FINALLLLL" + document.getElementById('amt').value )
         });
     });
+    </script>
+    <script>
+        function updateHiddenField() {
+            var checkBox = document.getElementById("useRewardCheckBox");
+            var hiddenField = document.getElementById("hasUsedReward");
+            var rewardHiddenField = document.getElementById("rewardHidden");
+    
+            if (checkBox.checked) {
+                hiddenField.value = "{{ request.user.userdetail.reward_points }}";
+                rewardHiddenField.value = "";
+            } else {
+                hiddenField.value = "";
+                rewardHiddenField.value = ""; // Reset reward points when checkbox is unchecked
+            }
+        }
     </script>
     
 {% endblock %}

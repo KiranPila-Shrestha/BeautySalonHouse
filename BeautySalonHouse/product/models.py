@@ -72,6 +72,7 @@ class orderplaced(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     rewardpoint = models.IntegerField(default=0)
     date_ordered = models.DateTimeField(default=timezone.now)
+    paymentType = models.CharField(default="online pay", max_length=100)
     STATUS_CHOICES = (
         ('Pending', 'Pending'),
         ('Completed', 'Completed'),

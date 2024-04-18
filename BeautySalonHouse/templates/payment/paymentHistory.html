@@ -53,6 +53,7 @@
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">Reward Used</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">Order Date</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">Status</th>
+                    <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Payment Type</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">Payment Details</th>
                 </tr>
             </thead>
@@ -76,7 +77,7 @@
                     {% endif %}">
                     {{ order.status }}
                 </td>
-                
+                <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.paymentType }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base"><button data-modal-target="default-modal-{{ order.id }}" data-modal-toggle="default-modal-{{ order.id }}" class="block text-white  bg-blue-700 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center " type="button">
                         View Detail
                       </button>
@@ -120,6 +121,8 @@
                                             </li>
                                         </ul>
                                     </div>
+
+                                   
                                     
 
                                     <!-- Modal footer -->
@@ -192,6 +195,7 @@
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Reward Used</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Order Date</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">status</th>
+                    <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Payment Type</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Payment Details</th>
                 </tr>
             </thead>
@@ -207,6 +211,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.rewardpoint }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.date_ordered }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.status }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.paymentType }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base"><button data-modal-target="default-modal-{{ order.id }}" data-modal-toggle="default-modal-{{ order.id }}" class="block text-white  bg-blue-700 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center " type="button">
                         
                         View Detail

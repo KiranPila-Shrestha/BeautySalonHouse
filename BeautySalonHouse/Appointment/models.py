@@ -39,14 +39,6 @@ class CanceledAppointment(models.Model):
         return f"Cancelled appointment for {self.appointment} by {self.user.username}"
   
   
-class BookingLog(models.Model):
-    appointment = models.ForeignKey(BookAppointment, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    bookingDate = models.DateTimeField(default=timezone.now)
-    status = models.CharField(max_length=50, default='Cancelled')
-
-    def __str__(self):
-        return f"Booking log for {self.appointment} by {self.user.username}"
 
 
 

@@ -44,32 +44,31 @@
 <form action="{% url 'productpage' %}" role="search">
   {% csrf_token %}
 
-<div class="grid grid-cols-2">
-  <div class="w-96">
-      <select name="searchFor" class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
-        <option ="">Select category</option>
+  <div class="grid grid-cols-3 gap-1">
+    <div class="w-64">
+      <select name="searchFor" class="py-2 px-4 pl-8 ml-10 block w-full border-2 border-black rounded-lg text-1xl focus:border-teal-600 focus:ring-teal-600 disabled:opacity-50 disabled:pointer-events-none">
+        <option>Select category</option>
         {% for category, _ in productCategoryChoice %}
-        <option value="{{category}}">{{category}}</option>
-
+          <option value="{{ category }}">{{ category }}</option>
         {% endfor %}
       </select>
+    </div>
+  
+    <div class="w-64">
+      <input name="searchForName" placeholder="Search product..." class="bg-gray-200 appearance-none border-2 border-black rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-teal-600" id="inline-full-name" type="text" value="">
+    </div>
+  
+    <div>
+      <!-- search button -->
+      <button name="searchProduct" type="submit" class="bg-teal-600 hover:bg-cyan-500 text-white font-bold py-2 px-4  rounded">
+        Search 
+      </button>
+    </div>
   </div>
-
- 
-
-  <div class="w-96">
-    <input name="searchForName" placeholder="Search product..." class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="">
-  </div>
-
-  <div>
-    <!-- search button: -->
-  <button name="searchProduct" type="submit" class="bg-teal-600 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded">
-    Search by Product Name and category
-  </button>
-</div>
-</div>
+  
+  
 </form>
-
+<br>
 <div class="text-center">
   {% if SearchFor and SearchFor != 'Select category' and not searchForName  %}
   <h5 class="text-black text-2xl font-semibold font-regular mb-2">Search result for: {{SearchFor}}</h5>

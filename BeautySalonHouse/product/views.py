@@ -450,68 +450,75 @@ def verifyKhalti(request):
         new_res = json.loads(res.text)
         print("new_res",new_res)
         if new_res['status'] == 'Completed':
-            print("SUCCESS PAYMENT")
-            Buyeruser = request.user
-            checkout_total_amount = int(new_res['total_amount'])
-            cartInstance = get_object_or_404(cart, user=Buyeruser)
-            print("cartcartcartcartcartcartcartcartcartcartcartcartcartcartcartcart: ", cartInstance)
-            cart_itemsInstance = Cartitem.objects.filter(cart = cartInstance)
+            try:
+                print("SUCCESS PAYMENT")
+                Buyeruser = request.user
+                checkout_total_amount = int(new_res['total_amount'])
+                cartInstance = get_object_or_404(cart, user=Buyeruser)
+                print("cartcartcartcartcartcartcartcartcartcartcartcartcartcartcartcart: ", cartInstance)
+                cart_itemsInstance = Cartitem.objects.filter(cart = cartInstance)
 
-            with transaction.atomic():
-                order = orderplaced.objects.create(
-                    Buyeruser = Buyeruser,
-                    total_amount = cartInstance.total_amount,
-                    order_contact_number = cartInstance.new_number,
-                    order_address =cartInstance.new_address,
-                    status = 'Pending'
-                )
-                
-                rewardPoint = int(Buyeruser.userdetail.reward_points)
-                cartTotalAmount = int(cartInstance.total_amount)
-                1000 == 1000  
-                if checkout_total_amount == cartTotalAmount: # update the rewaed if not used
-                    print("same amount")
-                    user_detail = UserDetail.objects.get(user = Buyeruser)  
-                    user_detail.reward_points += 1
-                    reward_point_used = 0
-                    user_detail.save()
-                else:
-                    print("Different amount")
-                    user_detail = UserDetail.objects.get(user = Buyeruser)  
-                    user_detail.reward_points = 1
-                    user_detail.save()
+                with transaction.atomic():
+                    order = orderplaced.objects.create(
+                        Buyeruser = Buyeruser,
+                        total_amount = cartInstance.total_amount,
+                        order_contact_number = cartInstance.new_number,
+                        order_address =cartInstance.new_address,
+                        status = 'Pending'
+                    )
+                    
+                    rewardPoint = int(Buyeruser.userdetail.reward_points)
+                    cartTotalAmount = int(cartInstance.total_amount)
+                    1000 == 1000  
+                    if checkout_total_amount == cartTotalAmount: # update the rewaed if not used
+                        print("same amount")
+                        user_detail = UserDetail.objects.get(user = Buyeruser)  
+                        user_detail.reward_points += 1
+                        reward_point_used = 0
+                        user_detail.save()
+                    else:
+                        print("Different amount")
+                        user_detail = UserDetail.objects.get(user = Buyeruser)  
+                        user_detail.reward_points = 1
+                        user_detail.save()
 
-                    reward_point_used = rewardPoint
-                
-                for cart_item in cart_itemsInstance:
-                    product = cart_item.product
-                    quantity = cart_item.Quantity
-                    total_amount_product = product.productPrice * quantity
+                        reward_point_used = rewardPoint
                     
-                    # Decreasing the product stock
-                    product.productStock -= quantity
-                    product.save()
-                    
-                    # If product is 0 which means: all products are sold out remove the product.
-                    if product.productStock == 0:
-                        product.isAvailable = False
+                    for cart_item in cart_itemsInstance:
+                        product = cart_item.product
+                        quantity = cart_item.Quantity
+                        total_amount_product = product.productPrice * quantity
+                        
+                        # Decreasing the product stock
+                        product.productStock -= quantity
                         product.save()
                         
-                    
-                    orderHistoryDetaillInstance =  orderhistoryDetails.objects.create(
-                        order_for = order,
-                        product = product,
-                        quantity = quantity,
-                        total_amount_product =total_amount_product
-                    )
+                        # If product is 0 which means: all products are sold out remove the product.
+                        if product.productStock == 0:
+                            product.isAvailable = False
+                            product.save()
+                            
+                        
+                        orderHistoryDetaillInstance =  orderhistoryDetails.objects.create(
+                            order_for = order,
+                            product = product,
+                            quantity = quantity,
+                            total_amount_product =total_amount_product
+                        )
 
-                
-                
-                order.rewardpoint = reward_point_used
-                order.save()
-                cart_itemsInstance.delete()
-                cartInstance.delete()
-                return render(request, 'payment/paymentsuccess.html')
+                    
+                    
+                    order.rewardpoint = reward_point_used
+                    order.save()
+                    cart_itemsInstance.delete()
+                    cartInstance.delete()
+                    return render(request, 'payment/paymentsuccess.html')
+            except Exception as e:
+                print("Error in transaction:", str(e))
+              
+                transaction.rollback()
+                return redirect('error')
+                  
         else:
             return redirect('error')
     else:
@@ -532,119 +539,112 @@ def paymentSuccess(request):
 @login_required
 @user_passes_test(is_customer)
 
-# def delivery_on_cash(request):
-#     url  = request.META.get('HTTP_REFERER')
-#     try:
-#         # Get user's cart
-#         Buyeruser = request.user
-#         print('bn', Buyeruser)
-#         cart = cart.objects.get(user=buyer)
-#         cartItems = Cartitem.objects.filter(cart=cart) # Assuming you want the first cart item
-        
-
-#         if request.method == 'POST':
-#             with transaction.atomic():
-#                 print("Transaction started")  # Add this line for debugging
-#                 new_order = orderplaced.objects.create(
-#                     Buyeruser = Buyeruser, 
-#                     total_amount=cart.total_amount,
-#                     ordered_phone_number = cart.new_number,
-#                     ordered_address = cart.new_address,
-#                 )
-                
-#                 # Loop through each cart item and create orderDetail instances
-#                 for cart_item in cartItems:
-#                     product = cart_item.product
-#                     quantity = cart_item.quantity
-#                     seller = cart_item.seller
-#                     total_each_product = product.productPrice * quantity
-#                     is_completed ='Delivery Pending'
-                    
-                    
-#                     #decrease quantity
-#                     product.productStock -= quantity
-#                     product.save()
-                    
-#                     print("Seller:", seller.username)
-#                     orderhistoryDetails.objects.create(
-#                         order_for = new_order,
-#                         seller = seller,
-#                         product = product,
-#                         quantity= quantity,
-#                         total_each_product=total_each_product,
-#                         is_completed = is_completed
-#                     )           
-            
-#                 # Create orders directly from cart items
-#                 new_order.save()
-#                 # Clear the cart
-#                 cart.delete()
-#                 return redirect('paymentHistory')
-#     except:
-#         sweetify.error(request, "Something went wrong. Please try again")
-#         return redirect(url)
-
 
 
 @login_required
 def delivery_on_cash(request):
     if request.method == 'POST':
-        Buyeruser = request.user
-
-        # Retrieve the user's cart
-        cart_instance = get_object_or_404(cart, user=Buyeruser)
-        cart_items_instance = Cartitem.objects.filter(cart=cart_instance)
         
+        # useRewards = int(request.POST.get("hasUsedReward"))
+        
+        useRewards = request.POST.get("hasUsedReward")
+        print("useRewards", useRewards)
+        
+        if useRewards != "":
+            print("here-", useRewards,"-")
+            useReward = int(request.POST.get("hasUsedReward"))
+            
+        else:
+            useReward = 0
+            
+            
+         
+        print("sure tyoe", type(useReward))
+        print("useRewarduseRewarduseRewarduseRewarduseRewarduseRewarduseRewarduseReward", useReward)
+        Buyeruser = request.user
+        cartInstance = get_object_or_404(cart, user=Buyeruser)
+        checkout_total_amount=cartInstance.total_amount,
+        print("cartcartcartcartcartcartcartcartcartcartcartcartcartcartcartcart: ", cartInstance)
+        cart_itemsInstance = Cartitem.objects.filter(cart = cartInstance)
+
         with transaction.atomic():
-            # Create order
             order = orderplaced.objects.create(
-                Buyeruser=Buyeruser,
-                total_amount=cart_instance.total_amount,
-                order_contact_number=cart_instance.new_number,
-                order_address=cart_instance.new_address,
-                status=' Delivery Pending'
+                Buyeruser = Buyeruser,
+                total_amount = cartInstance.total_amount,
+                order_contact_number = cartInstance.new_number,
+                order_address =cartInstance.new_address,
+                status = 'Pending',
+                paymentType = "cash on delivery"
             )
+           
+            # if useReward != 0:
+            #     user = order.Buyeruser
+            #     userDetailForReward = UserDetail.objects.get(user=user)
+            #     # reward = user.userdetail.reward_points
+                
+            #     print("yah ako xa")
+            #     order.rewardpoint = useReward
+            #     userDetailForReward.reward_points -= useReward 
+            #     userDetailForReward.save()
+            order.rewardpoint = useReward
+            order.Buyeruser.userdetail.reward_points += 1
+            order.save()
+            
+            userDetails = order.Buyeruser
+            
+            rewardPoint = int(Buyeruser.userdetail.reward_points)
+            cartTotalAmount = int(cartInstance.total_amount)
+            1000 == 1000  
+            if checkout_total_amount == cartTotalAmount: # update the rewaed if not used
+                print("same amount")
+                user_detail = UserDetail.objects.get(user = Buyeruser)  
+                user_detail.reward_points += 1
+                # reward_point_used = 0
+                user_detail.save()
+            else:
+                print("Different amount")
+                user_detail = UserDetail.objects.get(user = Buyeruser)  
+                user_detail.reward_points = rewardPoint
 
-            # Reward points logic
-            reward_point_used = 0
+                user_detail.save() 
+                
+                
+                orderplaceInstance = orderplaced.objects.filter(Buyeruser=userDetails).exclude(id=order.id)
+                
+                for orders in orderplaceInstance:
+                    orders.rewardpoint = 0
+                    orders.save()
+                
+                # orderplaceInstance.
 
-            user_detail = UserDetail.objects.get(user=Buyeruser)
-            user_detail.reward_points = 1
-            user_detail.save()
-            reward_point_used = user_detail.reward_points
-
-            # Process each cart item
-            for cart_item in cart_items_instance:
+                # reward_point_used = rewardPoint
+            
+            for cart_item in cart_itemsInstance:
                 product = cart_item.product
                 quantity = cart_item.Quantity
                 total_amount_product = product.productPrice * quantity
                 
-                # Decrease product stock
+                # Decreasing the product stock
                 product.productStock -= quantity
                 product.save()
                 
-                # If product is out of stock, update availability
+                # If product is 0 which means: all products are sold out remove the product.
                 if product.productStock == 0:
                     product.isAvailable = False
                     product.save()
-
-                # Create order history detail
-                order_history_detail_instance = orderhistoryDetails.objects.create(
-                    order_for=order,
-                    product=product,
-                    quantity=quantity,
-                    total_amount_product=total_amount_product
+                    
+                
+                orderHistoryDetaillInstance =  orderhistoryDetails.objects.create(
+                    order_for = order,
+                    product = product,
+                    quantity = quantity,
+                    total_amount_product =total_amount_product
                 )
 
-            # Update order with reward points used
-            order.rewardpoint = reward_point_used
-            order.save()
-
-            # Clear cart and cart items
-            cart_items_instance.delete()
-            cart_instance.delete()
-
-            # Redirect to payment success page
+            
+                
+            cart_itemsInstance.delete()
+            cartInstance.delete()
             return render(request, 'payment/paymentsuccess.html')
     else:
         # Redirect to error page if method is not POST
@@ -677,6 +677,18 @@ def paymentHistory(request):
             orderHistory = orderplaced.objects.get(pk=orderID)
             orderHistory.status = "Completed"
             orderHistory.save()
+            
+            orderHistory.Buyeruser.userdetail.reward_points -= orderHistory.rewardpoint
+            orderHistory.save()
+            
+            
+            if orderHistory.paymentType == "cash on delivery":
+                if orderHistory.rewardpoint != 0:
+                    orderHistory.Buyeruser.userdetail.reward_points -= orderHistory.rewardpoint
+                    orderHistory.save()
+                    
+         
+            
             # Get order details
             order_details = ""
             for orderDetail in orderHistory.orderhistorydetails_set.all():
@@ -718,103 +730,80 @@ def paymentHistory(request):
             return redirect('paymentHistory')
                     
         elif "cancelOrder" in request.POST: #reject order
-            orderID = request.POST.get("orderID")
-            orderHistory = orderplaced.objects.get(pk=orderID)
-            orderHistory.status = "Rejected"
-            orderHistory.save()
-            message = f"""
-                We regret to inform you that your order has been cancelled.
-
-                Please feel free to contact us for further assistance.
-
-                Thank you.
-                Contact: +01-555778899
-                Aura Salon, Baneshwor
-            """
-            
-            send_mail(
-                'Your order has been cancelled.',
-                message,
-                settings.EMAIL_HOST_USER,
-                [orderHistory.Buyeruser.email],
-                fail_silently=False,
-            )
-            
-            # Success message
-            sweetify.success(request, "Order Rejected successfully!!")
-            return redirect('paymentHistory')
-        
-        elif "CompleteOrder" in request.POST: #complete deliverd 
-            orderID = request.POST.get("orderID")
-            orderHistory = orderplaced.objects.get(pk=orderID)
-            orderHistory.status = "Delievery Completed"
-            orderHistory.save()
-            # Get order details
-            order_details = ""
-            for orderDetail in orderHistory.orderhistorydetails_set.all():
-                order_details += f"Product: {orderDetail.product.productName}\n"
-                order_details += f"Quantity: {orderDetail.quantity}\n"
-                order_details += f"Amount: {orderDetail.total_amount_product}\n"
-            
-            # Get total amount, reward points used, and payment date
-            total_amount = orderHistory.total_amount
-            reward_points_used = orderHistory.rewardpoint
-            payment_date = orderHistory.date_ordered
-            
-            # Construct the message
-            message = f"""
-                Your order has been completed successfully.
-
-                Details:
-                {order_details}
-                Total Amount: {total_amount}
-                Reward Points Used: {reward_points_used}
-                Payment Date: {payment_date}
+            with transaction.atomic():
+                orderID = request.POST.get("orderID")
+                orderHistory = orderplaced.objects.get(pk=orderID)
+                orderHistory.status = "Rejected"
+                orderHistory.save()
                 
-                Thank you for choosing us!
-                Contact: +01-555778899
-                Aura Salon, Baneshwor
-            """
+                
+                user = orderHistory.Buyeruser
+                print(user)
+                
+                userDetailForReward = UserDetail.objects.get(user = user)
+                
+                
+                userDetailForReward.reward_points -= orderHistory.rewardpoint
+                userDetailForReward.save()
+                
+                for ordered_product in orderHistory.orderhistorydetails_set.all():
+                    product = ordered_product.product
+                    quantity = ordered_product.quantity
+                    product.productStock += quantity
+                    product.save()
+
+                
+                
+                # userDetailForReward.reward_points += orderHistory.rewardpoint
+                # userDetailForReward.save()
+                
+                # orderHistory.Buyeruser.userdetail.reward_points += 1
+                # orderHistory.save()
+                
+                order_details = ""
+                for orderDetail in orderHistory.orderhistorydetails_set.all():
+                    order_details += f"Product: {orderDetail.product.productName}\n"
+                    order_details += f"Quantity: {orderDetail.quantity}\n"
+                    order_details += f"Amount: {orderDetail.total_amount_product}\n"
+                    
+                    orderDetail.product.productStock -= orderDetail.quantity
+                    orderDetail.save()
+                
+                # Get total amount, reward points used, and payment date
+                total_amount = orderHistory.total_amount
+                reward_points_used = orderHistory.rewardpoint
+                payment_date = orderHistory.date_ordered
+                
+                # Construct the message
+                message = f"""
+                    Your order has been Rejected.
+
+                    Details:
+                    We regret to inform you that your order has been cancelled.
+                    {order_details}
+                    Total Amount: {total_amount}
+                    Reward Points Used: {reward_points_used}
+                    Payment Date: {payment_date}
+                    
+                    Please feel free to contact us for further assistance.
+                    Contact: +01-555778899
+                    Aura Salon, Baneshwor
+                """
+                
+                # Send email
+                send_mail(
+                    "Your Order has been Rejected.",
+                    message,
+                    settings.EMAIL_HOST_USER,
+                    [orderHistory.Buyeruser.email],
+                    fail_silently=False,
+                )
+                print('aaaaa')
+                # Success message
+                sweetify.success(request, "Order Rejected successfully!!")
+                return redirect('paymentHistory')
             
-            # Send email
-            send_mail(
-                "Your Order has been Completed.",
-                message,
-                settings.EMAIL_HOST_USER,
-                [orderHistory.Buyeruser.email],
-                fail_silently=False,
-            )
-            
-            # Success message
-            sweetify.success(request, "Order delivered successfully!!")
-            return redirect('paymentHistory')
         
-        elif "DeliveryCancel" in request.POST: #delivery cancel
-            orderID = request.POST.get("orderID")
-            orderHistory = orderplaced.objects.get(pk=orderID)
-            orderHistory.status = "Delivery Canceled"
-            orderHistory.save()
-            message = f"""
-                We regret to inform you that your order has been cancelled.
-
-                Please feel free to contact us for further assistance.
-
-                Thank you.
-                Contact: +01-555778899
-                Aura Salon, Baneshwor
-            """
-            
-            send_mail(
-                'Your order has been cancelled.',
-                message,
-                settings.EMAIL_HOST_USER,
-                [orderHistory.Buyeruser.email],
-                fail_silently=False,
-            )
-            
-            # Success message
-            sweetify.success(request, "Order Rejected successfully!!")
-            return redirect('paymentHistory')
         
         elif 'leaveFeedback' in request.POST:
             with transaction.atomic():
@@ -844,6 +833,19 @@ def paymentHistory(request):
                     sweetify.success(request, "Thank you for your feedback!")
     #for filterdropdown in dashboard             
     orderStatusCounts = orderplaced.objects.values('status').annotate(count=Count('status'))
+    
+    # if request.method == 'POST':
+    #     if 'completed' in request.POST:
+    #         orderId = request.POST.get("orderID")
+    #         print("orderId", orderId)
+    #         sweetify.success(request, "Order completed")
+    #         return redirect("paymentHistory")
+    #     if 'canceled' in request.POST:
+    #         orderId = request.POST.get("orderID")
+    #         print("orderId", orderId)
+    #         sweetify.success(request, "Order canceled")
+    #         return redirect("paymentHistory")
+    
        
     context = {
         'orderPaymentHistory' : orderPaymentHistory,

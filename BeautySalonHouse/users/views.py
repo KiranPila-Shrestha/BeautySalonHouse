@@ -67,8 +67,8 @@ def loginUser(request):
         else:
             sweetify.error(request, 'Username or Password is invalid. Please provide valid password and username.')
             
-    if not request.user.is_authenticated:
-        sweetify.error(request, 'Please log in to access this page.')
+    # else:
+    #     sweetify.error(request, 'Please log in to access this page.')
 
     return render(request, 'login_register/login.html')
 
@@ -125,8 +125,9 @@ def registerUser(request):
 
 
 # logout user
+@login_required
 def logoutUser(request):
-    
+    sweetify.error(request, 'Logout successfully.')
     logout(request)
     return redirect('login')
 
@@ -151,7 +152,7 @@ def EditProfile(request, user_id):
             print("updaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaateeeeeeeeee")
             user.first_name = request.POST.get('first_name')
             user.last_name = request.POST.get('last_name')
-            user.email = request.POST.get('email')
+            # user.email = request.POST.get('email')
             user.save()
             print(user)
            
