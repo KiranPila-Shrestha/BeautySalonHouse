@@ -82,6 +82,7 @@ def registerUser(request):
             if User.objects.filter(email=request.POST.get('email')).exists():
                 sweetify.error(request, "Email already exist")
                 return redirect('register')
+            #if contact doesnot match this condition
             if 'contact' in request.POST:
                 contact_number = request.POST.get('contact')
             if not re.match(r'^(98|97)\d{8}$', contact_number):
@@ -114,7 +115,7 @@ def registerUser(request):
             return redirect('login')
         elif not form.is_valid():
             errorMessage = next(iter(form.errors.values()))[0]     
-            sweetify.error(request, errorMessage)
+            sweetify.error(request, "errorMessage")
             return redirect('register')
         else:
             sweetify.error(request, 'Something went wrong. Registration failed!')
@@ -173,7 +174,7 @@ def EditProfile(request, user_id):
         
         
         if 'saveImage' in request.POST:
-            # Check if an image was uploaded
+            # Check if an image was uploaded  
             if 'save_update_image' in request.FILES:
                 print("image ayoooooooooo")
                 profile = UserProfile.objects.get(user=user)
