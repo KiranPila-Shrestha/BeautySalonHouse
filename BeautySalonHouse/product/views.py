@@ -350,7 +350,7 @@ def checkoutpage(request):
                 user_cart.save()
                 sweetify.success(request, "New details saved successfully.")
             
-           
+        
             user_cart.save()
     cartItems = cart.objects.filter(user=request.user)
     user_detail = UserDetail.objects.get(user=request.user)  # or UserDetail.objects.get(user_id=user_id)
@@ -577,15 +577,7 @@ def delivery_on_cash(request):
                 paymentType = "cash on delivery"
             )
            
-            # if useReward != 0:
-            #     user = order.Buyeruser
-            #     userDetailForReward = UserDetail.objects.get(user=user)
-            #     # reward = user.userdetail.reward_points
-                
-            #     print("yah ako xa")
-            #     order.rewardpoint = useReward
-            #     userDetailForReward.reward_points -= useReward 
-            #     userDetailForReward.save()
+         
             order.rewardpoint = useReward
             order.Buyeruser.userdetail.reward_points += 1
             order.save()
@@ -672,62 +664,66 @@ def paymentHistory(request):
         
     if request.method == 'POST':
         if "confirmOrder" in request.POST: #confirm order
-            orderID = request.POST.get("orderID")
-            print("orderIDorderIDorderIDorderID", orderID)
-            orderHistory = orderplaced.objects.get(pk=orderID)
-            orderHistory.status = "Completed"
-            orderHistory.save()
-            
-            orderHistory.Buyeruser.userdetail.reward_points -= orderHistory.rewardpoint
-            orderHistory.save()
-            
-            
-            if orderHistory.paymentType == "cash on delivery":
-                if orderHistory.rewardpoint != 0:
-                    orderHistory.Buyeruser.userdetail.reward_points -= orderHistory.rewardpoint
-                    orderHistory.save()
-                    
-         
-            
-            # Get order details
-            order_details = ""
-            for orderDetail in orderHistory.orderhistorydetails_set.all():
-                order_details += f"Product: {orderDetail.product.productName}\n"
-                order_details += f"Quantity: {orderDetail.quantity}\n"
-                order_details += f"Amount: {orderDetail.total_amount_product}\n"
-            
-            # Get total amount, reward points used, and payment date
-            total_amount = orderHistory.total_amount
-            reward_points_used = orderHistory.rewardpoint
-            payment_date = orderHistory.date_ordered
-            
-            # Construct the message
-            message = f"""
-                Your order has been completed successfully.
-
-                Details:
-                {order_details}
-                Total Amount: {total_amount}
-                Reward Points Used: {reward_points_used}
-                Payment Date: {payment_date}
+            with transaction.atomic():
+                orderID = request.POST.get("orderID")
+                print("orderIDorderIDorderIDorderID", orderID)
+                orderHistory = orderplaced.objects.get(pk=orderID)
+                orderHistory.status = "Completed"
+                orderHistory.save()
                 
-                Thank you for choosing us!
-                Contact: +01-555778899
-                Aura Salon, Baneshwor
-            """
+                # orderHistory.Buyeruser.userdetail.reward_points -= orderHistory.rewardpoint
+                # orderHistory.save()
+                
+                user = orderHistory.Buyeruser
+                userDetailForReward = UserDetail.objects.get(user = user)
+                
+                
+                if orderHistory.paymentType == "cash on delivery":
+                    if orderHistory.rewardpoint != 0:
+                        userDetailForReward.reward_points -= orderHistory.rewardpoint
+                        userDetailForReward.save()
+                        
             
-            # Send email
-            send_mail(
-                "Your Order has been Completed.",
-                message,
-                settings.EMAIL_HOST_USER,
-                [orderHistory.Buyeruser.email],
-                fail_silently=False,
-            )
-            
-            # Success message
-            sweetify.success(request, "Order updated successfully!!")
-            return redirect('paymentHistory')
+                
+                # Get order details
+                order_details = ""
+                for orderDetail in orderHistory.orderhistorydetails_set.all():
+                    order_details += f"Product: {orderDetail.product.productName}\n"
+                    order_details += f"Quantity: {orderDetail.quantity}\n"
+                    order_details += f"Amount: {orderDetail.total_amount_product}\n"
+                
+                # Get total amount, reward points used, and payment date
+                total_amount = orderHistory.total_amount
+                reward_points_used = orderHistory.rewardpoint
+                payment_date = orderHistory.date_ordered
+                
+                # Construct the message
+                message = f"""
+                    Your order has been completed successfully.
+
+                    Details:
+                    {order_details}
+                    Total Amount: {total_amount}
+                    Reward Points Used: {reward_points_used}
+                    Payment Date: {payment_date}
+                    
+                    Thank you for choosing us!
+                    Contact: +01-555778899
+                    Aura Salon, Baneshwor
+                """
+                
+                # Send email
+                send_mail(
+                    "Your Order has been Completed.",
+                    message,
+                    settings.EMAIL_HOST_USER,
+                    [orderHistory.Buyeruser.email],
+                    fail_silently=False,
+                )
+                
+                # Success message
+                sweetify.success(request, "Order updated successfully!!")
+                return redirect('paymentHistory')
                     
         elif "cancelOrder" in request.POST: #reject order
             with transaction.atomic():
@@ -741,10 +737,13 @@ def paymentHistory(request):
                 print(user)
                 
                 userDetailForReward = UserDetail.objects.get(user = user)
+                print(userDetailForReward)
                 
                 
-                userDetailForReward.reward_points -= orderHistory.rewardpoint
+                
+                userDetailForReward.reward_points = orderHistory.rewardpoint
                 userDetailForReward.save()
+                
                 
                 for ordered_product in orderHistory.orderhistorydetails_set.all():
                     product = ordered_product.product
@@ -753,12 +752,6 @@ def paymentHistory(request):
                     product.save()
 
                 
-                
-                # userDetailForReward.reward_points += orderHistory.rewardpoint
-                # userDetailForReward.save()
-                
-                # orderHistory.Buyeruser.userdetail.reward_points += 1
-                # orderHistory.save()
                 
                 order_details = ""
                 for orderDetail in orderHistory.orderhistorydetails_set.all():
@@ -833,18 +826,6 @@ def paymentHistory(request):
                     sweetify.success(request, "Thank you for your feedback!")
     #for filterdropdown in dashboard             
     orderStatusCounts = orderplaced.objects.values('status').annotate(count=Count('status'))
-    
-    # if request.method == 'POST':
-    #     if 'completed' in request.POST:
-    #         orderId = request.POST.get("orderID")
-    #         print("orderId", orderId)
-    #         sweetify.success(request, "Order completed")
-    #         return redirect("paymentHistory")
-    #     if 'canceled' in request.POST:
-    #         orderId = request.POST.get("orderID")
-    #         print("orderId", orderId)
-    #         sweetify.success(request, "Order canceled")
-    #         return redirect("paymentHistory")
     
        
     context = {

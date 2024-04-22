@@ -50,7 +50,6 @@
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">Order ID</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">User</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">Address</th>
-                    <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">Reward Used</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">Order Date</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-black tracking-wider">Status</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Payment Type</th>
@@ -67,7 +66,6 @@
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.id }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.Buyeruser }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.order_address }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.rewardpoint }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.date_ordered }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base 
                     {% if order.status == 'Pending' %} text-yellow-500 text-semibold
@@ -192,7 +190,6 @@
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Order ID</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">User</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Address</th>
-                    <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Reward Used</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Order Date</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">status</th>
                     <th scope="col" class="px-6 py-3 text-left text-lg md:text-base font-medium font-semibold text-gray-700 tracking-wider">Payment Type</th>
@@ -208,7 +205,6 @@
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.id }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.Buyeruser }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.order_address }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.rewardpoint }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.date_ordered }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.status }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-lg md:text-base">{{ order.paymentType }}</td>
